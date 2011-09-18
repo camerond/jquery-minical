@@ -1,0 +1,24 @@
+%html
+  %head
+    %title jQuery.minical
+    %link(rel="stylesheet" href="/stylesheets/application.css")
+    %link(rel="stylesheet" href="/stylesheets/jquery.minical.css")
+    %script(type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js")
+    %script(type="text/javascript" src="/javascript/lib/raphael.js")
+    %script(type="text/javascript" src="/javascript/jquery.minical.js")
+    %script(type="text/javascript" src="/javascript/demo.js")
+    %script(type="text/javascript" src="http://use.typekit.com/aqp8xdq.js")
+    :javascript
+      try{Typekit.load();}catch(e){}
+  %body
+    #wrapper
+      %hgroup
+        %h1<>
+          jQuery
+          %span<> .minical
+        %h2 a lightweight calendar plugin
+      %p
+        by
+        %a(href="http://camerondaigle.com") Cameron Daigle
+      %form
+        %input.minical(type="text" value="")
