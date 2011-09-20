@@ -75,6 +75,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     });
 
     mc.$input.click(showCalendar);
+    mc.$input.keydown(handleKeypress);
 
     mc.$el.delegate("header a.minical_prev", "click.minical", function() {
       var prevMonth = $(this).closest("li").detach().data("minical_month");
@@ -112,6 +113,16 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       mc.$el.fadeOut(200, function() {
         mc.$el.find("li").detach();
       });
+    }
+
+    function handleKeypress(e) {
+      var key = e.keyCode;
+      if (key === 27 || key === 9) {
+        hideCalendar();
+      } else if (mc.$el.is(":visible")) {
+        return false;
+      }
+      return true;
     }
 
   }
