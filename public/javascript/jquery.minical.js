@@ -107,20 +107,20 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         left: offset.left + mc.opts.offset.x,
         top: offset.top + mc.$input.outerHeight() + mc.opts.offset.y
       }).fadeIn(200);
+      mc.$input.prop("disabled", true);
     }
 
     function hideCalendar() {
       mc.$el.fadeOut(200, function() {
         mc.$el.find("li").detach();
       });
+      mc.$input.prop("disabled", false);
     }
 
     function handleKeypress(e) {
       var key = e.keyCode;
       if (key === 27 || key === 9) {
         hideCalendar();
-      } else if (mc.$el.is(":visible")) {
-        return false;
       }
       return true;
     }
