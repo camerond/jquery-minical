@@ -9,42 +9,64 @@ body
 #wrapper
   padding: 100px
 
-p
-  font-weight: bold
-  margin: 0 0 40px 0
-  code
-    font-weight: bold
-    font-size: 1.1em
-    background: #31363b
-    padding: 2px 4px
-    margin: 0 4px
-    text-shadow: 0 1px 1px #000
-  a
-    text-decoration: none
-    color: #e42929
-    &:hover
-      text-decoration: underline
+a
+  text-decoration: none
+  color: #51b1ff
+  &:hover
+    text-decoration: underline
 
-hgroup
-  margin: 0 0 40px 0
-  font-family: "chunk-1","chunk-2", 'Helvetica Neue', helvetica, sans-serif
+code
+  font-weight: bold
+  background: #31363b
+  padding: 1px 4px
+  margin: 0 4px
+  text-shadow: 0 1px 1px #000
+
+header
   h1
     font-size: 80px
+    font-family: "chunk-1","chunk-2", 'Helvetica Neue', helvetica, sans-serif
     span
-      color: #e42929
+      color: #51b1ff
   h2
     font-size: 40px
-  form
-    label
-      font-size: 14px
-    + form
+    font-family: "chunk-1","chunk-2", 'Helvetica Neue', helvetica, sans-serif
+    margin: 0 0 20px 0
+  p
+    font-weight: bold
+    margin: 0 0 40px 0
 
-h3
-  font-weight: bold
-  margin: 0 0 20px 0
+form
+  margin: 0 0 40px 0
 
 input[type="text"]
   border: none
   margin: 0 20px 0 0
   padding: 5px
   font-size: 14px
+
+#readme
+  font-weight: normal
+  h1
+    display: none
+  h2
+    font-size: 16px
+    font-weight: bold
+    margin: 0 0 20px 0
+  h3
+    font-size: 14px
+    font-weight: bold
+    margin: 0 0 20px 20px
+  p
+    font-size: 13px
+    line-height: 20px
+    margin: 0 0 20px 0
+    padding: 0 40px
+  ul
+    padding: 0 20px
+    font-size: 13px
+    line-height: 20px
+  > ul
+    margin: 0 0 20px 0
+  p + ul
+    padding: 0 60px

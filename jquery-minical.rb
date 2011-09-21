@@ -12,5 +12,6 @@ get '/stylesheets/*.css' do |f|
 end
 
 get '/' do
+  @readme = ('../README').to_sym
   haml :index
 end

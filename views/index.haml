@@ -14,13 +14,14 @@
       try{Typekit.load();}catch(e){}
   %body
     #wrapper
-      %hgroup
+      %header
         %h1<>
           jQuery
           %span<> .minical
         %h2 a lightweight calendar plugin
-      %p
-        by
-        %a(href="http://camerondaigle.com") Cameron Daigle
+        %p
+          by
+          %a(href="http://camerondaigle.com") Cameron Daigle
       %form
         %input.minical(type="text" value="")
+      %article#readme= markdown @readme
