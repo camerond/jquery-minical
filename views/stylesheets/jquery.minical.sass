@@ -1,21 +1,35 @@
+$background: #fff
+$light_border: #dde2e6
+$dark_border: #bbc5cd
+$light_text: #b1b5b7
+$dark_text: #3d454b
+$accent: #517a9c
+$box_shadow: 0 0 12px rgba(0, 0, 0, .2)
+
 ul#minical
   position: absolute
-  color: #333
-  background: #fff
+  color: $dark_text
+  background: $background
+  border: 1px solid $dark_border
   margin: 0
   padding: 0
   text-shadow: none
   width: 16em
+  -webkit-box-shadow: $box_shadow
+  -moz-box-shadow: $box_shadow
+  box-shadow: $box_shadow
   li
     padding: 0
     margin: 0
     article
       header
-        background: #ccc
+        background: $light_border
+        color: $dark_text
+        border: 1px solid $dark_border
         padding: 2px 0
         position: relative
         height: 1.2em
-        width: 100%
+        margin: 1px
         h1
           font-size: .8em
           line-height: 1.2em
@@ -40,7 +54,6 @@ ul#minical
             background-position: bottom left
       section
         padding: 5px 10px 10px 10px
-        float: left
         table
           width: 100%
           color: inherit
@@ -59,18 +72,18 @@ ul#minical
                 font-size: .9em
                 a
                   display: block
-                  border: 1px solid #ccc
-                  color: #333
+                  border: 1px solid $light_border
+                  color: $dark_text
                   padding: .1em .3em
                   text-decoration: none
-                  &:hover
-                    border-color: #666
+                a:hover,
+                &.minical_selected a
+                  border-color: $accent
+                  color: $dark_text
                 &.minical_past_month a,
                 &.minical_future_month a
-                  color: #aaa
+                  color: $light_text
                 &.minical_today a
-                  border-color: #ff0000
-                &.minical_selected a
-                  border-color: #666
-                  background: #999
-                  color: #fff
+                  border-color: $accent
+                  background: $accent
+                  color: $background
