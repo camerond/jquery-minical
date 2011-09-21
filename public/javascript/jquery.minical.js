@@ -55,23 +55,19 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   };
 
   function init(mc) {
-    if ($("#minical").length) {
-      mc.$el = $("#minical");
-    } else {
-      mc.$el = $("<ul />").attr("id", "minical").appendTo("body").hide();
-    }
+    mc.$el = $("<ul />").attr("id", "minical");
     attachEvents.call(mc);
-    mc.$el.append(buildMonth.call(mc, mc.opts.start_date));
   }
 
   function attachEvents() {
     var mc = this;
 
-    $("body").live("click.minical", function(e) {
+    $("body").bind("click.minical", function(e) {
       var $target = $(e.target);
-      if (!$target.closest("#minical").length && $target[0] != mc.$input[0]) {
-        hideCalendar();
+      if ($target.is(mc.$input) || ($target.closest("li").length && $target.closest("li").data("minical_input").is(mc.$input))) {
+        return;
       }
+      hideCalendar();
     });
 
     mc.$input.click(showCalendar);
@@ -97,12 +93,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     });
 
     function attachMonth(date) {
-      mc.$el.append(buildMonth.call(mc, date));
+      mc.$el.find("li").detach();
+      var $month = buildMonth.call(mc, date).data("minical_input", mc.$input);
+      mc.$el.append($month);
     }
 
     function showCalendar() {
       var offset = mc.$input.position();
       mc.selected_day ? attachMonth(new Date(mc.selected_day)) : attachMonth(new Date(mc.opts.start_date));
+      mc.$el.appendTo(document.body).hide();
       mc.$el.css({
         left: offset.left + mc.opts.offset.x,
         top: offset.top + mc.$input.outerHeight() + mc.opts.offset.y
@@ -112,7 +111,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     function hideCalendar() {
       mc.$el.fadeOut(200, function() {
-        mc.$el.find("li").detach();
+        mc.$el.detach();
       });
       mc.$input.prop("disabled", false);
     }
@@ -135,7 +134,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       mc.dates[year] = [];
     };
     if (!mc.dates[year][month]) {
-      mc.dates[year][month] = buildMonthElement(date);
+      mc.dates[year][month] = buildMonthElement(date).data("minical_input", mc.$input);
     }
 
     var $li = mc.dates[year][month];
@@ -144,11 +143,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     $li.data("minical_month", new Date(date.setDate(1)));
 
-    $days.filter("td." + [today.getMonth(), today.getDate(), today.getFullYear()].join("_")).addClass("minical_today");
+    $days.filter("td.minical_day_" + [today.getMonth(), today.getDate(), today.getFullYear()].join("_")).addClass("minical_today");
 
     if (mc.selected_day) {
       var sd = mc.selected_day;
-      $days.filter("td." + [sd.getMonth(), sd.getDate(), sd.getFullYear()].join("_")).addClass("minical_selected");
+      $days.filter("td.minical_day_" + [sd.getMonth(), sd.getDate(), sd.getFullYear()].join("_")).addClass("minical_selected");
     }
     return mc.dates[year][month];
   }
@@ -180,7 +179,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           $day.addClass("minical_day");
         }
         $day.data("minical_date", new Date(current_day));
-        $day.addClass([current_day.getMonth(), current_day.getDate(), current_day.getFullYear()].join("_"));
+        $day.addClass("minical_day_" + [current_day.getMonth(), current_day.getDate(), current_day.getFullYear()].join("_"));
         current_day.setTime(current_day.getTime() + 86400000);
       }
       $tr.find("td.minical_day").length ? $tr.appendTo($tbody) : false;
