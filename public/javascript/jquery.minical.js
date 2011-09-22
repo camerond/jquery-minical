@@ -62,10 +62,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   function attachEvents() {
     var mc = this;
 
-    $("body").bind("click.minical", function(e) {
+    $(document).bind("click.minical", function(e) {
       var $target = $(e.target);
-      if ($target.is(mc.$input) || ($target.closest("li").length && $target.closest("li").data("minical_input").is(mc.$input))) {
-        return;
+      if ($target.is(mc.$input)) { return; }
+      var $associated_input = $target.closest("li").data("minical_input");
+      if ($associated_input) {
+        if($associated_input.is(mc.$input)) {
+          return;
+        }
       }
       hideCalendar();
     });
