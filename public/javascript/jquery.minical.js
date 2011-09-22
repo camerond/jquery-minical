@@ -130,26 +130,25 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     var mc = this,
         year = date.getFullYear(),
         month = date.getMonth();
+
     if (!mc.dates[year]) {
       mc.dates[year] = [];
     };
+
     if (!mc.dates[year][month]) {
       mc.dates[year][month] = buildMonthElement(date).data("minical_input", mc.$input);
     }
 
-    var $li = mc.dates[year][month];
-    var $days = $li.find("td").removeClass("minical_selected");
-    var today = new Date();
+    var $days = mc.dates[year][month].data("minical_month", new Date(date.setDate(1)));
 
-    $li.data("minical_month", new Date(date.setDate(1)));
-
-    $days.filter("td.minical_day_" + [today.getMonth(), today.getDate(), today.getFullYear()].join("_")).addClass("minical_today");
-
+    $days.find("td").removeClass("minical_selected");
+    $days.filter(getDayClass(new Date())).addClass("minical_today");
     if (mc.selected_day) {
-      var sd = mc.selected_day;
-      $days.filter("td.minical_day_" + [sd.getMonth(), sd.getDate(), sd.getFullYear()].join("_")).addClass("minical_selected");
+      $days.filter(getDayClass(mc.selected_day)).addClass("minical_selected");
     }
+
     return mc.dates[year][month];
+
   }
 
   function buildMonthElement(date) {
@@ -205,6 +204,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   function getMonthName(date) {
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return months[date.getMonth()];
+  }
+
+  function getDayClass(day) {
+    return "td.minical_day_" + [day.getMonth(), day.getDate(), day.getFullYear()].join("_");
   }
 
 })(jQuery);
