@@ -4,6 +4,10 @@
 
 - `$("my_text_input").minical();`
 
+## Requirements
+
+- jQuery, [jquery.minical.js](htts://github.com/camerond/jquery-minical/blob/master/public/javascript/jquery.minical.js), [jquery.minical.sass](https://github.com/camerond/jquery-minical/blob/master/views/stylesheets/jquery.minical.sass) (or the [generated css](http://localhost:9292/stylesheets/jquery.minical.css)), and [jquery_minical_icons.png](https://github.com/camerond/jquery-minical/blob/master/public/images/jquery_minical_icons.png). [See the source on GitHub](https://github.com/camerond/jquery-minical).
+
 ## Options
 
 - `start_date` defaults to today
