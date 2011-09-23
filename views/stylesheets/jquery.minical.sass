@@ -20,9 +20,11 @@ ul#minical
   -moz-box-shadow: $box_shadow
   box-shadow: $box_shadow
   li
-    padding: 0
+    padding: 1px 10px 0 10px
     margin: 0
     article
+      float: left
+      width: 100%
       header
         background: $light_border
         color: $dark_text
@@ -30,7 +32,7 @@ ul#minical
         padding: 2px 0
         position: relative
         height: 1.2em
-        margin: 1px
+        margin: 0 -9px
         h1
           font-size: .8em
           line-height: 1.2em
@@ -55,7 +57,7 @@ ul#minical
             right: 5px
             background-position: bottom left
       section
-        padding: 5px 10px 10px 10px
+        margin-bottom: 10px
         table
           width: 100%
           color: inherit
@@ -64,9 +66,11 @@ ul#minical
           thead
             tr
               th
+                padding: 5px 0 0 0
                 font-size: .7em
                 font-weight: bold
                 font-family: $font_family
+                color: $dark_text
           tbody
             tr
               td
