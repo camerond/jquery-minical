@@ -150,10 +150,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     var $days = mc.dates[year][month].data("minical_month", new Date(date.setDate(1)));
 
-    $days.find("td").removeClass("minical_selected");
-    $days.filter(getDayClass(new Date())).addClass("minical_today");
+    $days.find("td.minical_selected").removeClass("minical_selected");
+    $days.find(getDayClass(new Date())).addClass("minical_today");
     if (mc.selected_day) {
-      $days.filter(getDayClass(mc.selected_day)).addClass("minical_selected");
+      $days.find(getDayClass(mc.selected_day)).addClass("minical_selected");
     }
 
     return mc.dates[year][month];
