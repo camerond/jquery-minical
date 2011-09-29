@@ -1,7 +1,7 @@
 /*
 
 jQuery minical Plugin
-version 0.2
+version 0.3
 
 Copyright (c) 2011 Cameron Daigle, http://camerondaigle.com
 
@@ -33,6 +33,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
       var defaults = {
             start_date: new Date(),
+            selected_day: null,
             offset: {
               x: 0,
               y: 5
@@ -45,8 +46,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       var minical = {
         opts: $.extend(defaults, options),
         $input: $(this).addClass("minical_input"),
-        dates: [],
-        selected_day: null
+        dates: []
       };
 
       init(minical);
@@ -93,8 +93,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     mc.$el.delegate("td a", "click.minical", function() {
       var $td = $(this).closest("td");
-      mc.selected_day = new Date($td.data("minical_date"));
-      mc.$input.val(mc.opts.date_format(mc.selected_day));
+      mc.opts.selected_day = new Date($td.data("minical_date"));
+      mc.$input.val(mc.opts.date_format(mc.opts.selected_day));
       hideCalendar();
       return false;
     });
@@ -107,7 +107,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     function showCalendar() {
       var offset = mc.$input.position();
-      mc.selected_day ? attachMonth(new Date(mc.selected_day)) : attachMonth(new Date(mc.opts.start_date));
+      mc.opts.selected_day ? attachMonth(new Date(mc.opts.selected_day)) : attachMonth(new Date(mc.opts.start_date));
       mc.$el.appendTo(document.body).hide();
       mc.$el.css({
         left: offset.left + mc.opts.offset.x,
@@ -152,8 +152,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     $days.find("td.minical_selected").removeClass("minical_selected");
     $days.find(getDayClass(new Date())).addClass("minical_today");
-    if (mc.selected_day) {
-      $days.find(getDayClass(mc.selected_day)).addClass("minical_selected");
+    if (mc.opts.selected_day) {
+      $days.find(getDayClass(mc.opts.selected_day)).addClass("minical_selected");
     }
 
     return mc.dates[year][month];

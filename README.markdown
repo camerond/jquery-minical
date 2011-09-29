@@ -10,7 +10,8 @@
 
 ## Options
 
-- `start_date` defaults to today
+- `start_date` (Date object) defaults to today
+- `selected_day` (Date object) allows you to predefine a selected day
 - `offset` relative to bottom left of input
   - `x`
   - `y`
