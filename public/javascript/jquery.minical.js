@@ -74,7 +74,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       hideCalendar();
     });
 
-    mc.$input.click(showCalendar);
+    mc.$input.bind("click.minical", showCalendar);
     mc.$input.keydown(handleKeypress);
 
     mc.$el.delegate("header a.minical_prev", "click.minical", function() {
@@ -114,10 +114,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     }
 
     function hideCalendar() {
-      mc.$el.fadeOut(200, function() {
-        mc.$el.detach();
-      });
-      mc.$input.prop("disabled", false);
+      if (!mc.$el.is(":animated")) {
+        mc.$el.fadeOut(200, function() {
+          mc.$el.detach();
+        });
+        mc.$input.prop("disabled", false);
+      }
     }
 
     function handleKeypress(e) {
