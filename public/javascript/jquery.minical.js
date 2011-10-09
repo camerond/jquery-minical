@@ -1,7 +1,7 @@
 /*
 
 jQuery minical Plugin
-version 0.3
+version 0.4
 
 Copyright (c) 2011 Cameron Daigle, http://camerondaigle.com
 
@@ -38,44 +38,65 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               x: 0,
               y: 5
             },
+            trigger: null,
+            dropdowns: {
+              month: null,
+              day: null,
+              year: null
+            },
             date_format: function(date) {
               return [date.getMonth()+1, date.getDate(), date.getFullYear()].join("/");
             }
           };
 
-      var minical = {
+      var mc = {
         opts: $.extend(defaults, options),
-        $input: $(this).addClass("minical_input"),
         dates: []
       };
 
-      init(minical);
+      mc.$el = $("<ul />").attr("id", "minical");
+      mc.$called_on = $(this);
+
+      if (mc.$called_on.is(":text")) {
+        mc.$input = mc.$called_on.addClass("minical_input");
+        mc.$trigger = mc.$called_on;
+      } else {
+        mc.dropdowns = {
+          $month: mc.$called_on.find(mc.opts.dropdowns.month),
+          $day: mc.$called_on.find(mc.opts.dropdowns.day),
+          $year: mc.$called_on.find(mc.opts.dropdowns.year)
+        };
+        mc.$trigger = mc.$called_on.find(mc.opts.trigger);
+        mc.opts.selected_day = new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val(), mc.dropdowns.$day.val());
+      }
+      attachEvents.call(mc);
 
     });
   };
-
-  function init(mc) {
-    mc.$el = $("<ul />").attr("id", "minical");
-    attachEvents.call(mc);
-  }
 
   function attachEvents() {
     var mc = this;
 
     $(document).bind("click.minical", function(e) {
       var $target = $(e.target);
-      if ($target.is(mc.$input)) { return; }
-      var $associated_input = $target.closest("li").data("minical_input");
-      if ($associated_input) {
-        if($associated_input.is(mc.$input)) {
+      if ($target.is(mc.$trigger)) { return; }
+      var $associated_trigger = $target.closest("li").data("minical_trigger");
+      if ($associated_trigger) {
+        if($associated_trigger.is(mc.$trigger)) {
           return;
         }
       }
       hideCalendar();
     });
 
-    mc.$input.bind("click.minical", showCalendar);
-    mc.$input.keydown(handleKeypress);
+    mc.$trigger.bind("click.minical", showCalendar);
+    if (mc.$input) {
+      mc.$input.keydown(handleKeypress);
+    } else {
+      mc.dropdowns.$year.bind("change.minical", changeCalendar);
+      mc.dropdowns.$day.bind("change.minical", changeCalendar);
+      mc.dropdowns.$month.bind("change.minical", changeCalendar);
+    }
 
     mc.$el.delegate("header a.minical_prev", "click.minical", function() {
       var prevMonth = $(this).closest("li").detach().data("minical_month");
@@ -94,26 +115,46 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     mc.$el.delegate("td a", "click.minical", function() {
       var $td = $(this).closest("td");
       mc.opts.selected_day = new Date($td.data("minical_date"));
-      mc.$input.val(mc.opts.date_format(mc.opts.selected_day));
+      if (mc.$input) {
+        mc.$input.val(mc.opts.date_format(mc.opts.selected_day));
+      } else {
+        mc.dropdowns.$month.val(mc.opts.selected_day.getMonth());
+        mc.dropdowns.$day.val(mc.opts.selected_day.getDate());
+        mc.dropdowns.$year.val(mc.opts.selected_day.getFullYear());
+      }
       hideCalendar();
       return false;
     });
 
     function attachMonth(date) {
       mc.$el.find("li").detach();
-      var $month = buildMonth.call(mc, date).data("minical_input", mc.$input);
+      var $month = buildMonth.call(mc, date).data("minical_trigger", mc.$trigger);
       mc.$el.append($month);
     }
 
+    function changeCalendar() {
+      if (mc.$el.is(":visible")) {
+        showCalendar();
+      }
+    }
+
     function showCalendar() {
-      var offset = mc.$input.position();
-      mc.opts.selected_day ? attachMonth(new Date(mc.opts.selected_day)) : attachMonth(new Date(mc.opts.start_date));
-      mc.$el.appendTo(document.body).hide();
+      var offset = mc.$trigger.position();
+      if (mc.$input) {
+        mc.opts.selected_day ? attachMonth(new Date(mc.opts.selected_day)) : attachMonth(new Date(mc.opts.start_date));
+      } else {
+        attachMonth(new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val(), mc.dropdowns.$day.val()));
+      }
+      if (!mc.$el.is(":visible")) {
+        mc.$el.appendTo(document.body).hide();
+      }
       mc.$el.css({
         left: offset.left + mc.opts.offset.x,
-        top: offset.top + mc.$input.outerHeight() + mc.opts.offset.y
+        top: offset.top + mc.$trigger.outerHeight() + mc.opts.offset.y
       }).fadeIn(200);
-      mc.$input.prop("disabled", true);
+      if (mc.$input) {
+        mc.$input.prop("disabled", true);
+      }
     }
 
     function hideCalendar() {
@@ -121,7 +162,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         mc.$el.fadeOut(200, function() {
           mc.$el.detach();
         });
-        mc.$input.prop("disabled", false);
+        if (mc.$input) {
+          mc.$input.prop("disabled", false);
+        }
       }
     }
 
@@ -145,7 +188,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     };
 
     if (!mc.dates[year][month]) {
-      mc.dates[year][month] = buildMonthElement(date).data("minical_input", mc.$input);
+      mc.dates[year][month] = buildMonthElement(date).data("minical_trigger", mc.$trigger);
     }
 
     var $days = mc.dates[year][month].data("minical_month", new Date(date.setDate(1)));
