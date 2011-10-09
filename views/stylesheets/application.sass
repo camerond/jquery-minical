@@ -1,33 +1,46 @@
 @import 'reset.scss'
+$accent: #f13937
 
 body
   font-family: 'Helvetica Neue', helvetica, sans-serif
-  background: #1d1f21 url("/images/jq_bg.png")
-  color: #d2d8e3
-  text-shadow: 0 2px 1px #000
+  color: #373b43
+  text-shadow: 0 1px 1px #fff
+  background: #e9e4d7 url("/images/jq_bg.png")
+  &::before
+    position: absolute
+    left: 0
+    top: 0
+    opacity: .3
+    width: 100%
+    height: 100px
+    background-image: -moz-linear-gradient(100% 100% 90deg, #eae6d9, $accent)
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from($accent), to(#eae6d9))
+    content: ""
+    z-index: 1
 
 #wrapper
-  padding: 100px
+  position: relative
+  padding: 70px
+  z-index: 2
 
 a
   text-decoration: none
-  color: #51b1ff
+  color: $accent
   &:hover
-    text-decoration: underline
+    color: $accent - #333
 
 code
   font-weight: bold
-  background: #31363b
+  background: #efece4
   padding: 1px 4px
   margin: 0 4px
-  text-shadow: 0 1px 1px #000
 
 header
   h1
     font-size: 80px
     font-family: "chunk-1","chunk-2", 'Helvetica Neue', helvetica, sans-serif
     span
-      color: #51b1ff
+      color: $accent
   h2
     font-size: 40px
     font-family: "chunk-1","chunk-2", 'Helvetica Neue', helvetica, sans-serif
@@ -56,7 +69,6 @@ form
     background: url("/images/icon_calendar.png")
 
 input[type="text"]
-  border: none
   margin: 0 20px 0 0
   padding: 5px
   font-size: 14px
