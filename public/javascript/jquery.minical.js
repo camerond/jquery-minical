@@ -1,7 +1,7 @@
 /*
 
 jQuery minical Plugin
-version 0.4
+version 0.4.1
 
 Copyright (c) 2011 Cameron Daigle, http://camerondaigle.com
 
@@ -139,7 +139,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     }
 
     function showCalendar() {
-      var offset = mc.$trigger.position();
+      var offset = mc.$trigger.offset();
       if (mc.$input) {
         mc.opts.selected_day ? attachMonth(new Date(mc.opts.selected_day)) : attachMonth(new Date(mc.opts.start_date));
       } else {
