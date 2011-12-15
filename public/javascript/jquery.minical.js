@@ -1,7 +1,7 @@
 /*
 
 jQuery minical Plugin
-version 0.4.1
+version 0.4.2
 
 Copyright (c) 2011 Cameron Daigle, http://camerondaigle.com
 
@@ -99,14 +99,16 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     }
 
     mc.$el.delegate("header a.minical_prev", "click.minical", function() {
-      var prevMonth = $(this).closest("li").detach().data("minical_month");
+      var $a = $(this);
+      var prevMonth = $a.closest("li").detach().data("minical_month");
       prevMonth.setMonth(prevMonth.getMonth() - 1);
       attachMonth(prevMonth);
       return false;
     });
 
     mc.$el.delegate("header a.minical_next", "click.minical", function() {
-      var nextMonth = $(this).closest("li").detach().data("minical_month");
+      var $a = $(this);
+      var nextMonth = $a.closest("li").detach().data("minical_month");
       nextMonth.setMonth(nextMonth.getMonth() + 1);
       attachMonth(nextMonth);
       return false;
@@ -130,12 +132,25 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       mc.$el.find("li").detach();
       var $month = buildMonth.call(mc, date).data("minical_trigger", mc.$trigger);
       mc.$el.append($month);
+      date.setMonth(date.getMonth() - 1);
+      mc.$el.find("a.minical_prev").toggle(dateExistsInDropdowns(date));
+      date.setMonth(date.getMonth() + 2);
+      mc.$el.find("a.minical_next").toggle(dateExistsInDropdowns(date));
     }
 
     function changeCalendar() {
       if (mc.$el.is(":visible")) {
         showCalendar();
       }
+    }
+
+    function dateExistsInDropdowns(date) {
+      if (mc.$input) { return true; }
+      if (mc.dropdowns.$month.find("option[value='" + date.getMonth() + "']").length &&
+          mc.dropdowns.$year.find("option[value='" + date.getFullYear() + "']").length) {
+            return true;
+          }
+      return false;
     }
 
     function showCalendar() {
