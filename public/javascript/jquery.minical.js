@@ -1,7 +1,7 @@
 /*
 
 jQuery minical Plugin
-version 0.4.2
+version 0.4.3
 
 Copyright (c) 2011 Cameron Daigle, http://camerondaigle.com
 
@@ -46,30 +46,41 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             },
             date_format: function(date) {
               return [date.getMonth()+1, date.getDate(), date.getFullYear()].join("/");
-            }
-          };
-
-      var mc = {
-        opts: $.extend(defaults, options),
-        dates: []
+            },
+            date_changed: $.noop
       };
 
-      mc.$el = $("<ul />").attr("id", "minical");
-      mc.$called_on = $(this);
+      var mc;
 
-      if (mc.$called_on.is(":text")) {
-        mc.$input = mc.$called_on.addClass("minical_input");
-        mc.$trigger = mc.$called_on;
+      if (typeof options === "string") {
+        if (options === "refresh") {
+          mc = $(this).data("minical");
+          detectDate.call(mc);
+        }
       } else {
-        mc.dropdowns = {
-          $month: mc.$called_on.find(mc.opts.dropdowns.month),
-          $day: mc.$called_on.find(mc.opts.dropdowns.day),
-          $year: mc.$called_on.find(mc.opts.dropdowns.year)
+        mc = {
+          opts: $.extend(defaults, options),
+          dates: []
         };
-        mc.$trigger = mc.$called_on.find(mc.opts.trigger);
-        mc.opts.selected_day = new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val(), mc.dropdowns.$day.val());
+
+        mc.$el = $("<ul />").attr("id", "minical");
+        mc.$called_on = $(this);
+        mc.$called_on.data("minical", mc);
+
+        if (mc.$called_on.is(":text")) {
+          mc.$input = mc.$called_on.addClass("minical_input");
+          mc.$trigger = mc.$called_on;
+        } else {
+          mc.dropdowns = {
+            $month: mc.$called_on.find(mc.opts.dropdowns.month),
+            $day: mc.$called_on.find(mc.opts.dropdowns.day),
+            $year: mc.$called_on.find(mc.opts.dropdowns.year)
+          };
+          mc.$trigger = mc.$called_on.find(mc.opts.trigger);
+        }
+        attachEvents.call(mc);
+        detectDate.call(mc);
       }
-      attachEvents.call(mc);
 
     });
   };
@@ -119,10 +130,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       mc.opts.selected_day = new Date($td.data("minical_date"));
       if (mc.$input) {
         mc.$input.val(mc.opts.date_format(mc.opts.selected_day));
+        mc.opts.date_changed.apply(mc.$input);
       } else {
         mc.dropdowns.$month.val(mc.opts.selected_day.getMonth());
         mc.dropdowns.$day.val(mc.opts.selected_day.getDate());
         mc.dropdowns.$year.val(mc.opts.selected_day.getFullYear());
+        mc.opts.date_changed.apply(mc.dropdowns);
       }
       hideCalendar();
       return false;
@@ -251,6 +264,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       $tr.find("td.minical_day").length ? $tr.appendTo($tbody) : false;
     }
     return $li;
+  }
+
+  function detectDate() {
+    var mc = this;
+    if (mc.$input) {
+      mc.opts.selected_day = new Date(mc.$input.val());
+    } else {
+      mc.opts.selected_day = new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val(), mc.dropdowns.$day.val());
+    }
   }
 
   function getStartOfCalendarBlock(date) {
