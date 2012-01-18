@@ -268,9 +268,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
   function detectDate() {
     var mc = this;
-    if (mc.$input) {
+    if (mc.$input && mc.$input.val()) {
       mc.opts.selected_day = new Date(mc.$input.val());
-    } else {
+    } else if (mc.dropdowns) {
       mc.opts.selected_day = new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val(), mc.dropdowns.$day.val());
     }
   }
