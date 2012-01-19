@@ -1,7 +1,7 @@
 /*
 
 jQuery minical Plugin
-version 0.4.3
+version 0.4.4
 
 Copyright (c) 2011 Cameron Daigle, http://camerondaigle.com
 
@@ -69,14 +69,22 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
         if (mc.$called_on.is(":text")) {
           mc.$input = mc.$called_on.addClass("minical_input");
-          mc.$trigger = mc.$called_on;
         } else {
-          mc.dropdowns = {
-            $month: mc.$called_on.find(mc.opts.dropdowns.month),
-            $day: mc.$called_on.find(mc.opts.dropdowns.day),
-            $year: mc.$called_on.find(mc.opts.dropdowns.year)
-          };
+          if (mc.$called_on.find(":text").length === 1) {
+            mc.$input = mc.$called_on.find(":text").addClass("minical_input");
+          } else {
+            mc.dropdowns = {
+              $month: mc.$called_on.find(mc.opts.dropdowns.month),
+              $day: mc.$called_on.find(mc.opts.dropdowns.day),
+              $year: mc.$called_on.find(mc.opts.dropdowns.year)
+            };
+          }
+        }
+        if (mc.opts.trigger) {
           mc.$trigger = mc.$called_on.find(mc.opts.trigger);
+          if (!mc.$trigger.length) {
+            mc.$trigger = mc.$called_on.parent().find(mc.opts.trigger);
+          }
         }
         attachEvents.call(mc);
         detectDate.call(mc);
@@ -90,7 +98,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     $(document).bind("click.minical", function(e) {
       var $target = $(e.target);
-      if ($target.is(mc.$trigger)) { return; }
+      if ($target.is(mc.$trigger) || $target.is(mc.$input)) { return; }
       var $associated_trigger = $target.closest("li").data("minical_trigger");
       if ($associated_trigger) {
         if($associated_trigger.is(mc.$trigger)) {
@@ -100,8 +108,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       hideCalendar();
     });
 
-    mc.$trigger.bind("click.minical", showCalendar);
+    if (mc.$trigger) {
+      mc.$trigger.bind("click.minical", showCalendar);
+    }
     if (mc.$input) {
+      mc.$input.bind("click.minical", showCalendar);
       mc.$input.keydown(handleKeypress);
     } else {
       mc.dropdowns.$year.bind("change.minical", changeCalendar);
@@ -167,7 +178,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     }
 
     function showCalendar() {
-      var offset = mc.$trigger.offset();
+      var offset = mc.dropdowns ? mc.$trigger.offset() : mc.$input.offset();
+      var height = mc.dropdowns ? mc.$trigger.height() : mc.$input.outerHeight();
       if (mc.$input) {
         mc.opts.selected_day ? attachMonth(new Date(mc.opts.selected_day)) : attachMonth(new Date(mc.opts.start_date));
       } else {
@@ -178,7 +190,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       }
       mc.$el.css({
         left: offset.left + mc.opts.offset.x,
-        top: offset.top + mc.$trigger.outerHeight() + mc.opts.offset.y
+        top: offset.top + height + mc.opts.offset.y
       }).fadeIn(200);
       if (mc.$input) {
         mc.$input.prop("disabled", true);
