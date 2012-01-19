@@ -2,7 +2,11 @@
 
 ## Usage
 
-- `$("my_text_input").minical();`
+Call `.minical()` on:
+
+- a text input
+- the element containing a text input
+- the element containing a set of dropdowns
 
 ## Requirements
 
@@ -16,11 +20,11 @@
   - `x`
   - `y`
 - `date_format(Date)` output of date object to text input (defaults to m/d/yyyy)
+- `trigger` string selector specifying a trigger element (see [the demo source](http://jquery-minical.heroku.com/javascript/demo.js) for a good example).
 
 ### If you're using `<select>` tags (like in the second example above):
 
 - `dropdowns.month`, `dropdowns.day`, `dropdowns.year` string selectors specifying each select tag
-- `trigger` string selector specifying a trigger element (see [the demo source](http://jquery-minical.heroku.com/javascript/demo.js) for a good example).
 
 ## Why I made this instead of using the [jQuery UI Datepicker](http://jqueryui.com/demos/datepicker/):
 

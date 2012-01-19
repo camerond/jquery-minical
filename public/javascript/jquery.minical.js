@@ -1,7 +1,7 @@
 /*
 
 jQuery minical Plugin
-version 0.4.3
+version 0.4.4
 
 Copyright (c) 2011 Cameron Daigle, http://camerondaigle.com
 
@@ -69,14 +69,22 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
         if (mc.$called_on.is(":text")) {
           mc.$input = mc.$called_on.addClass("minical_input");
-          mc.$trigger = mc.$called_on;
         } else {
-          mc.dropdowns = {
-            $month: mc.$called_on.find(mc.opts.dropdowns.month),
-            $day: mc.$called_on.find(mc.opts.dropdowns.day),
-            $year: mc.$called_on.find(mc.opts.dropdowns.year)
-          };
+          if (mc.$called_on.find(":text").length === 1) {
+            mc.$input = mc.$called_on.find(":text").addClass("minical_input");
+          } else {
+            mc.dropdowns = {
+              $month: mc.$called_on.find(mc.opts.dropdowns.month),
+              $day: mc.$called_on.find(mc.opts.dropdowns.day),
+              $year: mc.$called_on.find(mc.opts.dropdowns.year)
+            };
+          }
+        }
+        if (mc.opts.trigger) {
           mc.$trigger = mc.$called_on.find(mc.opts.trigger);
+          if (!mc.$trigger.length) {
+            mc.$trigger = mc.$called_on.parent().find(mc.opts.trigger);
+          }
         }
         attachEvents.call(mc);
         detectDate.call(mc);
@@ -100,8 +108,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       hideCalendar();
     });
 
-    mc.$trigger.bind("click.minical", showCalendar);
+    if (mc.$trigger) {
+      mc.$trigger.bind("click.minical", showCalendar);
+    }
     if (mc.$input) {
+      mc.$input.bind("click.minical", showCalendar);
       mc.$input.keydown(handleKeypress);
     } else {
       mc.dropdowns.$year.bind("change.minical", changeCalendar);
