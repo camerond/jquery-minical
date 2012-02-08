@@ -108,6 +108,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       hideCalendar();
     });
 
+    $(document).bind("keyup.minical", function(e) {
+      if (e.keyCode === 27) {
+        hideCalendar();
+      }
+    });
+
     if (mc.$trigger) {
       mc.$trigger.bind("click.minical", showCalendar);
     }
