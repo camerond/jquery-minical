@@ -1,7 +1,7 @@
 /*
 
 jQuery minical Plugin
-version 0.4.4
+version 0.4.5
 
 Copyright (c) 2011 Cameron Daigle, http://camerondaigle.com
 
@@ -143,7 +143,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         mc.$input.val(mc.opts.date_format(mc.opts.selected_day));
         mc.opts.date_changed.apply(mc.$input);
       } else {
-        mc.dropdowns.$month.val(mc.opts.selected_day.getMonth());
+        mc.dropdowns.$month.val(mc.opts.selected_day.getMonth() + 1);
         mc.dropdowns.$day.val(mc.opts.selected_day.getDate());
         mc.dropdowns.$year.val(mc.opts.selected_day.getFullYear());
         mc.opts.date_changed.apply(mc.dropdowns);
@@ -170,7 +170,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     function dateExistsInDropdowns(date) {
       if (mc.$input) { return true; }
-      if (mc.dropdowns.$month.find("option[value='" + date.getMonth() + "']").length &&
+      if (mc.dropdowns.$month.find("option[value='" + (date.getMonth() + 1) + "']").length &&
           mc.dropdowns.$year.find("option[value='" + date.getFullYear() + "']").length) {
             return true;
           }
@@ -183,7 +183,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       if (mc.$input) {
         mc.opts.selected_day ? attachMonth(new Date(mc.opts.selected_day)) : attachMonth(new Date(mc.opts.start_date));
       } else {
-        attachMonth(new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val(), mc.dropdowns.$day.val()));
+        attachMonth(new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val() - 1, mc.dropdowns.$day.val()));
       }
       if (!mc.$el.is(":visible")) {
         mc.$el.appendTo(document.body).hide();
@@ -283,7 +283,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     if (mc.$input && mc.$input.val()) {
       mc.opts.selected_day = new Date(mc.$input.val());
     } else if (mc.dropdowns) {
-      mc.opts.selected_day = new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val(), mc.dropdowns.$day.val());
+      mc.opts.selected_day = new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val() - 1, mc.dropdowns.$day.val());
     }
   }
 

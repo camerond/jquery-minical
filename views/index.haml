@@ -37,7 +37,7 @@
           %dd
             %select.month
               - ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].each_with_index do |month, i|
-                %option(value=i)= month
+                %option{:value => i+1}= month
             %select.day
               - (1..31).each do |n|
                 %option(value=n)= n
