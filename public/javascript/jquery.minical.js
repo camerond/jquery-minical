@@ -1,7 +1,7 @@
 /*
 
 jQuery minical Plugin
-version 0.4.5
+version 0.4.6
 
 Copyright (c) 2011 Cameron Daigle, http://camerondaigle.com
 
@@ -143,7 +143,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       return false;
     });
 
-    mc.$el.delegate("td a", "click.minical", function() {
+    mc.$el.delegate("td a", "click.minical", function(e) {
+      e.preventDefault();
       var $td = $(this).closest("td");
       mc.opts.selected_day = new Date($td.data("minical_date"));
       if (mc.$input) {
@@ -156,7 +157,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         mc.opts.date_changed.apply(mc.dropdowns);
       }
       hideCalendar();
-      return false;
     });
 
     function attachMonth(date) {
