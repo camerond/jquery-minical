@@ -39,6 +39,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               y: 5
             },
             trigger: null,
+            attach_to_trigger: true,
             dropdowns: {
               month: null,
               day: null,
@@ -184,8 +185,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     }
 
     function showCalendar() {
-      var offset = mc.dropdowns ? mc.$trigger.offset() : mc.$input.offset();
-      var height = mc.dropdowns ? mc.$trigger.height() : mc.$input.outerHeight();
+      var offset = mc.dropdowns || mc.opts.attach_to_trigger ? mc.$trigger.offset() : mc.$input.offset();
+      var height = mc.dropdowns || mc.opts.attach_to_trigger ? mc.$trigger.height() : mc.$input.outerHeight();
       if (mc.$input) {
         mc.opts.selected_day ? attachMonth(new Date(mc.opts.selected_day)) : attachMonth(new Date(mc.opts.start_date));
       } else {
