@@ -279,7 +279,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           $day.addClass("minical_day");
         }
         $day.data("minical_date", new Date(current_day));
-        $day.addClass("minical_day_" + [current_day.getMonth(), current_day.getDate(), current_day.getFullYear()].join("_"));
+        $day.addClass("minical_day_" + [current_day.getMonth() + 1, current_day.getDate(), current_day.getFullYear()].join("_"));
         current_day.setTime(current_day.getTime() + 86400000);
       }
       $tr.find("td.minical_day").length ? $tr.appendTo($tbody) : false;
@@ -317,7 +317,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   }
 
   function getDayClass(day) {
-    return "td.minical_day_" + [day.getMonth(), day.getDate(), day.getFullYear()].join("_");
+    return "td.minical_day_" + [day.getMonth() + 1, day.getDate(), day.getFullYear()].join("_");
   }
 
 })(jQuery);
