@@ -48,7 +48,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             date_format: function(date) {
               return [date.getMonth()+1, date.getDate(), date.getFullYear()].join("/");
             },
-            date_changed: $.noop
+            date_changed: $.noop,
+            month_drawn: $.noop
       };
 
       var mc;
@@ -167,6 +168,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       mc.$el.find("a.minical_prev").toggle(dateExistsInDropdowns(date));
       date.setMonth(date.getMonth() + 2);
       mc.$el.find("a.minical_next").toggle(dateExistsInDropdowns(date));
+      mc.opts.month_drawn.apply(mc.$el);
     }
 
     function changeCalendar() {
