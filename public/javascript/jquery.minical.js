@@ -39,7 +39,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               y: 5
             },
             trigger: null,
-            attach_to_trigger: false,
+            align_to_trigger: true,
             dropdowns: {
               month: null,
               day: null,
@@ -87,10 +87,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           if (!mc.$trigger.length) {
             mc.$trigger = mc.$called_on.parent().find(mc.opts.trigger);
           }
+        } else {
+          mc.opts.align_to_trigger = false;
         }
         attachEvents.call(mc);
         detectDate.call(mc);
       }
+
+      $(this).data("minical", mc);
 
     });
   };
@@ -190,8 +194,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     }
 
     function showCalendar() {
-      var offset = mc.dropdowns || mc.opts.attach_to_trigger ? mc.$trigger.offset() : mc.$input.offset();
-      var height = mc.dropdowns || mc.opts.attach_to_trigger ? mc.$trigger.height() : mc.$input.outerHeight();
+      var offset = mc.dropdowns || mc.opts.align_to_trigger ? mc.$trigger.offset() : mc.$input.offset();
+      var height = mc.dropdowns || mc.opts.align_to_trigger ? mc.$trigger.height() : mc.$input.outerHeight();
       if (mc.$input) {
         mc.opts.selected_day ? attachMonth(new Date(mc.opts.selected_day)) : attachMonth(new Date(mc.opts.start_date));
       } else {
@@ -201,9 +205,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       if (!mc.$el.is(":visible")) {
         mc.$el.appendTo(document.body).hide();
       }
-      mc.$el.css({
-        left: offset.left + mc.opts.offset.x,
-        top: offset.top + height + mc.opts.offset.y
+      mc.$el.show().css({
+        left: offset.left + mc.opts.offset.x + "px",
+        top: offset.top + height + mc.opts.offset.y + "px"
       }).fadeIn(200);
       if (mc.$input) {
         mc.$input.prop("disabled", true);
