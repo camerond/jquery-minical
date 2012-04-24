@@ -5,14 +5,14 @@
     %link(rel="stylesheet" href="/stylesheets/application.css")
     %link(rel="stylesheet" href="/stylesheets/jquery.minical.css")
     %link(rel='icon' type='image/png' href='/favicon.png')
-    %script(type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js")
+    %script(type="text/javascript" src="/javascript/jquery-1.7.1.min.js")
     %script(type="text/javascript" src="/javascript/jquery.minical.js")
     %script(type="text/javascript" src="/javascript/demo.js")
-    %script(type="text/javascript" src="http://use.typekit.com/aqp8xdq.js")
+    /%script(type="text/javascript" src="http://use.typekit.com/aqp8xdq.js")
     /[if IE]
       %script(type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js")
-    :javascript
-      try{Typekit.load();}catch(e){}
+    /:javascript
+    /try{Typekit.load();}catch(e){}
   %body
     #wrapper
       %header
@@ -28,7 +28,7 @@
           %dt
             %label Date using a text input:
           %dd
-            %input(type="text" value="")
+            %input(type="text" value="12/21/2012")
             %span.calendar_icon
       %form#dropdown_example
         %dl

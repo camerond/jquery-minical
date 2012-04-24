@@ -39,7 +39,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               y: 5
             },
             trigger: null,
-            attach_to_trigger: true,
+            attach_to_trigger: false,
             dropdowns: {
               month: null,
               day: null,
@@ -162,7 +162,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     function attachMonth(date) {
       mc.$el.find("li").detach();
-      var $month = buildMonth.call(mc, date).data("minical_trigger", mc.$trigger);
+      var $month = buildMonth.call(mc, date);
+      if (mc.$trigger) {
+        $month.data("minical_trigger", mc.$trigger);
+      }
       mc.$el.append($month);
       date.setMonth(date.getMonth() - 1);
       mc.$el.find("a.minical_prev").toggle(dateExistsInDropdowns(date));
@@ -194,6 +197,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       } else {
         attachMonth(new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val() - 1, mc.dropdowns.$day.val()));
       }
+
       if (!mc.$el.is(":visible")) {
         mc.$el.appendTo(document.body).hide();
       }
@@ -237,10 +241,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     };
 
     if (!mc.dates[year][month]) {
-      mc.dates[year][month] = buildMonthElement(date).data("minical_trigger", mc.$trigger);
+      mc.dates[year][month] = buildMonthElement(date);
     }
 
     var $days = mc.dates[year][month].data("minical_month", new Date(date.setDate(1)));
+    if (mc.$trigger) {
+      $days.data("minical_trigger", mc.$trigger);
+    }
 
     $days.find("td.minical_selected").removeClass("minical_selected");
     $days.find(getDayClass(new Date())).addClass("minical_today");

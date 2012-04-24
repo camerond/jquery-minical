@@ -1,0 +1,15 @@
+%html
+  %head
+    %title jQuery.minical Test Suite
+    %script(type="text/javascript" src="/javascript/jquery-1.7.1.min.js")
+    %script(type="text/javascript" src="/javascript/qunit/qunit.js")
+    %script(type="text/javascript" src="/javascript/jquery.minical.js")
+    %script(type="text/javascript" src="/javascript/suite.js")
+    %link(rel="stylesheet" href="/javascript/qunit/qunit.css" type="text/css")
+  %body
+    #qunit
+    #qunit-fixture
+      .calendar
+        %label Test Calendar 1
+        %input(type="text")
+        %a.trigger(href="#") trigger
