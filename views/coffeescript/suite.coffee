@@ -5,9 +5,9 @@ $.fx.off = true
 tester =
   typeKeycode: (k, msg) ->
     if msg then ok true, "I press #{msg}"
-    $e = $.Event('keyup');
-    $e.keyCode = k;
-    @$el.trigger($e);
+    $e = $.Event('keyup')
+    $e.keyCode = k
+    @$el.trigger($e)
   initDropdowns: (opts, month, day, year, months, days, years) ->
     month ?= 12
     day ?= 21
