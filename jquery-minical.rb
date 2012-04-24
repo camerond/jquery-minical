@@ -16,6 +16,10 @@ get '/javascript/suite.js' do
   coffee '/coffeescript/suite'.to_sym
 end
 
+get '/javascript/jquery.minical.js' do
+  coffee '/coffeescript/jquery.minical'.to_sym
+end
+
 get '/test' do
   haml :test
 end
