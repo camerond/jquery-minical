@@ -27,7 +27,7 @@ minical =
   date_changed: $.noop
   month_drawn: $.noop
   getDayClass: (date) ->
-    return "minical_day_" + [date.getMonth() + 1, date.getDate(), date.getFullYear()].join("_");
+    return "minical_day_" + [date.getMonth() + 1, date.getDate(), date.getFullYear()].join("_")
   render: (date) ->
     date ?= @selected_day
     $li = $("<li />", class: "minical_#{date_tools.getMonthName(date).toLowerCase()}")
@@ -61,6 +61,7 @@ minical =
         current_date.setTime(current_date.getTime() + 86400000)
       $tr.appendTo($tbody) if $tr.find(".minical_day").length
     $li.find(".#{@getDayClass(new Date())}").addClass("minical_today")
+    @month_drawn.apply(@$el)
     @$cal.empty().append($li)
   renderDay: (d, base_date) ->
     $td = $("<td />")
@@ -78,7 +79,7 @@ minical =
   selectDay: (e) ->
     $td = $(e.target).closest("td")
     mc = $td.closest("ul").data("minical")
-    mc.selected_day = new Date($td.data("minical_date"));
+    mc.selected_day = new Date($td.data("minical_date"))
     console.log($td.data("minical_date"))
     if (mc.$el.is(":text"))
       mc.$el.val(mc.date_format(mc.selected_day))
@@ -101,7 +102,12 @@ minical =
   showCalendar: (e) ->
     mc = if e then $(e.target).data("minical") else @
     mc.$el.prop("disabled", true) if mc.$el.is(":text")
-    mc.render().fadeIn(200)
+    offset = if mc.align_to_trigger then mc.$trigger.offset() else mc.$el.offset()
+    height = if mc.align_to_trigger then mc.$trigger.outerHeight() else mc.$el.outerHeight()
+    position =
+      left: "#{offset.left + mc.offset.x}px",
+      top: "#{offset.top + height + mc.offset.y}px"
+    mc.render().css(position).fadeIn(200)
   hideCalendar: (e) ->
     mc = if e then $(e.target).data("minical") else @
     return true if !mc.$cal || mc.$cal.is(":animated")
@@ -109,14 +115,17 @@ minical =
     mc.$el.prop("disabled", false) if mc.$el.is(":text")
   outsideClick: (e) ->
     $t = $(e.target)
-    return true if ($t.is(@$el) and @$el.is(":text")) or @$el.closest(".minical").length
+    return true if ($t.is(@$el) and @$el.is(":text")) or $t.is(@$trigger) or @$el.closest(".minical").length
     @hideCalendar()
   init: ->
     @$cal = $("<ul />", { id: "minical_#{$('.minical').length}", class: "minical" }).data("minical", @).appendTo($("body"))
     if @trigger
       @$trigger = @$el.find(@trigger)
+      @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
       @$trigger.bind("click.minical", @showCalendar).data("minical", @)
-    if @$el.is(":text")
+    else
+      @align_to_trigger = false
+    if @$el.is("input")
       @$el.addClass("minical_input").click(@showCalendar)
       @selected_day = new Date(@$el.val())
     else
@@ -124,6 +133,7 @@ minical =
       @dropdowns.$month = @$el.find(@dropdowns.month) if @dropdowns.month
       @dropdowns.$day = @$el.find(@dropdowns.day) if @dropdowns.day
       @selected_day = new Date(@dropdowns.$year.val(), @dropdowns.$month.val() - 1, @dropdowns.$day.val())
+      @align_to_trigger = true
     $(document).bind("click.minical", (e) => @outsideClick.call(@, e))
     @$cal.delegate("td a", "click.minical", @selectDay)
     @$cal.delegate("a.minical_next", "click.minical", @nextMonth)

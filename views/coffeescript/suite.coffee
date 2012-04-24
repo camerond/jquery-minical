@@ -141,8 +141,8 @@ test "Calendar aligns to trigger if one is specified", ->
     trigger: ".trigger"
   $el = tester.init(opts)
   $trigger = $el.data("minical").$trigger.click()
-  equal $trigger.offset().left, tester.cal().offset().left, "Calendar and trigger left offsets are identical"
-  equal $trigger.offset().top + $trigger.outerHeight() + 5, tester.cal().offset().top, "Calendar is 5px below trigger by default"
+  equal $trigger.offset().left, tester.cal().show().offset().left, "Calendar and trigger left offsets are identical"
+  equal $trigger.offset().top + $trigger.outerHeight() + 5, tester.cal().show().offset().top, "Calendar is 5px below trigger by default"
 
 test "Calendar offset can be specified", ->
   opts =
