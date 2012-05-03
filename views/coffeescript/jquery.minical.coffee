@@ -65,6 +65,8 @@ minical =
         current_date.setTime(current_date.getTime() + 86400000)
       $tr.appendTo($tbody) if $tr.find(".minical_day").length
     $li.find(".#{@getDayClass(new Date())}").addClass("minical_today")
+    $li.find(".#{@getDayClass(@selected_day)}").addClass("minical_selected").addClass("minical_highlighted") if @selected_day
+    $li.find("td").not(".minical_disabled, .minical_past_month").eq(0).addClass("minical_highlighted") if !$li.find(".minical_highlighted").length
     $li.find(".minical_next").hide() if @to && @to < new Date($li.find("td").last().data("minical_date"))
     @month_drawn.apply(@$el)
     @$cal.empty().append($li)
@@ -96,6 +98,11 @@ minical =
       mc.dropdowns.$year.val(mc.selected_day.getFullYear())
       mc.date_changed.apply(mc.dropdowns)
     mc.hideCalendar()
+  highlightDay: (e) ->
+    $td = $(e.target).closest("td")
+    klass = "minical_highlighted"
+    $td.closest("tbody").find(".#{klass}").removeClass(klass)
+    $td.addClass(klass)
   nextMonth: (e) ->
     mc = $(e.target).closest(".minical").data("minical")
     mc.selected_day.setMonth(mc.selected_day.getMonth() + 1)
@@ -146,6 +153,7 @@ minical =
       @align_to_trigger = true
     $(document).bind("click.minical", (e) => @outsideClick.call(@, e))
     @$cal.delegate("td a", "click.minical", @selectDay)
+    @$cal.delegate("td a", "hover.minical", @highlightDay)
     @$cal.delegate("a.minical_next", "click.minical", @nextMonth)
     @$cal.delegate("a.minical_prev", "click.minical", @prevMonth)
 

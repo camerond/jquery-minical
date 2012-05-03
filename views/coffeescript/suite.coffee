@@ -100,7 +100,7 @@ test "minical fades out displayed days not of current month", ->
   tester.cal("td:lt(7)").shouldBe(".minical_past_month")
 
 test "minical highlights the current day", ->
-  today = new Date
+  today = new Date()
   today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]
   $input = tester.init({}, today_array.join("/")).click()
   tester.cal("td.minical_day_#{today_array.join('_')}").shouldBe(".minical_today")
@@ -215,6 +215,30 @@ test "Calendar can be overridden to align to text input", ->
   $el = tester.init(opts).click()
   equal $el.offset().left, tester.cal().offset().left, "Calendar and input left offsets are identical"
   equal $el.offset().top + $el.outerHeight() + 5, tester.cal().offset().top, "Calendar is 5px below input by default"
+
+module "Selection feedback and keyboard support"
+
+test "Select date in calendar on draw", ->
+  tester.init().click()
+  equal tester.cal("td.minical_selected").length, 1, "Only one td with 'selected' class"
+  tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_selected")
+
+test "Select date in calendar on redraw", ->
+  $input = tester.init().click()
+  tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_selected")
+  tester.cal("td.minical_day_12_7_2012 a").click()
+  $input.click()
+  equal tester.cal("td.minical_selected").length, 1, "Only one td with 'selected' class"
+  tester.cal("td.minical_day_12_7_2012").shouldBe(".minical_selected")
+
+test "Highlight existing choice if available", ->
+  tester.init({}, "12/5/2012").click()
+  tester.cal("td.minical_day_12_5_2012").shouldBe(".minical_highlighted")
+
+test "Highlight triggers on mouse hover", ->
+  tester.init().click()
+  tester.cal("td:eq(3) a").trigger("mouseover").parent().shouldBe(".minical_highlighted")
+  equal tester.cal("td.minical_selected").length, 1, "Only one td with 'selected' class"
 
 module "Other options"
 
