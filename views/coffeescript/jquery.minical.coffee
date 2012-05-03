@@ -24,6 +24,8 @@ minical =
     year: null
   date_format: (date) ->
     [date.getMonth()+1, date.getDate(), date.getFullYear()].join("/")
+  from: null
+  to: null
   date_changed: $.noop
   month_drawn: $.noop
   getDayClass: (date) ->
@@ -48,12 +50,14 @@ minical =
             </tbody>
           </table>
         </section>
+      </article>
     ")
     days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     $tr = $li.find("tr")
     $("<th />", { text: day }).appendTo($tr) for day in days
     $tbody = $li.find("tbody")
     current_date = date_tools.getStartOfCalendarBlock(date)
+    $li.find(".minical_prev").hide() if @from && @from > current_date
     for w in [1..6]
       $tr = $("<tr />")
       for d in [1..7]
@@ -61,6 +65,7 @@ minical =
         current_date.setTime(current_date.getTime() + 86400000)
       $tr.appendTo($tbody) if $tr.find(".minical_day").length
     $li.find(".#{@getDayClass(new Date())}").addClass("minical_today")
+    $li.find(".minical_next").hide() if @to && @to < new Date($li.find("td").last().data("minical_date"))
     @month_drawn.apply(@$el)
     @$cal.empty().append($li)
   renderDay: (d, base_date) ->
@@ -70,6 +75,7 @@ minical =
       .append($("<a />", {"href": "#"}).text(d.getDate()))
     current_month = d.getMonth()
     month = base_date.getMonth()
+    $td.addClass("minical_disabled") if (@from && d < @from) || (@to && d > @to)
     if current_month < month
       $td.addClass("minical_past_month")
     else if current_month > month
@@ -78,9 +84,9 @@ minical =
       $td.addClass("minical_day")
   selectDay: (e) ->
     $td = $(e.target).closest("td")
+    return false if $td.hasClass("minical_disabled")
     mc = $td.closest("ul").data("minical")
     mc.selected_day = new Date($td.data("minical_date"))
-    console.log($td.data("minical_date"))
     if (mc.$el.is(":text"))
       mc.$el.val(mc.date_format(mc.selected_day))
       mc.date_changed.apply(mc.$input)
@@ -91,14 +97,15 @@ minical =
       mc.date_changed.apply(mc.dropdowns)
     mc.hideCalendar()
   nextMonth: (e) ->
-    console.log(e)
     mc = $(e.target).closest(".minical").data("minical")
     mc.selected_day.setMonth(mc.selected_day.getMonth() + 1)
     mc.render()
+    false
   prevMonth: (e) ->
     mc = $(e.target).closest(".minical").data("minical")
     mc.selected_day.setMonth(mc.selected_day.getMonth() - 1)
     mc.render()
+    false
   showCalendar: (e) ->
     mc = if e then $(e.target).data("minical") else @
     mc.$el.prop("disabled", true) if mc.$el.is(":text")

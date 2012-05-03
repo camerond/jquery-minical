@@ -44,16 +44,20 @@ $.fn.getTextArray = ->
   ($(@).map -> $(@).text()).get()
 
 $.fn.shouldHaveValue = (val) ->
-  return equal @.val(), val, "#{@.selector} should have a value of #{val}"
+  equal @.val(), val, "#{@.selector} should have a value of #{val}"
+  @
 
 $.fn.shouldBe = (attr) ->
-  return ok @.is(attr), "#{@.selector} should be #{attr}"
+  ok @.is(attr), "#{@.selector} should be #{attr}"
+  @
 
 $.fn.shouldNotBe = (attr) ->
-  return ok !@.is(attr), "#{@.selector} should not be #{attr}"
+  ok !@.is(attr), "#{@.selector} should not be #{attr}"
+  @
 
 $.fn.shouldSay = (text) ->
-  return equal @.text(), text, "#{text} is displayed within #{@.selector}"
+  equal @.text(), text, "#{text} is displayed within #{@.selector}"
+  @
 
 test "it is chainable", ->
   ok tester.init().hide().show().is(":visible"), "minical is invoked and visibility is toggled"
@@ -81,8 +85,9 @@ test "minical displays the correct month heading", ->
 
 test "minical displays the correct day table", ->
   $input = tester.init().click()
-  deepEqual tester.cal("th").getTextArray(), ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], "Days of week are displayed properly"
+  deepEqual(tester.cal("th").getTextArray(), ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], "Days of week are displayed properly")
   days = ((day + "") for day in [].concat([25..30],[1..31],[1..5]))
+  console.log(tester.cal())
   deepEqual(tester.cal("td").getTextArray(), days, "days of month are displayed properly")
 
 test "clicking a day sets input to that value", ->
@@ -114,11 +119,39 @@ test "click to view next month", ->
   tester.init().click()
   tester.cal(".minical_next").click()
   tester.cal("h1").shouldSay("Jan 2013")
+  tester.cal().shouldBe(":visible")
 
 test "click to view previous month", ->
   tester.init().click()
   tester.cal(".minical_prev").click()
   tester.cal("h1").shouldSay("Nov 2012")
+  tester.cal().shouldBe(":visible")
+
+test "Minimum date specified", ->
+  opts =
+    from: new Date("October 4, 2012")
+  $input = tester.init(opts).click()
+  tester.cal(".minical_prev").click()
+  tester.cal(".minical_prev").click()
+  tester.cal(".minical_prev").shouldNotBe(":visible")
+  tester.cal("h1").shouldSay("Oct 2012")
+  tester.cal("td.minical_day_10_4_2012").shouldNotBe(".minical_disabled")
+  tester.cal("td.minical_day_10_3_2012").shouldBe(".minical_disabled").find("a").click()
+  tester.cal().shouldBe(":visible")
+  $input.shouldHaveValue("12/1/2012")
+
+test "Maximum date specified", ->
+  opts =
+    to: new Date("February 26, 2013")
+  $input = tester.init(opts).click()
+  tester.cal(".minical_next").click()
+  tester.cal(".minical_next").click()
+  tester.cal(".minical_next").shouldNotBe(":visible")
+  tester.cal("h1").shouldSay("Feb 2013")
+  tester.cal("td.minical_day_2_26_2013").shouldNotBe(".minical_disabled")
+  tester.cal("td.minical_day_2_27_2013").shouldBe(".minical_disabled").find("a").click()
+  tester.cal().shouldBe(":visible")
+  $input.shouldHaveValue("12/1/2012")
 
 module "Firing using dropdowns"
 
