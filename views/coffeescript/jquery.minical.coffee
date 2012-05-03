@@ -136,10 +136,13 @@ minical =
       @$el.addClass("minical_input").click(@showCalendar)
       @selected_day = new Date(@$el.val())
     else
-      @dropdowns.$year = @$el.find(@dropdowns.year) if @dropdowns.year
-      @dropdowns.$month = @$el.find(@dropdowns.month) if @dropdowns.month
-      @dropdowns.$day = @$el.find(@dropdowns.day) if @dropdowns.day
-      @selected_day = new Date(@dropdowns.$year.val(), @dropdowns.$month.val() - 1, @dropdowns.$day.val())
+      dr = @dropdowns
+      dr.$year = @$el.find(dr.year) if dr.year
+      dr.$month = @$el.find(dr.month) if dr.month
+      dr.$day = @$el.find(dr.day) if dr.day
+      @selected_day = new Date(dr.$year.val(), dr.$month.val() - 1, dr.$day.val())
+      @from = new Date(dr.$year.find("option").eq(-1).val(), dr.$month.find("option:eq(0)").val() - 1, dr.$day.find("option:eq(0)").val()) if !@from
+      @to = new Date(dr.$year.find("option:eq(0)").val(), dr.$month.find("option").eq(-1).val() - 1, dr.$day.find("option").eq(-1).val()) if !@to
       @align_to_trigger = true
     $(document).bind("click.minical", (e) => @outsideClick.call(@, e))
     @$cal.delegate("td a", "click.minical", @selectDay)

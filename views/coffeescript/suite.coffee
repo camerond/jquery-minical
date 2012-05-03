@@ -87,7 +87,6 @@ test "minical displays the correct day table", ->
   $input = tester.init().click()
   deepEqual(tester.cal("th").getTextArray(), ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], "Days of week are displayed properly")
   days = ((day + "") for day in [].concat([25..30],[1..31],[1..5]))
-  console.log(tester.cal())
   deepEqual(tester.cal("td").getTextArray(), days, "days of month are displayed properly")
 
 test "clicking a day sets input to that value", ->
@@ -166,6 +165,16 @@ test "clicking a day sets dropdowns to that value", ->
   $el.find(".months").shouldHaveValue(12)
   $el.find(".days").shouldHaveValue(21)
   $el.find(".years").shouldHaveValue(2012)
+
+test "Minimum date is autodetected from dropdown content", ->
+  $el = tester.initDropdowns({}, 1, 1, 2000).data("minical").$trigger.click()
+  tester.cal("td.minical_day_12_31_1999").shouldBe(".minical_disabled")
+  tester.cal("td.minical_day_1_1_2000").shouldNotBe(".minical_disabled")
+  tester.cal(".minical_prev").shouldNotBe(":visible")
+
+test "Maximum date is autodetected from dropdown content", ->
+  $el = tester.initDropdowns({}, 12, 25, 2020).data("minical").$trigger.click()
+  tester.cal(".minical_next").shouldNotBe(":visible")
 
 module "Testing alignment"
 
