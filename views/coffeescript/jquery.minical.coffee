@@ -159,7 +159,7 @@ minical =
     if keys[key] and @$cal.is(":visible") then keys[key]()
   outsideClick: (e) ->
     $t = $(e.target)
-    return true if ($t.is(@$el) and @$el.is(":text")) or $t.is(@$trigger) or @$el.closest(".minical").length
+    return true if ($t.is(@$el) and @$el.is(":text")) or $t.is(@$trigger) or $t.is(@$el) or $t.closest(".minical").length
     @hideCalendar()
   init: ->
     @$cal = $("<ul />", { id: "minical_#{$('.minical').length}", class: "minical" }).data("minical", @).appendTo($("body")).hide()

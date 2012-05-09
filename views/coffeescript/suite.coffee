@@ -70,6 +70,8 @@ test "minical triggers on click", ->
 
 test "minical hides on outside click", ->
   $input = tester.init().click()
+  tester.cal().click()
+  tester.cal().shouldBe(":visible")
   $("#qunit").click()
   tester.cal().shouldNotBe(":visible")
   $input.shouldNotBe(":disabled")
