@@ -57,7 +57,7 @@ minical =
     $("<th />", { text: day }).appendTo($tr) for day in days
     $tbody = $li.find("tbody")
     current_date = date_tools.getStartOfCalendarBlock(date)
-    $li.find(".minical_prev").hide() if @from && @from > current_date
+    $li.find(".minical_prev").hide() if @from and @from > current_date
     for w in [1..6]
       $tr = $("<tr />")
       for d in [1..7]
@@ -67,7 +67,7 @@ minical =
     $li.find(".#{@getDayClass(new Date())}").addClass("minical_today")
     $li.find(".#{@getDayClass(@selected_day)}").addClass("minical_selected").addClass("minical_highlighted") if @selected_day
     $li.find("td").not(".minical_disabled, .minical_past_month").eq(0).addClass("minical_highlighted") if !$li.find(".minical_highlighted").length
-    $li.find(".minical_next").hide() if @to && @to < new Date($li.find("td").last().data("minical_date"))
+    $li.find(".minical_next").hide() if @to and @to < new Date($li.find("td").last().data("minical_date"))
     @month_drawn.apply(@$el)
     @$cal.empty().append($li)
   renderDay: (d, base_date) ->
@@ -77,7 +77,7 @@ minical =
       .append($("<a />", {"href": "#"}).text(d.getDate()))
     current_month = d.getMonth()
     month = base_date.getMonth()
-    $td.addClass("minical_disabled") if (@from && d < @from) || (@to && d > @to)
+    $td.addClass("minical_disabled") if (@from and d < @from) or (@to and d > @to)
     if current_month < month
       $td.addClass("minical_past_month")
     else if current_month > month
@@ -104,13 +104,14 @@ minical =
     $td.closest("tbody").find(".#{klass}").removeClass(klass)
     $td.addClass(klass)
   moveToDay: (x, y) ->
+    return true if !@$cal.is(":visible")
     $selected = if @$cal.find(".minical_highlighted").length then @$cal.find(".minical_highlighted") else @$cal.find("tbody td").eq(0)
     $tr = $selected.closest("tr")
     move_from = $selected.data("minical_date")
     if $tr.is(":first-of-type")
-      if ($selected.is(":first-of-type") && x == -1) || y == -1 then @prevMonth()
+      if ($selected.is(":first-of-type") and x == -1) or y == -1 then @prevMonth()
     if $tr.is(":last-of-type")
-      if ($selected.is(":last-of-type") && x == 1) || y == 1 then @nextMonth()
+      if ($selected.is(":last-of-type") and x == 1) or y == 1 then @nextMonth()
     move_to = new Date(move_from)
     move_to.setDate(move_from.getDate() + x + y * 7)
     @$cal.find(".#{@getDayClass(move_to)} a").trigger("mouseover")
@@ -127,53 +128,57 @@ minical =
     false
   showCalendar: (e) ->
     mc = if e then $(e.target).data("minical") else @
-    mc.$el.prop("disabled", true) if mc.$el.is(":text")
     offset = if mc.align_to_trigger then mc.$trigger.offset() else mc.$el.offset()
     height = if mc.align_to_trigger then mc.$trigger.outerHeight() else mc.$el.outerHeight()
     position =
       left: "#{offset.left + mc.offset.x}px",
       top: "#{offset.top + height + mc.offset.y}px"
-    mc.render().css(position).fadeIn(200)
+    mc.render().css(position).stop().removeClass("minical_hidden");
   hideCalendar: (e) ->
     mc = if e then $(e.target).data("minical") else @
-    return true if !mc.$cal || mc.$cal.is(":animated")
-    mc.$cal.fadeOut(200)
+    return true if !mc.$cal or mc.$cal.is(":animated")
+    mc.$cal.addClass("minical_hidden");
     mc.$el.prop("disabled", false) if mc.$el.is(":text")
-  input_keydown: (e) ->
-    mc = $(e.target).data("minical")
-    if e.keyCode == 13 && !mc.$cal.is(":visible")
-      mc.showCalendar()
-      false
-  body_keydown: (e) ->
+  keydown: (e) ->
     key = e.keyCode
-    mc = @
+    mc = $(e.target).data("minical")
     keys =
+      9:  -> true                  # tab
       13: ->                       # enter
-        mc.$cal.find(".minical_highlighted a").click()
+        if mc.$cal.css("visibility") == "visible" then mc.$cal.find(".minical_highlighted a").click() else mc.showCalendar()
         false
-      27: -> mc.hideCalendar()     # esc
       37: -> mc.moveToDay(-1, 0)   # left
       38: -> mc.moveToDay(0, -1)   # up
       39: -> mc.moveToDay(1, 0)    # right
       40: -> mc.moveToDay(0, 1)    # down
-    if keys[key] and @$cal.is(":visible") then keys[key]()
+    if keys[key]
+      keys[key]()
+    else if !e.metaKey and !e.ctrlKey
+      false
   outsideClick: (e) ->
     $t = $(e.target)
     return true if ($t.is(@$el) and @$el.is(":text")) or $t.is(@$trigger) or $t.is(@$el) or $t.closest(".minical").length
     @hideCalendar()
   init: ->
-    @$cal = $("<ul />", { id: "minical_#{$('.minical').length}", class: "minical" }).data("minical", @).appendTo($("body")).hide()
+    @$cal = $("<ul />", { id: "minical_#{$('.minical').length}", class: "minical" }).data("minical", @).appendTo($("body")).addClass("minical_hidden")
     if @trigger
       @$trigger = @$el.find(@trigger)
       @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
-      @$trigger.bind("click.minical", @showCalendar).data("minical", @)
-      @$trigger.on("keydown.minical", @input_keydown)
+      @$trigger
+        .data("minical", @)
+        .on("click.minical focus.minical", @showCalendar)
+        .on("blur.minical", @hideCalendar)
+        .on("keydown.minical", @keydown)
     else
       @align_to_trigger = false
     if @$el.is("input")
-      @$el.addClass("minical_input").click(@showCalendar)
+      @$el
+        .addClass("minical_input")
+        .on("focus.minical", @showCalendar)
+        .on("blur.minical", @hideCalendar)
+        .on("keydown.minical", @keydown)
+        .on("keyup.minical", () -> false)
       @selected_day = new Date(@$el.val())
-      @$el.on("keydown.minical", @input_keydown)
     else
       dr = @dropdowns
       dr.$year = @$el.find(dr.year) if dr.year
@@ -183,12 +188,12 @@ minical =
       @from = new Date(dr.$year.find("option").eq(-1).val(), dr.$month.find("option:eq(0)").val() - 1, dr.$day.find("option:eq(0)").val()) if !@from
       @to = new Date(dr.$year.find("option:eq(0)").val(), dr.$month.find("option").eq(-1).val() - 1, dr.$day.find("option").eq(-1).val()) if !@to
       @align_to_trigger = true
+    @$cal
+      .on("click.minical", "td a", @selectDay)
+      .on("hover.minical", "td a", @highlightDay)
+      .on("click.minical", "a.minical_next", @nextMonth)
+      .on("click.minical", "a.minical_prev", @prevMonth)
     $(document).bind("click.minical", (e) => @outsideClick.call(@, e))
-    @$cal.delegate("td a", "click.minical", @selectDay)
-    @$cal.delegate("td a", "hover.minical", @highlightDay)
-    @$cal.delegate("a.minical_next", "click.minical", @nextMonth)
-    @$cal.delegate("a.minical_prev", "click.minical", @prevMonth)
-    $("body").on("keydown.minical", (e) => @body_keydown.call(@, e))
 
 do (minical) ->
   $.fn.minical = (opts) ->
