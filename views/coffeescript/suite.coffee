@@ -76,6 +76,7 @@ test "minical hides on outside click", ->
 test "minical hides on esc", ->
   tester.init().click()
   tester.keydown(27, "esc")
+  tester.cal().shouldNotBe(":visible")
 
 module "Rendering a month"
 
@@ -242,22 +243,21 @@ test "Highlight triggers on mouse hover", ->
 
 test "Arrow keys move around current month", ->
   tester.init().click()
-  tester.keydown(39, "right arrow")
-  tester.cal("td.minical_day_12_2_2012").shouldBe(".minical_highlighted")
-  tester.keydown(40, "down arrow")
-  tester.cal("td.minical_day_12_9_2012").shouldBe(".minical_highlighted")
   tester.keydown(37, "left arrow")
+  tester.cal("td.minical_day_11_30_2012").shouldBe(".minical_highlighted")
+  tester.keydown(40, "down arrow")
+  tester.cal("td.minical_day_12_7_2012").shouldBe(".minical_highlighted")
+  tester.keydown(39, "right arrow")
   tester.cal("td.minical_day_12_8_2012").shouldBe(".minical_highlighted")
   tester.keydown(38, "up arrow")
   tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_highlighted")
 
-test "Arrow keys move around end of week", ->
+test "Arrow keys move around ends of week", ->
   tester.init().click()
-  tester.keydown(40, "down arrow")
-  tester.keydown(37, "left arrow")
-  tester.cal("td.minical_day_12_7_2012").shouldBe(".minical_highlighted")
   tester.keydown(39, "right arrow")
-  tester.cal("td.minical_day_12_8_2012").shouldBe(".minical_highlighted")
+  tester.cal("td.minical_day_12_2_2012").shouldBe(".minical_highlighted")
+  tester.keydown(37, "left arrow")
+  tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_highlighted")
 
 module "Other options"
 

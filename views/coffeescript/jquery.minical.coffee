@@ -138,10 +138,16 @@ minical =
     key = e.keyCode
     mc = @
     keys =
+      27: -> mc.hideCalendar()     # esc
       37: -> mc.moveToDay(-1, 0)   # left
       38: -> mc.moveToDay(0, -1)   # up
       39: -> mc.moveToDay(1, 0)    # right
       40: -> mc.moveToDay(0, 1)    # down
+    if keys[key] and @$cal.is(":visible") then keys[key]()
+  keyup: (e) ->
+    key = e.keyCode
+    mc = @
+    keys = []
     if keys[key] and @$cal.is(":visible") then keys[key]()
   outsideClick: (e) ->
     $t = $(e.target)
