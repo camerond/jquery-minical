@@ -259,6 +259,18 @@ test "Arrow keys move around ends of week", ->
   tester.keydown(37, "left arrow")
   tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_highlighted")
 
+test "Arrow keys move around ends of month", ->
+  tester.init().click()
+  tester.cal("td.minical_day_11_25_2012 a").trigger("mouseover")
+  tester.keydown(37, "left arrow")
+  tester.cal("h1").shouldSay("Nov 2012")
+  tester.cal("td.minical_day_11_24_2012").shouldBe(".minical_highlighted")
+  tester.keydown(40, "down arrow")
+  tester.keydown(40, "down arrow")
+  tester.cal("h1").shouldSay("Dec 2012")
+  tester.cal("td.minical_day_12_8_2012").shouldBe(".minical_highlighted")
+
+
 module "Other options"
 
 test "Callback when date is changed", ->

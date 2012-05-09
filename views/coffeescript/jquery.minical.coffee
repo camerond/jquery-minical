@@ -62,7 +62,7 @@ minical =
       $tr = $("<tr />")
       for d in [1..7]
         $tr.append(@renderDay(current_date, date))
-        current_date.setTime(current_date.getTime() + 86400000)
+        current_date.setDate(current_date.getDate() + 1)
       $tr.appendTo($tbody) if $tr.find(".minical_day").length
     $li.find(".#{@getDayClass(new Date())}").addClass("minical_today")
     $li.find(".#{@getDayClass(@selected_day)}").addClass("minical_selected").addClass("minical_highlighted") if @selected_day
@@ -105,18 +105,23 @@ minical =
     $td.addClass(klass)
   moveToDay: (x, y) ->
     $selected = if @$cal.find(".minical_highlighted").length then @$cal.find(".minical_highlighted") else @$cal.find("tbody td").eq(0)
+    $tr = $selected.closest("tr")
     move_from = $selected.data("minical_date")
+    if $tr.is(":first-of-type")
+      if ($selected.is(":first-of-type") && x == -1) || y == -1 then @prevMonth()
+    if $tr.is(":last-of-type")
+      if ($selected.is(":last-of-type") && x == 1) || y == 1 then @nextMonth()
     move_to = new Date(move_from)
-    move_to.setDate(move_from.getDate() + x + y * 7);
+    move_to.setDate(move_from.getDate() + x + y * 7)
     @$cal.find(".#{@getDayClass(move_to)} a").trigger("mouseover")
     false
   nextMonth: (e) ->
-    mc = $(e.target).closest(".minical").data("minical")
+    mc = if e then $(e.target).closest(".minical").data("minical") else @
     mc.selected_day.setMonth(mc.selected_day.getMonth() + 1)
     mc.render()
     false
   prevMonth: (e) ->
-    mc = $(e.target).closest(".minical").data("minical")
+    mc = if e then $(e.target).closest(".minical").data("minical") else @
     mc.selected_day.setMonth(mc.selected_day.getMonth() - 1)
     mc.render()
     false
