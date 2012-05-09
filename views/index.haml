@@ -29,7 +29,7 @@
             %label Date using a text input:
           %dd
             %input(type="text" value="12/21/2012")
-            %span.calendar_icon
+            %a(href="#" class="calendar_icon")
       %form#dropdown_example
         %dl
           %dt
@@ -44,5 +44,5 @@
             %select.year
               - 2011.downto(1901) do |n|
                 %option(value=n)= n
-            %span.calendar_icon
+            %a(href="#" class="calendar_icon")
       %article#readme= markdown @readme

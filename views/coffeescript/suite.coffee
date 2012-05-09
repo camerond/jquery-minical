@@ -3,11 +3,12 @@ $ = jQuery
 $.fx.off = true
 
 tester =
-  keydown: (k, msg) ->
+  keydown: (k, msg, $el) ->
+    $el ?= @$el
     if msg then ok true, "I press #{msg}"
     $e = $.Event('keydown')
     $e.keyCode = k
-    @$el.trigger($e)
+    $el.trigger($e)
   initDropdowns: (opts, month, day, year, months, days, years) ->
     month ?= 12
     day ?= 21
@@ -241,12 +242,18 @@ test "Highlight triggers on mouse hover", ->
   tester.cal("td:eq(3) a").trigger("mouseover").parent().shouldBe(".minical_highlighted")
   equal tester.cal("td.minical_selected").length, 1, "Only one td with 'selected' class"
 
-test "Enter selects highlighted day", ->
-  $input = tester.init().click()
+test "Enter on trigger or input toggles calendar and selects highlighted day", ->
+  opts =
+    trigger: ".trigger"
+  $input = tester.init()
+  tester.keydown(13, "enter")
+  tester.cal().shouldBe(":visible")
   tester.cal("td.minical_day_11_25_2012 a").trigger("mouseover")
   tester.keydown(13, "enter")
   tester.cal().shouldNotBe(":visible")
   $input.shouldHaveValue("11/25/2012")
+  tester.keydown(13, "enter", $input.data("minical").$trigger)
+  tester.cal().shouldBe(":visible")
 
 test "Arrow keys move around current month", ->
   tester.init().click()
@@ -276,7 +283,6 @@ test "Arrow keys move around ends of month", ->
   tester.keydown(40, "down arrow")
   tester.cal("h1").shouldSay("Dec 2012")
   tester.cal("td.minical_day_12_8_2012").shouldBe(".minical_highlighted")
-
 
 module "Other options"
 

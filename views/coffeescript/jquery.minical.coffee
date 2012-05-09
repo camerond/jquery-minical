@@ -140,19 +140,15 @@ minical =
     mc.$cal.fadeOut(200)
     mc.$el.prop("disabled", false) if mc.$el.is(":text")
   input_keydown: (e) ->
-    key = e.keyCode
     mc = $(e.target).data("minical")
-    keys =
-      13: ->
-        if !mc.$cal.is(":visible")
-          mc.showCalendar()
-          false
-    if keys[key] and mc.$el.is(":focus") then keys[key]()
+    if e.keyCode == 13 && !mc.$cal.is(":visible")
+      mc.showCalendar()
+      false
   body_keydown: (e) ->
     key = e.keyCode
     mc = @
     keys =
-      13: ->
+      13: ->                       # enter
         mc.$cal.find(".minical_highlighted a").click()
         false
       27: -> mc.hideCalendar()     # esc
@@ -166,11 +162,12 @@ minical =
     return true if ($t.is(@$el) and @$el.is(":text")) or $t.is(@$trigger) or @$el.closest(".minical").length
     @hideCalendar()
   init: ->
-    @$cal = $("<ul />", { id: "minical_#{$('.minical').length}", class: "minical" }).data("minical", @).appendTo($("body"))
+    @$cal = $("<ul />", { id: "minical_#{$('.minical').length}", class: "minical" }).data("minical", @).appendTo($("body")).hide()
     if @trigger
       @$trigger = @$el.find(@trigger)
       @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
       @$trigger.bind("click.minical", @showCalendar).data("minical", @)
+      @$trigger.on("keydown.minical", @input_keydown)
     else
       @align_to_trigger = false
     if @$el.is("input")
