@@ -1,5 +1,5 @@
 $(function() {
-  $("#input_example").minical({
+  $("#input_example :text").minical({
     trigger: "span.calendar_icon"
   });
   $("#dropdown_example dd").minical({

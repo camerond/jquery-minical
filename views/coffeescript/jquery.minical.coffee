@@ -139,20 +139,27 @@ minical =
     return true if !mc.$cal || mc.$cal.is(":animated")
     mc.$cal.fadeOut(200)
     mc.$el.prop("disabled", false) if mc.$el.is(":text")
-  keydown: (e) ->
+  input_keydown: (e) ->
+    key = e.keyCode
+    mc = $(e.target).data("minical")
+    keys =
+      13: ->
+        if !mc.$cal.is(":visible")
+          mc.showCalendar()
+          false
+    if keys[key] and mc.$el.is(":focus") then keys[key]()
+  body_keydown: (e) ->
     key = e.keyCode
     mc = @
     keys =
+      13: ->
+        mc.$cal.find(".minical_highlighted a").click()
+        false
       27: -> mc.hideCalendar()     # esc
       37: -> mc.moveToDay(-1, 0)   # left
       38: -> mc.moveToDay(0, -1)   # up
       39: -> mc.moveToDay(1, 0)    # right
       40: -> mc.moveToDay(0, 1)    # down
-    if keys[key] and @$cal.is(":visible") then keys[key]()
-  keyup: (e) ->
-    key = e.keyCode
-    mc = @
-    keys = []
     if keys[key] and @$cal.is(":visible") then keys[key]()
   outsideClick: (e) ->
     $t = $(e.target)
@@ -169,6 +176,7 @@ minical =
     if @$el.is("input")
       @$el.addClass("minical_input").click(@showCalendar)
       @selected_day = new Date(@$el.val())
+      @$el.on("keydown.minical", @input_keydown)
     else
       dr = @dropdowns
       dr.$year = @$el.find(dr.year) if dr.year
@@ -183,8 +191,7 @@ minical =
     @$cal.delegate("td a", "hover.minical", @highlightDay)
     @$cal.delegate("a.minical_next", "click.minical", @nextMonth)
     @$cal.delegate("a.minical_prev", "click.minical", @prevMonth)
-    $("body").on("keydown.minical", (e) => @keydown.call(@, e))
-    $("body").on("keyup.minical", (e) => @keyup.call(@, e))
+    $("body").on("keydown.minical", (e) => @body_keydown.call(@, e))
 
 do (minical) ->
   $.fn.minical = (opts) ->

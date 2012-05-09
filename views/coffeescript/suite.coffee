@@ -241,6 +241,13 @@ test "Highlight triggers on mouse hover", ->
   tester.cal("td:eq(3) a").trigger("mouseover").parent().shouldBe(".minical_highlighted")
   equal tester.cal("td.minical_selected").length, 1, "Only one td with 'selected' class"
 
+test "Enter selects highlighted day", ->
+  $input = tester.init().click()
+  tester.cal("td.minical_day_11_25_2012 a").trigger("mouseover")
+  tester.keydown(13, "enter")
+  tester.cal().shouldNotBe(":visible")
+  $input.shouldHaveValue("11/25/2012")
+
 test "Arrow keys move around current month", ->
   tester.init().click()
   tester.keydown(37, "left arrow")
