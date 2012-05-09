@@ -3,9 +3,9 @@ $ = jQuery
 $.fx.off = true
 
 tester =
-  typeKeycode: (k, msg) ->
+  keydown: (k, msg) ->
     if msg then ok true, "I press #{msg}"
-    $e = $.Event('keyup')
+    $e = $.Event('keydown')
     $e.keyCode = k
     @$el.trigger($e)
   initDropdowns: (opts, month, day, year, months, days, years) ->
@@ -75,7 +75,7 @@ test "minical hides on outside click", ->
 
 test "minical hides on esc", ->
   tester.init().click()
-  tester.typeKeycode(27, "esc")
+  tester.keydown(27, "esc")
 
 module "Rendering a month"
 
@@ -239,6 +239,25 @@ test "Highlight triggers on mouse hover", ->
   tester.init().click()
   tester.cal("td:eq(3) a").trigger("mouseover").parent().shouldBe(".minical_highlighted")
   equal tester.cal("td.minical_selected").length, 1, "Only one td with 'selected' class"
+
+test "Arrow keys move around current month", ->
+  tester.init().click()
+  tester.keydown(39, "right arrow")
+  tester.cal("td.minical_day_12_2_2012").shouldBe(".minical_highlighted")
+  tester.keydown(40, "down arrow")
+  tester.cal("td.minical_day_12_9_2012").shouldBe(".minical_highlighted")
+  tester.keydown(37, "left arrow")
+  tester.cal("td.minical_day_12_8_2012").shouldBe(".minical_highlighted")
+  tester.keydown(38, "up arrow")
+  tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_highlighted")
+
+test "Arrow keys move around end of week", ->
+  tester.init().click()
+  tester.keydown(40, "down arrow")
+  tester.keydown(37, "left arrow")
+  tester.cal("td.minical_day_12_7_2012").shouldBe(".minical_highlighted")
+  tester.keydown(39, "right arrow")
+  tester.cal("td.minical_day_12_8_2012").shouldBe(".minical_highlighted")
 
 module "Other options"
 

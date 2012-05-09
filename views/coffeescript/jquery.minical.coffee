@@ -103,6 +103,13 @@ minical =
     klass = "minical_highlighted"
     $td.closest("tbody").find(".#{klass}").removeClass(klass)
     $td.addClass(klass)
+  moveToDay: (x, y) ->
+    $selected = if @$cal.find(".minical_highlighted").length then @$cal.find(".minical_highlighted") else @$cal.find("tbody td").eq(0)
+    move_from = $selected.data("minical_date")
+    move_to = new Date(move_from)
+    move_to.setDate(move_from.getDate() + x + y * 7);
+    @$cal.find(".#{@getDayClass(move_to)} a").trigger("mouseover")
+    false
   nextMonth: (e) ->
     mc = $(e.target).closest(".minical").data("minical")
     mc.selected_day.setMonth(mc.selected_day.getMonth() + 1)
@@ -127,6 +134,15 @@ minical =
     return true if !mc.$cal || mc.$cal.is(":animated")
     mc.$cal.fadeOut(200)
     mc.$el.prop("disabled", false) if mc.$el.is(":text")
+  keydown: (e) ->
+    key = e.keyCode
+    mc = @
+    keys =
+      37: -> mc.moveToDay(-1, 0)   # left
+      38: -> mc.moveToDay(0, -1)   # up
+      39: -> mc.moveToDay(1, 0)    # right
+      40: -> mc.moveToDay(0, 1)    # down
+    if keys[key] and @$cal.is(":visible") then keys[key]()
   outsideClick: (e) ->
     $t = $(e.target)
     return true if ($t.is(@$el) and @$el.is(":text")) or $t.is(@$trigger) or @$el.closest(".minical").length
@@ -156,6 +172,8 @@ minical =
     @$cal.delegate("td a", "hover.minical", @highlightDay)
     @$cal.delegate("a.minical_next", "click.minical", @nextMonth)
     @$cal.delegate("a.minical_prev", "click.minical", @prevMonth)
+    $("body").on("keydown.minical", (e) => @keydown.call(@, e))
+    $("body").on("keyup.minical", (e) => @keyup.call(@, e))
 
 do (minical) ->
   $.fn.minical = (opts) ->
