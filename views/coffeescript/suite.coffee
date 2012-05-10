@@ -41,10 +41,6 @@ tester =
     date ?= "12/1/2012"
     @$el = $(".calendar :text").val(date).minical(opts)
 
-$.extend $.expr[":"],
-  opaque: (el) ->
-    return $(el).css("visibility") == "visible"
-
 $.fn.getTextArray = ->
   ($(@).map -> $(@).text()).get()
 
@@ -69,14 +65,18 @@ test "it is chainable", ->
 
 test "minical triggers on focus", ->
   $input = tester.init().focus()
-  tester.cal().shouldBe(":opaque")
+  tester.cal().shouldBe(":visible")
+
+test "minical hides on blur", ->
+  $input = tester.init().blur()
+  tester.cal().shouldNotBe(":visible")
 
 test "minical hides on outside click", ->
   $input = tester.init().focus()
-  tester.cal().click()
-  tester.cal().shouldBe(":opaque")
+  tester.cal("h1").click()
+  tester.cal().shouldBe(":visible")
   $("#qunit").click()
-  tester.cal().shouldNotBe(":opaque")
+  tester.cal().shouldNotBe(":visible")
 
 module "Rendering a month"
 
@@ -93,7 +93,7 @@ test "minical displays the correct day table", ->
 test "clicking a day sets input to that value", ->
   $input = tester.init().focus()
   tester.cal("td.minical_day_12_21_2012 a").click()
-  tester.cal().shouldNotBe(":opaque")
+  tester.cal().shouldNotBe(":visible")
   $input.shouldHaveValue("12/21/2012")
 
 test "minical fades out displayed days not of current month", ->
@@ -111,7 +111,7 @@ test "minical triggers from a separate trigger element", ->
     trigger: ".trigger"
   $el = tester.init(opts)
   $el.data("minical").$trigger.click()
-  tester.cal().shouldBe(":opaque")
+  tester.cal().shouldBe(":visible")
 
 module "Navigating between months"
 
@@ -119,13 +119,13 @@ test "click to view next month", ->
   tester.init().focus()
   tester.cal(".minical_next").click()
   tester.cal("h1").shouldSay("Jan 2013")
-  tester.cal().shouldBe(":opaque")
+  tester.cal().shouldBe(":visible")
 
 test "click to view previous month", ->
   tester.init().focus()
   tester.cal(".minical_prev").click()
   tester.cal("h1").shouldSay("Nov 2012")
-  tester.cal().shouldBe(":opaque")
+  tester.cal().shouldBe(":visible")
 
 test "Minimum date specified", ->
   opts =
@@ -137,7 +137,7 @@ test "Minimum date specified", ->
   tester.cal("h1").shouldSay("Oct 2012")
   tester.cal("td.minical_day_10_4_2012").shouldNotBe(".minical_disabled")
   tester.cal("td.minical_day_10_3_2012").shouldBe(".minical_disabled").find("a").click()
-  tester.cal().shouldBe(":opaque")
+  tester.cal().shouldBe(":visible")
   $input.shouldHaveValue("12/1/2012")
 
 test "Maximum date specified", ->
@@ -150,7 +150,7 @@ test "Maximum date specified", ->
   tester.cal("h1").shouldSay("Feb 2013")
   tester.cal("td.minical_day_2_26_2013").shouldNotBe(".minical_disabled")
   tester.cal("td.minical_day_2_27_2013").shouldBe(".minical_disabled").find("a").click()
-  tester.cal().shouldBe(":opaque")
+  tester.cal().shouldBe(":visible")
   $input.shouldHaveValue("12/1/2012")
 
 module "Firing using dropdowns"
@@ -246,13 +246,13 @@ test "Enter on trigger or input toggles calendar and selects highlighted day", -
     trigger: ".trigger"
   $input = tester.init()
   tester.keydown(13, "enter")
-  tester.cal().shouldBe(":opaque")
+  tester.cal().shouldBe(":visible")
   tester.cal("td.minical_day_11_25_2012 a").trigger("mouseover")
   tester.keydown(13, "enter")
-  tester.cal().shouldNotBe(":opaque")
+  tester.cal().shouldNotBe(":visible")
   $input.shouldHaveValue("11/25/2012")
   tester.keydown(13, "enter", $input.data("minical").$trigger)
-  tester.cal().shouldBe(":opaque")
+  tester.cal().shouldBe(":visible")
 
 test "Arrow keys move around current month", ->
   tester.init().focus()

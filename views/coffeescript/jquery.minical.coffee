@@ -128,24 +128,28 @@ minical =
     false
   showCalendar: (e) ->
     mc = if e then $(e.target).data("minical") else @
+    $("[id^='minical_calendar']").not(mc.$cal).hide()
     offset = if mc.align_to_trigger then mc.$trigger.offset() else mc.$el.offset()
     height = if mc.align_to_trigger then mc.$trigger.outerHeight() else mc.$el.outerHeight()
     position =
       left: "#{offset.left + mc.offset.x}px",
       top: "#{offset.top + height + mc.offset.y}px"
-    mc.render().css(position).stop().removeClass("minical_hidden");
+    mc.render().css(position).show()
+    false
   hideCalendar: (e) ->
-    mc = if e then $(e.target).data("minical") else @
-    return true if !mc.$cal or mc.$cal.is(":animated")
-    mc.$cal.addClass("minical_hidden");
-    mc.$el.prop("disabled", false) if mc.$el.is(":text")
+    mc = @
+    if e
+      mc = $(e.target).data("minical")
+      if e.type == "blur" and mc.last_clicked.closest(".minical").length or mc.$last_clicked = mc.$cal
+        true
+    mc.$cal.hide()
   keydown: (e) ->
     key = e.keyCode
     mc = $(e.target).data("minical")
     keys =
       9:  -> true                  # tab
       13: ->                       # enter
-        if mc.$cal.css("visibility") == "visible" then mc.$cal.find(".minical_highlighted a").click() else mc.showCalendar()
+        if mc.$cal.is(":visible") then mc.$cal.find(".minical_highlighted a").click() else mc.showCalendar()
         false
       37: -> mc.moveToDay(-1, 0)   # left
       38: -> mc.moveToDay(0, -1)   # up
@@ -157,10 +161,12 @@ minical =
       false
   outsideClick: (e) ->
     $t = $(e.target)
-    return true if ($t.is(@$el) and @$el.is(":text")) or $t.is(@$trigger) or $t.is(@$el) or $t.closest(".minical").length
+    @last_clicked = $t
+    return true if $t.is(@$el) or $t.is(@$trigger) or $t.closest(".minical").length
     @hideCalendar()
   init: ->
-    @$cal = $("<ul />", { id: "minical_#{$('.minical').length}", class: "minical" }).data("minical", @).appendTo($("body")).addClass("minical_hidden")
+    id = $(".minical").length
+    @$cal = $("<ul />", { id: "minical_calendar_#{id}", class: "minical" }).data("minical", @).appendTo($("body"))
     if @trigger
       @$trigger = @$el.find(@trigger)
       @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
@@ -173,12 +179,13 @@ minical =
       @align_to_trigger = false
     if @$el.is("input")
       @$el
+        .attr("id", "minical_input_#{id}")
         .addClass("minical_input")
         .on("focus.minical", @showCalendar)
-        .on("blur.minical", @hideCalendar)
         .on("keydown.minical", @keydown)
         .on("keyup.minical", () -> false)
       @selected_day = new Date(@$el.val())
+      $(document).bind("blur.minical", "minical_input_#{id}", @hideCalendar)
     else
       dr = @dropdowns
       dr.$year = @$el.find(dr.year) if dr.year

@@ -9,6 +9,7 @@ $box_shadow: 0 0 12px rgba(0, 0, 0, .2)
 
 ul.minical
   position: absolute
+  display: none
   color: $dark_text
   background: $background
   border: 1px solid $dark_border
@@ -20,15 +21,7 @@ ul.minical
   -moz-box-shadow: $box_shadow
   box-shadow: $box_shadow
   z-index: 9327
-  -webkit-transition: opacity .2s, visibility .2s
-  -moz-transition: opacity .2s, visibility .2s
-  transition: opacity .2s, visibility .2s
-  -webkit-font-smoothing: antialiased
   font-size: 1.1em
-  visibility: visible
-  &.minical_hidden
-    opacity: 0
-    visibility: hidden
   li
     padding: 1px 10px 0 10px
     margin: 0

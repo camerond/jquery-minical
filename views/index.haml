@@ -8,11 +8,11 @@
     %script(type="text/javascript" src="/javascript/jquery-1.7.1.min.js")
     %script(type="text/javascript" src="/javascript/jquery.minical.js")
     %script(type="text/javascript" src="/javascript/demo.js")
-    /%script(type="text/javascript" src="http://use.typekit.com/aqp8xdq.js")
+    %script(type="text/javascript" src="http://use.typekit.com/aqp8xdq.js")
     /[if IE]
       %script(type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js")
-    /:javascript
-    /try{Typekit.load();}catch(e){}
+    :javascript
+      try{Typekit.load();}catch(e){}
   %body
     #wrapper
       %header
