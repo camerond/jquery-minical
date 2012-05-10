@@ -136,7 +136,6 @@ minical =
       left: "#{offset.left + mc.offset.x}px",
       top: "#{offset.top + height + mc.offset.y}px"
     mc.render().css(position).show()
-    false
   hideCalendar: (e) ->
     mc = @
     if e and (e.type == "focusout" or e.type == "blur")
@@ -174,6 +173,7 @@ minical =
     @hideCalendar()
   init: ->
     id = $(".minical").length
+    mc = @
     @$cal = $("<ul />", { id: "minical_calendar_#{id}", class: "minical" }).data("minical", @).appendTo($("body"))
     if @trigger
       @$trigger = @$el.find(@trigger)
@@ -182,7 +182,11 @@ minical =
         .attr("id", "minical_trigger_#{id}")
         .data("minical", @)
         .on("blur.minical", @hideCalendar)
-        .on("click.minical focus.minical", @showCalendar)
+        .on("focus.minical", @showCalendar)
+        .on("click.minical", () ->
+          mc.$trigger.focus()
+          false
+        )
         .on("keydown.minical", @keydown)
     else
       @align_to_trigger = false
