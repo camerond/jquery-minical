@@ -98,6 +98,7 @@ minical =
       mc.dropdowns.$year.val(mc.selected_day.getFullYear())
       mc.date_changed.apply(mc.dropdowns)
     mc.hideCalendar()
+    false
   highlightDay: (e) ->
     $td = $(e.target).closest("td")
     klass = "minical_highlighted"
@@ -138,11 +139,15 @@ minical =
     false
   hideCalendar: (e) ->
     mc = @
-    if e
+    if e and (e.type == "focusout" or e.type == "blur")
       mc = $(e.target).data("minical")
-      if e.type == "blur" and mc.last_clicked.closest(".minical").length or mc.$last_clicked = mc.$cal
-        true
-    mc.$cal.hide()
+      setTimeout(->
+        $e = $(document.activeElement)
+        if !$e.is("body") and !$e.is(mc.$trigger) and !$e.is(mc.$el)
+          mc.$cal.hide()
+      , 1)
+    else
+      mc.$cal.hide()
   keydown: (e) ->
     key = e.keyCode
     mc = $(e.target).data("minical")
@@ -165,7 +170,6 @@ minical =
     mc.render() if mc.$cal.is(":visible")
   outsideClick: (e) ->
     $t = $(e.target)
-    @last_clicked = $t
     return true if $t.is(@$el) or $t.is(@$trigger) or $t.closest(".minical").length
     @hideCalendar()
   init: ->
@@ -175,9 +179,10 @@ minical =
       @$trigger = @$el.find(@trigger)
       @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
       @$trigger
+        .attr("id", "minical_trigger_#{id}")
         .data("minical", @)
-        .on("click.minical focus.minical", @showCalendar)
         .on("blur.minical", @hideCalendar)
+        .on("click.minical focus.minical", @showCalendar)
         .on("keydown.minical", @keydown)
     else
       @align_to_trigger = false
@@ -186,10 +191,10 @@ minical =
         .attr("id", "minical_input_#{id}")
         .addClass("minical_input")
         .on("focus.minical", @showCalendar)
+        .on("blur.minical", @hideCalendar)
         .on("keydown.minical", @keydown)
         .on("keyup.minical", () -> false)
       @selected_day = new Date(@$el.val())
-      $(document).bind("blur.minical", "minical_input_#{id}", @hideCalendar)
     else
       dr = @dropdowns
       dr.$year = @$el.find(dr.year).data("minical", @).change(@dropdownChange) if dr.year
@@ -204,7 +209,7 @@ minical =
       .on("hover.minical", "td a", @highlightDay)
       .on("click.minical", "a.minical_next", @nextMonth)
       .on("click.minical", "a.minical_prev", @prevMonth)
-    $(document).bind("click.minical", (e) => @outsideClick.call(@, e))
+    $("body").bind("click.minical", (e) => @outsideClick.call(@, e))
 
 do (minical) ->
   $.fn.minical = (opts) ->
