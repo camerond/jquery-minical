@@ -251,9 +251,7 @@ test "Highlight triggers on mouse hover", ->
 test "Enter on trigger or input toggles calendar and selects highlighted day", ->
   opts =
     trigger: ".trigger"
-  $input = tester.init()
-  tester.keydown(13, "enter")
-  tester.cal().shouldBe(":visible")
+  $input = tester.init().focus()
   tester.cal("td.minical_day_11_25_2012 a").trigger("mouseover")
   tester.keydown(13, "enter")
   tester.cal().shouldNotBe(":visible")
@@ -289,6 +287,11 @@ test "Arrow keys move around ends of month", ->
   tester.keydown(40, "down arrow")
   tester.cal("h1").shouldSay("Dec 2012")
   tester.cal("td.minical_day_12_8_2012").shouldBe(".minical_highlighted")
+
+test "Arrow keys fire anywhere on page as long as calendar is visible", ->
+  tester.initDropdowns().find(".trigger").click()
+  tester.keydown(37, "left arrow", $("body"))
+  tester.cal("td.minical_day_12_20_2012").shouldBe(".minical_highlighted")
 
 module "Other options"
 

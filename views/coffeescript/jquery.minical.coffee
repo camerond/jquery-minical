@@ -97,7 +97,7 @@ minical =
       mc.dropdowns.$day.val(mc.selected_day.getDate())
       mc.dropdowns.$year.val(mc.selected_day.getFullYear())
       mc.date_changed.apply(mc.dropdowns)
-    mc.hideCalendar()
+    mc.$cal.hide()
     false
   highlightDay: (e) ->
     $td = $(e.target).closest("td")
@@ -130,12 +130,14 @@ minical =
   showCalendar: (e) ->
     mc = if e then $(e.target).data("minical") else @
     $("[id^='minical_calendar']").not(mc.$cal).hide()
+    return true if mc.$cal.is(":visible")
     offset = if mc.align_to_trigger then mc.$trigger.offset() else mc.$el.offset()
     height = if mc.align_to_trigger then mc.$trigger.outerHeight() else mc.$el.outerHeight()
     position =
       left: "#{offset.left + mc.offset.x}px",
       top: "#{offset.top + height + mc.offset.y}px"
     mc.render().css(position).show()
+    mc.attachCalendarKeyEvents()
   hideCalendar: (e) ->
     mc = @
     if e and (e.type == "focusout" or e.type == "blur")
@@ -144,12 +146,20 @@ minical =
         $e = $(document.activeElement)
         if !$e.is("body") and !$e.is(mc.$trigger) and !$e.is(mc.$el)
           mc.$cal.hide()
+          mc.detachCalendarKeyEvents()
       , 1)
     else
       mc.$cal.hide()
+      mc.detachCalendarKeyEvents()
+  attachCalendarKeyEvents: ->
+    mc = @
+    $(document).off("keydown.minical")
+    $(document).on("keydown.minical", (e) -> mc.keydown.call(mc, e))
+  detachCalendarKeyEvents: ->
+    $(document).off("keydown.minical")
   keydown: (e) ->
     key = e.keyCode
-    mc = $(e.target).data("minical")
+    mc = @
     keys =
       9:  -> true                  # tab
       13: ->                       # enter
@@ -179,7 +189,6 @@ minical =
       @$trigger = @$el.find(@trigger)
       @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
       @$trigger
-        .attr("id", "minical_trigger_#{id}")
         .data("minical", @)
         .on("blur.minical", @hideCalendar)
         .on("focus.minical", @showCalendar)
@@ -187,16 +196,13 @@ minical =
           mc.$trigger.focus()
           false
         )
-        .on("keydown.minical", @keydown)
     else
       @align_to_trigger = false
     if @$el.is("input")
       @$el
-        .attr("id", "minical_input_#{id}")
         .addClass("minical_input")
         .on("focus.minical", @showCalendar)
         .on("blur.minical", @hideCalendar)
-        .on("keydown.minical", @keydown)
         .on("keyup.minical", () -> false)
       @selected_day = new Date(@$el.val())
     else
