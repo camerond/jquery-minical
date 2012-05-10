@@ -159,6 +159,10 @@ minical =
       keys[key]()
     else if !e.metaKey and !e.ctrlKey
       false
+  dropdownChange: (e) ->
+    mc = $(e.target).data("minical")
+    mc.selected_day = new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val() - 1, mc.dropdowns.$day.val())
+    mc.render() if mc.$cal.is(":visible")
   outsideClick: (e) ->
     $t = $(e.target)
     @last_clicked = $t
@@ -188,13 +192,13 @@ minical =
       $(document).bind("blur.minical", "minical_input_#{id}", @hideCalendar)
     else
       dr = @dropdowns
-      dr.$year = @$el.find(dr.year) if dr.year
-      dr.$month = @$el.find(dr.month) if dr.month
-      dr.$day = @$el.find(dr.day) if dr.day
-      @selected_day = new Date(dr.$year.val(), dr.$month.val() - 1, dr.$day.val())
+      dr.$year = @$el.find(dr.year).data("minical", @).change(@dropdownChange) if dr.year
+      dr.$month = @$el.find(dr.month).data("minical", @).change(@dropdownChange) if dr.month
+      dr.$day = @$el.find(dr.day).data("minical", @).change(@dropdownChange) if dr.day
       @from = new Date(dr.$year.find("option").eq(-1).val(), dr.$month.find("option:eq(0)").val() - 1, dr.$day.find("option:eq(0)").val()) if !@from
       @to = new Date(dr.$year.find("option:eq(0)").val(), dr.$month.find("option").eq(-1).val() - 1, dr.$day.find("option").eq(-1).val()) if !@to
       @align_to_trigger = true
+      dr.$year.change()
     @$cal
       .on("click.minical", "td a", @selectDay)
       .on("hover.minical", "td a", @highlightDay)

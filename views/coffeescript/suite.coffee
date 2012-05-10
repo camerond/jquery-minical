@@ -167,6 +167,14 @@ test "clicking a day sets dropdowns to that value", ->
   $el.find(".days").shouldHaveValue(21)
   $el.find(".years").shouldHaveValue(2012)
 
+test "changing dropdowns updates visible calendar", ->
+  $el = tester.initDropdowns()
+  $el.find(".trigger").click()
+  $el.find(".years option:contains('2011')").attr("selected", true).parent().change()
+  tester.cal("h1").shouldSay("Dec 2011")
+  console.log(tester.cal("td"))
+  tester.cal("td.minical_day_12_21_2011").shouldBe(".minical_selected")
+
 test "Minimum date is autodetected from dropdown content", ->
   $el = tester.initDropdowns({}, 1, 1, 2000).data("minical").$trigger.click()
   tester.cal("td.minical_day_12_31_1999").shouldBe(".minical_disabled")
