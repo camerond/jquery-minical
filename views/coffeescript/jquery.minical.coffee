@@ -138,6 +138,9 @@ minical =
       left: "#{offset.left + mc.offset.x}px",
       top: "#{offset.top + height + mc.offset.y}px"
     mc.render().css(position).show()
+    overlap = mc.$cal.width() + mc.$cal.offset().left - $(window).width()
+    if overlap > 0
+      mc.$cal.css("left", offset.left - overlap- 10)
     mc.attachCalendarKeyEvents()
   hideCalendar: (e) ->
     mc = @
