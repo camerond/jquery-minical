@@ -79,10 +79,10 @@ minical =
     current_month = d.getMonth()
     month = base_date.getMonth()
     $td.addClass("minical_disabled") if (@from and d < @from) or (@to and d > @to)
-    if current_month < month
-      $td.addClass("minical_past_month")
-    else if current_month > month
+    if current_month > month || current_month == 0 and month == 11
       $td.addClass("minical_future_month")
+    else if current_month < month
+      $td.addClass("minical_past_month")
     else
       $td.addClass("minical_day")
   selectDay: (e) ->

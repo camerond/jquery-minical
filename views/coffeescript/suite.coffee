@@ -103,6 +103,7 @@ test "clicking a day sets input to that value", ->
 test "minical fades out displayed days not of current month", ->
   $input = tester.init().focus()
   tester.cal("td:lt(7)").shouldBe(".minical_past_month")
+  tester.cal("td:last").shouldBe(".minical_future_month")
 
 test "minical highlights the current day", ->
   today = new Date()
