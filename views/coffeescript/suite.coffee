@@ -7,7 +7,7 @@ tester =
     $el ?= @$el
     if msg then ok true, "I press #{msg}"
     $e = $.Event('keydown')
-    $e.keyCode = k
+    $e.keyCode = $e.which = k
     $el.trigger($e)
   initDropdowns: (opts, month, day, year, months, days, years) ->
     month ?= 12

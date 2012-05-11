@@ -188,7 +188,7 @@ minical =
   detachCalendarKeyEvents: ->
     $(document).off("keydown.minical")
   keydown: (e) ->
-    key = e.keyCode
+    key = e.which
     mc = @
     keys =
       9:  -> true                  # tab
