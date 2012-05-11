@@ -145,14 +145,16 @@ minical =
   nextMonth: (e) ->
     mc = if e then $(e.target).closest(".minical").data("minical") else @
     return false if !mc.$cal.find(".minical_next").is(":visible")
-    mc.selected_day.setMonth(mc.selected_day.getMonth() + 1)
-    mc.render()
+    next = new Date(mc.$cal.find("td").eq(8).data("minical_date"))
+    next.setMonth(next.getMonth() + 1)
+    mc.render(next)
     false
   prevMonth: (e) ->
     mc = if e then $(e.target).closest(".minical").data("minical") else @
     return false if !mc.$cal.find(".minical_prev").is(":visible")
-    mc.selected_day.setMonth(mc.selected_day.getMonth() - 1)
-    mc.render()
+    prev = new Date(mc.$cal.find("td").eq(8).data("minical_date"))
+    prev.setMonth(prev.getMonth() - 1)
+    mc.render(prev)
     false
   showCalendar: (e) ->
     mc = if e then $(e.target).data("minical") else @

@@ -243,6 +243,8 @@ test "Select date in calendar on redraw", ->
   $input.focus()
   equal tester.cal("td.minical_selected").length, 1, "Only one td with 'selected' class"
   tester.cal("td.minical_day_12_7_2012").shouldBe(".minical_selected")
+  tester.cal("a.minical_next").click()
+  equal tester.cal(".minical_selected").length, 0, "selected day was for previous month"
 
 test "Highlight existing choice if available", ->
   tester.init({}, "12/5/2012").focus()
