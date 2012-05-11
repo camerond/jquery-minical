@@ -179,14 +179,16 @@ minical =
         if !$e.is("body") and !$e.is(mc.$trigger) and !$e.is(mc.$el)
           mc.$cal.hide()
           mc.detachCalendarKeyEvents()
-      , 1)
+      , 10)
     else
       mc.$cal.hide()
       mc.detachCalendarKeyEvents()
   attachCalendarKeyEvents: ->
     mc = @
-    $(document).off("keydown.minical")
-    $(document).on("keydown.minical", (e) -> mc.keydown.call(mc, e))
+    setTimeout(->
+      $(document).off("keydown.minical")
+      $(document).on("keydown.minical", (e) -> mc.keydown.call(mc, e))
+    , 30)
   detachCalendarKeyEvents: ->
     $(document).off("keydown.minical")
   keydown: (e) ->
