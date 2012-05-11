@@ -1,5 +1,5 @@
 # jQuery Minical Plugin
-# version 0.5
+# version 0.5.1
 #
 # Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 #
@@ -179,18 +179,16 @@ minical =
         if !$e.is("body") and !$e.is(mc.$trigger) and !$e.is(mc.$el)
           mc.$cal.hide()
           mc.detachCalendarKeyEvents()
-      , 10)
+      , 1)
     else
       mc.$cal.hide()
       mc.detachCalendarKeyEvents()
   attachCalendarKeyEvents: ->
     mc = @
-    setTimeout(->
-      $(document).off("keydown.minical")
-      $(document).on("keydown.minical", (e) -> mc.keydown.call(mc, e))
-    , 30)
+    $(document).off("keydown.minical_#{mc.id}")
+    $(document).on("keydown.minical_#{mc.id}", (e) -> mc.keydown.call(mc, e))
   detachCalendarKeyEvents: ->
-    $(document).off("keydown.minical")
+    $(document).off("keydown.minical_#{@id}")
   keydown: (e) ->
     key = e.which
     mc = @
@@ -216,9 +214,9 @@ minical =
     return true if $t.is(@$el) or $t.is(@$trigger) or $t.closest(".minical").length
     @hideCalendar()
   init: ->
-    id = $(".minical").length
+    @id = $(".minical").length
     mc = @
-    @$cal = $("<ul />", { id: "minical_calendar_#{id}", class: "minical" }).data("minical", @).appendTo($("body"))
+    @$cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" }).data("minical", @).appendTo($("body"))
     if @trigger
       @$trigger = @$el.find(@trigger)
       @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
