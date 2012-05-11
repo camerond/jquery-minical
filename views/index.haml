@@ -16,20 +16,6 @@
     %meta(name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0")
   %body
     #wrapper
-      #social
-        <!-- AddThis Button BEGIN -->
-        <div class="addthis_toolbox addthis_floating_style addthis_32x32_style" style="right:10px;top:10px;">
-        <a class="addthis_button_preferred_1"></a>
-        <a class="addthis_button_preferred_2"></a>
-        <a class="addthis_button_preferred_3"></a>
-        <a class="addthis_button_preferred_4"></a>
-        <a class="addthis_button_preferred_5"></a>
-        <a class="addthis_button_preferred_6"></a>
-        <a class="addthis_button_compact"></a>
-        </div>
-        <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
-        <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4fad554c32392cd8"></script>
-        <!-- AddThis Button END -->
       %header
         %h1<>
           jQuery
@@ -61,3 +47,27 @@
                 %option(value=n)= n
             %a(href="#" class="calendar_icon")
       %article#readme= markdown @readme
+    #social
+      <!-- AddThis Button BEGIN -->
+      <div class="addthis_toolbox addthis_floating_style addthis_32x32_style" style="right:10px;top:10px;">
+      <a class="addthis_button_preferred_1"></a>
+      <a class="addthis_button_preferred_2"></a>
+      <a class="addthis_button_preferred_3"></a>
+      <a class="addthis_button_preferred_4"></a>
+      <a class="addthis_button_preferred_5"></a>
+      <a class="addthis_button_preferred_6"></a>
+      <a class="addthis_button_compact"></a>
+      </div>
+      <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+      <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4fad554c32392cd8"></script>
+      <!-- AddThis Button END -->
+    :javascript
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-308731-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
