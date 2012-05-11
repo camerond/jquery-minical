@@ -134,21 +134,23 @@ minical =
     $selected = if @$cal.find(".minical_highlighted").length then @$cal.find(".minical_highlighted") else @$cal.find("tbody td").eq(0)
     $tr = $selected.closest("tr")
     move_from = $selected.data("minical_date")
-    if $tr.is(":first-of-type")
-      if ($selected.is(":first-of-type") and x == -1) or y == -1 then @prevMonth()
-    if $tr.is(":last-of-type")
-      if ($selected.is(":last-of-type") and x == 1) or y == 1 then @nextMonth()
+    if $tr.parent().children().eq(0).is($tr)
+      if ($selected.parent().children().eq(0).is($selected) and x == -1) or y == -1 then @prevMonth()
+    else if $tr.parent().children().eq(-1).is($tr)
+      if ($selected.parent().children().eq(-1).is($selected) and x == 1) or y == 1 then @nextMonth()
     move_to = new Date(move_from)
     move_to.setDate(move_from.getDate() + x + y * 7)
     @$cal.find(".#{@getDayClass(move_to)} a").trigger("mouseover")
     false
   nextMonth: (e) ->
     mc = if e then $(e.target).closest(".minical").data("minical") else @
+    return false if !mc.$cal.find(".minical_next").is(":visible")
     mc.selected_day.setMonth(mc.selected_day.getMonth() + 1)
     mc.render()
     false
   prevMonth: (e) ->
     mc = if e then $(e.target).closest(".minical").data("minical") else @
+    return false if !mc.$cal.find(".minical_prev").is(":visible")
     mc.selected_day.setMonth(mc.selected_day.getMonth() - 1)
     mc.render()
     false
