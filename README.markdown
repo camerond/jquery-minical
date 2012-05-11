@@ -1,49 +1,28 @@
-# Jquery.minical
+# jQuery.minical
 
 ## Usage
 
-Call `.minical()` on:
-
-- a text input
-- the element containing a text input
-- the element containing a set of dropdowns
+Call `.minical()` on a text (or date) input, or the element containing a set of month/day/year dropdowns.
 
 ## Requirements
 
-- jQuery, [jquery.minical.js](https://github.com/camerond/jquery-minical/blob/master/public/javascript/jquery.minical.js), [jquery.minical.sass](https://github.com/camerond/jquery-minical/blob/master/views/stylesheets/jquery.minical.sass) (or the [generated css](http://jquery-minical.heroku.com/stylesheets/jquery.minical.css)), and [jquery_minical_icons.png](https://github.com/camerond/jquery-minical/blob/master/public/images/jquery_minical_icons.png). [See the source on GitHub](https://github.com/camerond/jquery-minical).
+- jQuery (1.7+)
+- [jquery.minical.coffee](https://github.com/camerond/jquery-minical/blob/master/views/coffeescript/jquery.minical.coffee) (or the [generated javascript](http://jquery-minical.heroku.com/javascript/jquery.minical.js))
+- [jquery.minical.sass](https://github.com/camerond/jquery-minical/blob/master/views/stylesheets/jquery.minical.sass) (or the [generated css](http://jquery-minical.heroku.com/stylesheets/jquery.minical.css))
+- [jquery_minical_icons.png](https://github.com/camerond/jquery-minical/blob/master/public/images/jquery_minical_icons.png)
 
-## Options
+Feel free to [check out the source on GitHub](https://github.com/camerond/jquery-minical).
 
-- `start_date` (Date object) defaults to today
-- `selected_day` (Date object) allows you to predefine a selected day
-- `offset` relative to bottom left of input
-  - `x`
-  - `y`
-- `date_format(Date)` output of date object to text input (defaults to m/d/yyyy)
-- `trigger` string selector specifying a trigger element (see [the demo source](http://jquery-minical.heroku.com/javascript/demo.js) for a good example).
+## Why It's Awesome
 
-### If you're using `<select>` tags (like in the second example above):
+Minical is teeny (~4KB minified and gzipped), with no dependencies other than its icon PNG and stylesheet (which has SASS variables for easy customization).
 
-- `dropdowns.month`, `dropdowns.day`, `dropdowns.year` string selectors specifying each select tag
+It has full keyboard support (press enter to open/close the calendar, arrows to choose a day, enter to select a day) and also defaults to make the associated input read-only, so its value can only be changed by the date format specified in the plugin. (It also works great in iOS, with just enough touch event handling to behave properly.)
 
-## Why I made this instead of using the [jQuery UI Datepicker](http://jqueryui.com/demos/datepicker/):
+To aid in customization and general sanity, its markup is also nice and lean. Here's the DOM construction of Minical:
 
-### Usability issues.
-
-jQuery UI's datepicker appears when you use `tab` to highlight the input, but isn't actually keyboard-accessible. It allows you to type (numbers only) in the input, but its date-parsing is literal to a fault (type 5/1/111 and you get May 1, 111).
-
-Minical disables the text input while the calendar is visible, and doesn't appear on tab, so it's (appropriately) not utilized for keyboard-only browsing.
-
-### Portability issues.
-
-The UI datepicker requires a bunch of dependencies and the class names are nigh impetrenable. We ([Hashrocket](http://hashrocket.com)) don't use a lot of jQuery UI in projects, so we needed something light and independent. Minical is reliant upon one 16x32 PNG (for the back/forward buttons) and a SASS file (complete with color variables for ease of use).
-
-If you don't want to use SASS, you can always just pull the [generated stylesheet](http://jquery-minical.heroku.com/stylesheets/jquery.minical.css).
-
-Here's the DOM construction of Minical:
-
-- `ul#minical` contains all elements
-  - `li` - contains each month, with class `.minical_jan` and so on for each month.
+- `ul.minical` contains all elements, with id `#minical_calendar_0` and so on (for multiple instances on a page).
+  - `li` - given class `.minical_jan` and so on for each month.
     - `article`
       - `header`
         - `a.minical_next`
@@ -56,12 +35,33 @@ Here's the DOM construction of Minical:
               - `th`
           - `tbody`
             - `tr`
-              - `td.minical_previous_day` for shown days of previous month
-              - `td.minical_upcoming_day` for shown days of next month
-              - `td.minical_day` for current day
-              - `td.minical_selected` for selected day
+              - `td.minical_day` for each day
+              - `td.minical_day_[m_d_yYYY]` a unique class (e.g. `minical_day_1_1_2011`) for each day
+              - `td.minical_today` for the current day
+              - `td.minical_past_month` for days of previous month
+              - `td.minical_future_month` for days of next month
+              - `td.minical_disabled` for unselectable days
+              - `td.minical_selected` for the currently selected day in inputs/dropdowns
+              - `td.minical_highlighted` for the currently highlighted day
                 - `a`
 
-### Can you make it animate / display more than one month / select a range / display on the page permanently / select the time also / fix me a delicious omelet?
+## Options
 
-I'll be adding features as required by Hashrocket projects, and don't have any intention of reaching feature parity with a robust platform like jQuery UI. Just use the Datepicker if you need that stuff (I'm not certain whether it makes omelets, however).
+- `offset`: positions calendar relative to the bottom-left corner of the input
+  - `x` defaults to 0
+  - `y` defaults to 5
+- `trigger`: a string selector to specify a trigger element (like the calendar icon in the examples). It can be a child or sibling of the element on which you call `.minical()`.
+- `align_to_trigger`: set to `true` to align the calendar to the trigger instead of the input. (Defaults to true if a trigger is available)
+- `read_only`: makes the date/text input only modifiable by the calendar (defaults to true)
+- `date_format`: allows you to output a custom date format from the chosen Date object (defaults to MM/DD/YYYY)
+- `from` and `to`: date objects specifying min and max valid dates (defaults to null, autodetected if using dropdowns)
+- `date_changed`: callback that fires after the input or dropdowns have changed value
+- `month_drawn`: callback that fires when a new month is rendered
+
+### If you're using `<select>` tags (like in the second example above):
+
+- `dropdowns.month`, `dropdowns.day`, `dropdowns.year` string selectors specifying each select tag
+
+## Sweet! Can you make it animate / display more than one month / select a range / display on the page permanently / select the time also / fix me a delicious omelet?
+
+I'll be adding features as required by Hashrocket projects, and don't have any intention of reaching feature parity with a robust platform like jQuery UI. Just use the jQuery UI Datepicker if you need that stuff (I'm not certain whether it makes omelets, however).
