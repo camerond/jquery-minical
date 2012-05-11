@@ -18,6 +18,7 @@ minical =
     y: 5
   trigger: null
   align_to_trigger: true
+  read_only: true
   dropdowns:
     month: null
     day: null
@@ -201,9 +202,9 @@ minical =
     if @$el.is("input")
       @$el
         .addClass("minical_input")
-        .on("focus.minical", @showCalendar)
+        .on("focus.minical click.minical", @showCalendar)
         .on("blur.minical", @hideCalendar)
-        .on("keyup.minical", () -> false)
+        .attr("readonly", @read_only)
       @selected_day = new Date(@$el.val())
     else
       dr = @dropdowns
@@ -219,7 +220,7 @@ minical =
       .on("hover.minical", "td a", @highlightDay)
       .on("click.minical", "a.minical_next", @nextMonth)
       .on("click.minical", "a.minical_prev", @prevMonth)
-    $("body").bind("click.minical", (e) => @outsideClick.call(@, e))
+    $("body").on("click.minical touchend.minical", (e) => @outsideClick.call(@, e))
 
 do (minical) ->
   $.fn.minical = (opts) ->
