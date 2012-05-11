@@ -24,6 +24,8 @@ body
   z-index: 2
   max-width: 1000px
   margin: 0 auto
+  @media screen and (max-width: 850px)
+    padding: 20px
 
 a
   text-decoration: none
@@ -43,10 +45,16 @@ header
     font-family: "chunk-1","chunk-2", 'Helvetica Neue', helvetica, sans-serif
     span
       color: $accent
+    @media screen and (max-width: 850px)
+      font-size: 50px
+    @media screen and (max-width: 480px)
+      font-size: 30px
   h2
     font-size: 40px
     font-family: "chunk-1","chunk-2", 'Helvetica Neue', helvetica, sans-serif
     margin: 0 0 20px 0
+    @media screen and (max-width: 850px)
+      font-size: 20px
   p
     font-weight: bold
     margin: 0 0 40px 0
@@ -54,6 +62,10 @@ header
 form
   margin: 0 60px 40px 0
   float: left
+  @media screen and (max-width: 480px)
+    float: none
+    margin-right: 0
+    overflow: hidden
   label
     font-weight: bold
     display: block
@@ -94,7 +106,8 @@ form
     margin: 0 0 20px 0
     padding: 0 40px
   ul
-    padding: 0 40px 20px 40px
+    margin: 0 0 20px 0
+    padding: 0 40px
     font-size: 13px
     line-height: 20px
     ul
@@ -102,3 +115,10 @@ form
   p + ul
     padding-left: 60px
     padding-right: 60px
+  @media screen and (max-width: 480px)
+    h3
+      margin-left: 0
+    p, ul, p + ul
+      padding: 0
+    ul ul
+      padding: 0 10px
