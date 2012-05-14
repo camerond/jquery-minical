@@ -38,6 +38,7 @@ tester =
     $cal = @$el.data("minical").$cal
     if selector then $cal.find(selector) else $cal
   init: (opts, date) ->
+    $(document).off("keydown")
     date ?= "12/1/2012"
     @$el = $(".calendar :text").val(date).minical(opts)
 
