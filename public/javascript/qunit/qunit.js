@@ -1,5 +1,5 @@
 /**
- * QUnit v1.6.0pre - A JavaScript Unit Testing Framework
+ * QUnit v1.7.0pre - A JavaScript Unit Testing Framework
  *
  * http://docs.jquery.com/QUnit
  *
@@ -40,17 +40,23 @@ function Test( name, testName, expected, async, callback ) {
 
 Test.prototype = {
 	init: function() {
-		var b, li,
+		var a, b, li,
         tests = id( "qunit-tests" );
 
 		if ( tests ) {
 			b = document.createElement( "strong" );
-			b.innerHTML = "Running " + this.name;
+			b.innerHTML = this.name;
+
+			// `a` initialized at top of scope
+			a = document.createElement( "a" );
+			a.innerHTML = "Rerun";
+			a.href = QUnit.url({ filter: getText([b]).replace( /\([^)]+\)$/, "" ).replace( /(^\s*|\s*$)/g, "" ) });
 
 			li = document.createElement( "li" );
 			li.appendChild( b );
+			li.appendChild( a );
 			li.className = "running";
-			li.id = this.id = "test-output" + testId++;
+			li.id = this.id = "qunit-test-output" + testId++;
 
 			tests.appendChild( li );
 		}
@@ -153,9 +159,9 @@ Test.prototype = {
 	finish: function() {
 		config.current = this;
 		if ( this.expected != null && this.expected != this.assertions.length ) {
-			QUnit.pushFailure( "Expected " + this.expected + " assertions, but " + this.assertions.length + " were run" );
+			QUnit.pushFailure( "Expected " + this.expected + " assertions, but " + this.assertions.length + " were run", this.stack );
 		} else if ( this.expected == null && !this.assertions.length ) {
-			QUnit.pushFailure( "Expected at least one assertion, but none were run - call expect(0) to accept zero assertions." );
+			QUnit.pushFailure( "Expected at least one assertion, but none were run - call expect(0) to accept zero assertions.", this.stack );
 		}
 
 		var assertion, a, b, i, li, ol,
@@ -203,11 +209,6 @@ Test.prototype = {
 			b = document.createElement( "strong" );
 			b.innerHTML = this.name + " <b class='counts'>(<b class='failed'>" + bad + "</b>, <b class='passed'>" + good + "</b>, " + this.assertions.length + ")</b>";
 
-			// `a` initialized at top of scope
-			a = document.createElement( "a" );
-			a.innerHTML = "Rerun";
-			a.href = QUnit.url({ filter: getText([b]).replace( /\([^)]+\)$/, "" ).replace( /(^\s*|\s*$)/g, "" ) });
-
 			addEvent(b, "click", function() {
 				var next = b.nextSibling.nextSibling,
 					display = next.style.display;
@@ -230,8 +231,9 @@ Test.prototype = {
 			li = id( this.id );
 			li.className = bad ? "fail" : "pass";
 			li.removeChild( li.firstChild );
+			a = li.firstChild;
 			li.appendChild( b );
-			li.appendChild( a );
+			li.appendChild ( a );
 			li.appendChild( ol );
 
 		} else {
@@ -329,6 +331,7 @@ QUnit = {
 		test = new Test( name, testName, expected, async, callback );
 		test.module = config.currentModule;
 		test.moduleTestEnvironment = config.currentModuleTestEnviroment;
+		test.stack = sourceFromStacktrace( 2 );
 		test.queue();
 	},
 
@@ -548,9 +551,9 @@ config = {
 	QUnit.isLocal = location.protocol === "file:";
 }());
 
-// Expose the API as global variables, unless an 'exports'
-// object exists, in that case we assume we're in CommonJS - export everything at the end
-if ( typeof exports === "undefined" || typeof require === "undefined" ) {
+// Expose the API as global variables, unless an 'exports' object exists,
+// in that case we assume we're in CommonJS - export everything at the end
+if ( typeof exports === "undefined" ) {
 	extend( window, QUnit );
 	window.QUnit = QUnit;
 }
@@ -1073,7 +1076,8 @@ function saveGlobal() {
 
 	if ( config.noglobals ) {
 		for ( var key in window ) {
-			if ( !hasOwn.call( window, key ) ) {
+			// in Opera sometimes DOM element ids show up here, ignore them
+			if ( !hasOwn.call( window, key ) || /^qunit-test-output/.test( key ) ) {
 				continue;
 			}
 			config.pollution.push( key );
@@ -1749,7 +1753,7 @@ QUnit.diff = (function() {
 }());
 
 // for CommonJS enviroments, export everything
-if ( typeof exports !== "undefined" || typeof require !== "undefined" ) {
+if ( typeof exports !== "undefined" ) {
 	extend(exports, QUnit);
 }
 
