@@ -122,7 +122,7 @@ minical =
       mc.dropdowns.$day.val(mc.selected_day.getDate())
       mc.dropdowns.$year.val(mc.selected_day.getFullYear())
       mc.date_changed.apply(mc.dropdowns)
-    mc.$cal.hide()
+    mc.hideCalendar()
     false
   highlightDay: (e) ->
     $td = $(e.target).closest("td")
@@ -158,7 +158,8 @@ minical =
     false
   showCalendar: (e) ->
     mc = if e then $(e.target).data("minical") else @
-    $("[id^='minical_calendar']").not(mc.$cal).hide()
+    $other_cals = $("[id^='minical_calendar']").not(mc.$cal)
+    $other_cals.data("minical").hideCalendar() if $other_cals.length
     return true if mc.$cal.is(":visible")
     offset = if mc.align_to_trigger then mc.$trigger.offset() else mc.$el.offset()
     height = if mc.align_to_trigger then mc.$trigger.outerHeight() else mc.$el.outerHeight()
