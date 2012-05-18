@@ -72,10 +72,6 @@ test "minical hides on blur", ->
   $input = tester.init().blur()
   tester.cal().shouldNotBe(":visible")
 
-test "minical makes input readonly", ->
-  $input = tester.init()
-  equal $input.attr("readonly"), "readonly", "Input should be readonly"
-
 test "minical hides on outside click", ->
   $input = tester.init().focus()
   tester.cal("h1").click()
@@ -314,12 +310,6 @@ test "Arrow keys fire anywhere on page as long as calendar is visible", ->
   tester.cal("td.minical_day_12_20_2012").shouldBe(".minical_highlighted")
 
 module "Other options"
-
-test "Option to disable readonly input", ->
-  opts =
-    read_only: false
-  $input = tester.init(opts).focus()
-  equal $input.attr("readonly"), undefined, "Input should not be readonly"
 
 test "Callback when date is changed", ->
   callback = false
