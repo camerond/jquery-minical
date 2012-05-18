@@ -42,7 +42,7 @@ minical =
     y: 5
   trigger: null
   align_to_trigger: true
-  read_only: true
+  read_only: false
   dropdowns:
     month: null
     day: null
@@ -196,7 +196,7 @@ minical =
     keys =
       9:  -> true                  # tab
       13: ->                       # enter
-        if mc.$cal.is(":visible") then mc.$cal.find(".minical_highlighted a").click() else mc.showCalendar()
+        mc.$cal.find(".minical_highlighted a").click()
         false
       37: -> mc.moveToDay(-1, 0)   # left
       38: -> mc.moveToDay(0, -1)   # up
@@ -206,6 +206,16 @@ minical =
       keys[key]()
     else if !e.metaKey and !e.ctrlKey
       false
+  preventKeystroke: (e) ->
+    mc = @
+    if mc.$cal.is(":visible") then return true
+    key = e.which
+    keys =
+      9:  -> true                  # tab
+      13: ->                    # enter
+          mc.showCalendar()
+          false
+    if keys[key] then return keys[key]() else return !mc.read_only
   dropdownChange: (e) ->
     mc = $(e.target).data("minical")
     mc.selected_day = new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val() - 1, mc.dropdowns.$day.val())
@@ -236,7 +246,7 @@ minical =
         .addClass("minical_input")
         .on("focus.minical click.minical", @showCalendar)
         .on("blur.minical", @hideCalendar)
-        .attr("readonly", @read_only)
+        .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
       @selected_day = new Date(@$el.val())
     else
       dr = @dropdowns
