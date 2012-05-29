@@ -26,7 +26,7 @@ tester =
     $y.append($("<option />", { text: y, value: y })) for y in years
     $m.find("option:eq(#{month-1})").attr("selected", true)
     $d.find("option:eq(#{day-1})").attr("selected", true)
-    $y.find("option:eq(#{2020-year})").attr("selected", true)
+    $y.val(year)
     dropdown_opts =
       trigger: ".trigger",
       dropdowns:
@@ -185,6 +185,19 @@ test "Minimum date is autodetected from dropdown content", ->
 test "Maximum date is autodetected from dropdown content", ->
   $el = tester.initDropdowns({}, 12, 25, 2020).data("minical").$trigger.click()
   tester.cal(".minical_next").shouldNotBe(":visible")
+
+test "Dropdown date detection works with ascending or descending year values", ->
+  months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+  days = [1..31]
+  years = [2000..2020]
+  $el = tester.initDropdowns({}, 12, 15, 2000, months, days, years)
+  $el.data("minical").$trigger.click()
+  tester.cal(".minical_next").click()
+  tester.cal("td.minical_day_1_8_2001 a").click()
+  $el.find(".months").shouldHaveValue(1)
+  $el.find(".days").shouldHaveValue(8)
+  $el.find(".years").shouldHaveValue(2001)
+  tester.cal().shouldNotBe(":visible")
 
 module "Testing alignment"
 

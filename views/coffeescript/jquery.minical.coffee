@@ -253,8 +253,12 @@ minical =
       dr.$year = @$el.find(dr.year).data("minical", @).change(@dropdownChange) if dr.year
       dr.$month = @$el.find(dr.month).data("minical", @).change(@dropdownChange) if dr.month
       dr.$day = @$el.find(dr.day).data("minical", @).change(@dropdownChange) if dr.day
-      @from = new Date(dr.$year.find("option").eq(-1).val(), dr.$month.find("option:eq(0)").val() - 1, dr.$day.find("option:eq(0)").val()) if !@from
-      @to = new Date(dr.$year.find("option:eq(0)").val(), dr.$month.find("option").eq(-1).val() - 1, dr.$day.find("option").eq(-1).val()) if !@to
+      if !@from
+        min_year = Math.min.apply(Math, dr.$year.children().map(() -> $(@).val()).get())
+        @from = new Date(min_year, dr.$month.find("option:eq(0)").val() - 1, dr.$day.find("option:eq(0)").val())
+      if !@to
+        max_year = Math.max.apply(Math, dr.$year.children().map(() -> $(@).val()).get())
+        @to = new Date(max_year, dr.$month.find("option").eq(-1).val() - 1, dr.$day.find("option").eq(-1).val())
       @align_to_trigger = true
       dr.$year.change()
     @$cal
