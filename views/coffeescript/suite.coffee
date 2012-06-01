@@ -102,6 +102,12 @@ test "minical fades out displayed days not of current month", ->
   tester.cal("td:lt(7)").shouldBe(".minical_past_month")
   tester.cal("td:last").shouldBe(".minical_future_month")
 
+test "minical defaults to today if input value is blank", ->
+  today = new Date()
+  today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]
+  $input = tester.init({}, "").focus()
+  tester.cal("td.minical_day_#{today_array.join('_')}").shouldBe(":visible")
+
 test "minical highlights the current day", ->
   today = new Date()
   today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]

@@ -247,7 +247,7 @@ minical =
         .on("focus.minical click.minical", @showCalendar)
         .on("blur.minical", @hideCalendar)
         .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
-      @selected_day = new Date(@$el.val())
+      @selected_day = if @$el.val() then new Date(@$el.val()) else new Date()
     else
       dr = @dropdowns
       dr.$year = @$el.find(dr.year).data("minical", @).change(@dropdownChange) if dr.year
