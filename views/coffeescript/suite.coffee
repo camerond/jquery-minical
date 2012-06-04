@@ -9,31 +9,34 @@ tester =
     $e = $.Event('keydown')
     $e.keyCode = $e.which = k
     $el.trigger($e)
-  initDropdowns: (opts, month, day, year, months, days, years) ->
-    month ?= 12
-    day ?= 21
-    year ?= 2012
-    months ?= ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    days ?= [1..31]
-    years ?= [2000..2020].reverse()
+  initDropdowns: (options) ->
+    defaults =
+      opts: {}
+      month: 12
+      day: 21
+      year: 2012
+      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      days: [1..31]
+      years: [2000..2020].reverse()
+    opts = $.extend(true, defaults, options)
     $div = $(".calendar")
     $div.find(":text").remove()
     $m = $("<select />", { class: "months"} ).appendTo($div)
     $d = $("<select />", { class: "days"} ).appendTo($div)
     $y = $("<select />", { class: "years"} ).appendTo($div)
-    $m.append($("<option />", { text: m, value: i+1 })) for m, i in months
-    $d.append($("<option />", { text: d, value: d })) for d in days
-    $y.append($("<option />", { text: y, value: y })) for y in years
-    $m.find("option:eq(#{month-1})").attr("selected", true)
-    $d.find("option:eq(#{day-1})").attr("selected", true)
-    $y.val(year)
+    $m.append($("<option />", { text: m, value: i+1 })) for m, i in opts.months
+    $d.append($("<option />", { text: d, value: d })) for d in opts.days
+    $y.append($("<option />", { text: y, value: y })) for y in opts.years
+    $m.find("option:eq(#{opts.month-1})").attr("selected", true)
+    $d.find("option:eq(#{opts.day-1})").attr("selected", true)
+    $y.val(opts.year)
     dropdown_opts =
       trigger: ".trigger",
       dropdowns:
         month: ".months"
         day: ".days"
         year: ".years"
-    @$el = $(".calendar").minical($.extend(opts, dropdown_opts))
+    @$el = $(".calendar").minical($.extend(opts.opts, dropdown_opts))
   cal: (selector) ->
     $cal = @$el.data("minical").$cal
     if selector then $cal.find(selector) else $cal
@@ -101,12 +104,6 @@ test "minical fades out displayed days not of current month", ->
   $input = tester.init().focus()
   tester.cal("td:lt(7)").shouldBe(".minical_past_month")
   tester.cal("td:last").shouldBe(".minical_future_month")
-
-test "minical defaults to today if input value is blank", ->
-  today = new Date()
-  today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]
-  $input = tester.init({}, "").focus()
-  tester.cal("td.minical_day_#{today_array.join('_')}").shouldBe(":visible")
 
 test "minical highlights the current day", ->
   today = new Date()
@@ -183,20 +180,32 @@ test "changing dropdowns updates visible calendar", ->
   tester.cal("td.minical_day_12_21_2011").shouldBe(".minical_selected")
 
 test "Minimum date is autodetected from dropdown content", ->
-  $el = tester.initDropdowns({}, 1, 1, 2000).data("minical").$trigger.click()
+  opts =
+    month: 1
+    day: 1
+    year: 2000
+  $el = tester.initDropdowns(opts).data("minical").$trigger.click()
   tester.cal("td.minical_day_12_31_1999").shouldBe(".minical_disabled")
   tester.cal("td.minical_day_1_1_2000").shouldNotBe(".minical_disabled")
   tester.cal(".minical_prev").shouldNotBe(":visible")
 
 test "Maximum date is autodetected from dropdown content", ->
-  $el = tester.initDropdowns({}, 12, 25, 2020).data("minical").$trigger.click()
+  opts =
+    month: 12
+    day: 25
+    year: 2020
+  $el = tester.initDropdowns(opts).data("minical").$trigger.click()
   tester.cal(".minical_next").shouldNotBe(":visible")
 
 test "Dropdown date detection works with ascending or descending year values", ->
-  months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-  days = [1..31]
-  years = [2000..2020]
-  $el = tester.initDropdowns({}, 12, 15, 2000, months, days, years)
+  opts =
+    months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    days: [1..31]
+    years: [2000..2020]
+    month: 12
+    day: 15
+    year: 2000
+  $el = tester.initDropdowns(opts)
   $el.data("minical").$trigger.click()
   tester.cal(".minical_next").click()
   tester.cal("td.minical_day_1_8_2001 a").click()
@@ -312,10 +321,11 @@ test "Arrow keys move around ends of month", ->
   tester.cal("td.minical_day_12_8_2012").shouldBe(".minical_highlighted")
 
 test "Arrow keys should not go to inaccessible months", ->
-  opts =
-    trigger: ".trigger"
-    to: new Date("December 31, 2012")
-  tester.initDropdowns(opts).find(".trigger").click()
+  options =
+    opts:
+      trigger: ".trigger"
+      to: new Date("December 31, 2012")
+  tester.initDropdowns(options).find(".trigger").click()
   tester.cal(".minical_next").shouldNotBe(":visible")
   tester.keydown(40, "down arrow")
   tester.keydown(40, "down arrow")
