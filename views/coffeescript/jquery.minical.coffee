@@ -1,5 +1,5 @@
 # jQuery Minical Plugin
-# version 0.5.2
+# version 0.5.3
 #
 # Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 #
@@ -218,7 +218,11 @@ minical =
     if keys[key] then return keys[key]() else return !mc.read_only
   dropdownChange: (e) ->
     mc = $(e.target).data("minical")
-    mc.selected_day = new Date(mc.dropdowns.$year.val(), mc.dropdowns.$month.val() - 1, mc.dropdowns.$day.val())
+    dr = mc.dropdowns
+    if dr.$year.val() and dr.$month.val() and dr.$day.val()
+      mc.selected_day = new Date(dr.$year.val(), dr.$month.val() - 1, dr.$day.val())
+    else
+      mc.selected_day = new Date()
     mc.render() if mc.$cal.is(":visible")
   outsideClick: (e) ->
     $t = $(e.target)
@@ -254,8 +258,10 @@ minical =
       dr.$month = @$el.find(dr.month).data("minical", @).change(@dropdownChange) if dr.month
       dr.$day = @$el.find(dr.day).data("minical", @).change(@dropdownChange) if dr.day
       if !@from
-        min_year = Math.min.apply(Math, dr.$year.children().map(() -> $(@).val()).get())
-        @from = new Date(min_year, dr.$month.find("option:eq(0)").val() - 1, dr.$day.find("option:eq(0)").val())
+        min_year = Math.min.apply(Math, dr.$year.children().map(() -> $(@).val() if $(@).val()).get())
+        min_month = Math.min.apply(Math, dr.$month.children().map(() -> $(@).val() if $(@).val()).get())
+        min_day = Math.min.apply(Math, dr.$day.children().map(() -> $(@).val() if $(@).val()).get())
+        @from = new Date(min_year, min_month - 1, min_day)
       if !@to
         max_year = Math.max.apply(Math, dr.$year.children().map(() -> $(@).val()).get())
         @to = new Date(max_year, dr.$month.find("option").eq(-1).val() - 1, dr.$day.find("option").eq(-1).val())

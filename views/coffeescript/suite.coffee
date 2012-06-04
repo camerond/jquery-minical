@@ -18,6 +18,7 @@ tester =
       months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
       days: [1..31]
       years: [2000..2020].reverse()
+      blank: true
     opts = $.extend(true, defaults, options)
     $div = $(".calendar")
     $div.find(":text").remove()
@@ -27,8 +28,12 @@ tester =
     $m.append($("<option />", { text: m, value: i+1 })) for m, i in opts.months
     $d.append($("<option />", { text: d, value: d })) for d in opts.days
     $y.append($("<option />", { text: y, value: y })) for y in opts.years
-    $m.find("option:eq(#{opts.month-1})").attr("selected", true)
-    $d.find("option:eq(#{opts.day-1})").attr("selected", true)
+    if opts.blank
+      $m.prepend($("<option />", { value: "" }))
+      $d.prepend($("<option />", { value: "" }))
+      $y.prepend($("<option />", { value: "" }))
+    $m.val(opts.month)
+    $d.val(opts.day)
     $y.val(opts.year)
     dropdown_opts =
       trigger: ".trigger",
@@ -163,6 +168,18 @@ module "Firing using dropdowns"
 test "displays when trigger clicked and dropdowns specified", ->
   tester.initDropdowns().find(".trigger").click()
   tester.cal("h1").shouldSay("Dec 2012")
+
+test "defaults to today if dropdowns are blank", ->
+  options =
+    month: ''
+    day: ''
+    year: ''
+    blank: true
+  today = new Date()
+  today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]
+  $el = tester.initDropdowns(options)
+  $el.data("minical").$trigger.click()
+  tester.cal("td.minical_day_#{today_array.join('_')}").shouldBe(":visible")
 
 test "clicking a day sets dropdowns to that value", ->
   $el = tester.initDropdowns()
