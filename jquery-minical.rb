@@ -16,7 +16,7 @@ get '/javascript/suite.js' do
   coffee '/coffeescript/suite'.to_sym
 end
 
-get '/javascript/jquery.minical.js' do
+get '/javascript/jquery.minical.coffee' do
   coffee '/coffeescript/jquery.minical'.to_sym
 end
 
