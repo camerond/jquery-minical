@@ -1,6 +1,6 @@
 // jQuery Minical Plugin
 // http://github.com/camerond/jquery-minical
-// version 0.5.3
+// version 0.5.4
 //
 // Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 //
@@ -334,7 +334,7 @@
       return this.hideCalendar();
     },
     init: function() {
-      var dr, max_year, mc, min_day, min_month, min_year,
+      var dr, initial_date, max_year, mc, min_day, min_month, min_year,
         _this = this;
       this.id = $(".minical").length;
       mc = this;
@@ -358,7 +358,8 @@
         this.$el.addClass("minical_input").on("focus.minical click.minical", this.showCalendar).on("blur.minical", this.hideCalendar).on("keydown.minical", function(e) {
           return mc.preventKeystroke.call(mc, e);
         });
-        this.selected_day = this.$el.val() ? new Date(this.$el.val()) : new Date();
+        initial_date = this.$el.attr("data-minical-initial") || this.$el.val();
+        this.selected_day = initial_date ? new Date(initial_date) : new Date();
       } else {
         dr = this.dropdowns;
         if (dr.year) {

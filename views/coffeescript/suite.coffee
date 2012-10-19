@@ -357,6 +357,13 @@ test "Arrow keys fire anywhere on page as long as calendar is visible", ->
 
 module "Other options"
 
+test "Initialize with data-minical-initial attribute if provided", ->
+  $(".calendar :text")
+    .attr("data-minical-initial", "Tue Aug 07 2012 00:00:00 GMT-0400 (EDT)")
+    .val("August seventh two thousand and twelvey!")
+  tester.init().focus()
+  tester.cal("td.minical_day_8_7_2012").shouldBe(".minical_highlighted")
+
 test "Callback when date is changed", ->
   callback = false
   opts =

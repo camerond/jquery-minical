@@ -1,6 +1,6 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.5.3
+# version 0.5.4
 #
 # Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 #
@@ -252,7 +252,8 @@ minical =
         .on("focus.minical click.minical", @showCalendar)
         .on("blur.minical", @hideCalendar)
         .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
-      @selected_day = if @$el.val() then new Date(@$el.val()) else new Date()
+      initial_date = @$el.attr("data-minical-initial") || @$el.val()
+      @selected_day = if initial_date then new Date(initial_date) else new Date()
     else
       dr = @dropdowns
       dr.$year = @$el.find(dr.year).data("minical", @).change(@dropdownChange) if dr.year

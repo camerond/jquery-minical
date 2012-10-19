@@ -58,6 +58,10 @@ To aid in customization and general sanity, its markup is also nice and lean. He
 - `date_changed`: callback that fires after the input or dropdowns have changed value
 - `month_drawn`: callback that fires when a new month is rendered
 
+## Attributes
+
+Javascript date parsing is a pain, and it's entirely possible that the date format you want displayed in your input is not one that JS can parse. If your page ever loads with a value already in the Minical-enabled input, Minical needs a Javascript-parseable date in order to set its initial value properly. In this case, you can just output a `data-minical-initial` attribute on your input element, give it a Javascript-parseable string, and Minical will initialize using that attribute instead of attempting to parse the value of your input.
+
 ### If you're using `<select>` tags (like in the second example above):
 
 - `dropdowns.month`, `dropdowns.day`, `dropdowns.year` string selectors specifying each select tag
