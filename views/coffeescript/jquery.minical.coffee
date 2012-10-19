@@ -1,6 +1,6 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.5.3
+# version 0.5.4
 #
 # Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 #
@@ -273,6 +273,10 @@ minical =
       .on("hover.minical", "td a", @highlightDay)
       .on("click.minical", "a.minical_next", @nextMonth)
       .on("click.minical", "a.minical_prev", @prevMonth)
+    $(window).resize(() ->
+      $cal = $(".minical:visible")
+      $cal.length && $cal.hide().data("minical").showCalendar()
+    )
     $("body").on("click.minical touchend.minical", (e) => @outsideClick.call(@, e))
 
 do (minical) ->
