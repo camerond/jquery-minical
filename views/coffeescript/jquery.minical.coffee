@@ -274,6 +274,10 @@ minical =
       .on("hover.minical", "td a", @highlightDay)
       .on("click.minical", "a.minical_next", @nextMonth)
       .on("click.minical", "a.minical_prev", @prevMonth)
+    $(window).resize(() ->
+      $cal = $(".minical:visible")
+      $cal.length && $cal.hide().data("minical").showCalendar()
+    )
     $("body").on("click.minical touchend.minical", (e) => @outsideClick.call(@, e))
 
 do (minical) ->

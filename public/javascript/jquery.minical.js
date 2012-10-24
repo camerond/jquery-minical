@@ -399,6 +399,11 @@
         dr.$year.change();
       }
       this.$cal.on("click.minical", "td a", this.selectDay).on("hover.minical", "td a", this.highlightDay).on("click.minical", "a.minical_next", this.nextMonth).on("click.minical", "a.minical_prev", this.prevMonth);
+      $(window).resize(function() {
+        var $cal;
+        $cal = $(".minical:visible");
+        return $cal.length && $cal.hide().data("minical").showCalendar();
+      });
       return $("body").on("click.minical touchend.minical", function(e) {
         return _this.outsideClick.call(_this, e);
       });
