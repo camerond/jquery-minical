@@ -1,6 +1,6 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.5.4
+# version 0.5.5
 #
 # Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 #
@@ -178,7 +178,7 @@ minical =
       mc = $(e.target).data("minical")
       setTimeout(->
         $e = $(document.activeElement)
-        if !$e.is("body") and !$e.is(mc.$trigger) and !$e.is(mc.$el)
+        if !$e.is("body") and !$e.is(mc.$trigger) and !$e.is(mc.$el) and !$e.closest(mc.$cal).length
           mc.$cal.hide()
           mc.detachCalendarKeyEvents()
       , 1)
