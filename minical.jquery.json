@@ -1,0 +1,26 @@
+{
+  "name": "minical",
+  "title": "jQuery Minical",
+  "description": "Lightweight jQuery datepicker plugin.",
+  "keywords": [
+    "calendar",
+    "date",
+    "datepicker"
+  ],
+  "version": "0.5.4",
+  "author": {
+    "name": "Cameron Daigle",
+    "email": "me@camerondaigle.com",
+    "url": "http://camerondaigle.com"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/camerond/jquery-minical/blob/master/views/coffeescript/jquery.minical.coffee"
+    }
+  ],
+  "homepage": "http://minical.camerondaigle.com",
+  "dependencies": {
+    "jquery": ">=1.7"
+  }
+}
