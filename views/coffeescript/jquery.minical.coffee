@@ -164,16 +164,14 @@ minical =
     $other_cals = $("[id^='minical_calendar']").not(mc.$cal)
     $other_cals.data("minical").hideCalendar() if $other_cals.length
     return true if mc.$cal.is(":visible")
-    offset = if mc.align_to_trigger
-      unless mc.appendTo.apply().html() == $('body').html() then mc.$trigger.position() else mc.$trigger.offset()
-    else
-      unless mc.appendTo.apply().html() == $('body').html() then mc.$el.position() else mc.$el.offset()
+    offset_method = if mc.appendTo().is("body") then "offset" else "position"
+    offset = if mc.align_to_trigger then mc.$trigger[offset_method]() else mc.$el[offset_method]()
     height = if mc.align_to_trigger then mc.$trigger.outerHeight() else mc.$el.outerHeight()
     position =
       left: "#{offset.left + mc.offset.x}px",
       top: "#{height + offset.top + mc.offset.y}px"
     mc.render().css(position).show()
-    overlap = mc.$cal.width() + mc.$cal.offset().left - $(window).width()
+    overlap = mc.$cal.width() + mc.$cal[offset_method]().left - $(window).width()
     if overlap > 0
       mc.$cal.css("left", offset.left - overlap - 10)
     mc.attachCalendarKeyEvents()
@@ -281,7 +279,7 @@ minical =
       .on("click.minical", "a.minical_prev", @prevMonth)
       if @move_on_resize
         $(window).resize(() ->
-          cal = $(".minical:visible")
+          $cal = $(".minical:visible")
           $cal.length && $cal.hide().data("minical").showCalendar()
         )
     $("body").on("click.minical touchend.minical", (e) => @outsideClick.call(@, e))
