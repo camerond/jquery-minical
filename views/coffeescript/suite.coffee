@@ -273,14 +273,13 @@ test "Calendar can be overridden to align to text input", ->
 
 test "Calendar should be appended to the body by default", ->
   tester.init()
-  $el = $("body").children(".minical")
-  equal $el.length, 1, "Calendar is appended to the body."
+  ok tester.cal().parent().is("body"), "Calendar is appended to the body."
 
 test "Calendar can be overridden to append to an arbitrary element", ->
-  opts =
+  tester.init(
     appendTo: -> this.parents(".calendar")
-  $el = tester.init(opts)
-  equal $el.parents(".calendar").length, 1, "Calendar is not appended to the body and is appended to the calendar class."
+  )
+  ok tester.cal().parent().is(".calendar"), "Calendar is appended to the .calendar element"
 
 module "Selection feedback and keyboard support"
 
