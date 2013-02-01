@@ -48,6 +48,7 @@ minical =
     month: null
     day: null
     year: null
+  appendTo: -> $('body')
   date_format: (date) ->
     [date.getMonth()+1, date.getDate(), date.getFullYear()].join("/")
   from: null
@@ -117,7 +118,7 @@ minical =
     mc.selected_day = new Date($td.data("minical_date"))
     if (mc.$el.is(":text"))
       mc.$el.val(mc.date_format(mc.selected_day))
-      mc.date_changed.apply(mc.$input)
+      mc.date_changed.apply(mc.$el)
     else
       mc.dropdowns.$month.val(mc.selected_day.getMonth() + 1)
       mc.dropdowns.$day.val(mc.selected_day.getDate())
@@ -162,15 +163,18 @@ minical =
     $other_cals = $("[id^='minical_calendar']").not(mc.$cal)
     $other_cals.data("minical").hideCalendar() if $other_cals.length
     return true if mc.$cal.is(":visible")
-    offset = if mc.align_to_trigger then mc.$trigger.offset() else mc.$el.offset()
+    offset = if mc.align_to_trigger
+      unless mc.appendTo.apply().html() == $('body').html() then mc.$trigger.position() else mc.$trigger.offset()
+    else
+      unless mc.appendTo.apply().html() == $('body').html() then mc.$el.position() else mc.$el.offset()
     height = if mc.align_to_trigger then mc.$trigger.outerHeight() else mc.$el.outerHeight()
     position =
       left: "#{offset.left + mc.offset.x}px",
-      top: "#{offset.top + height + mc.offset.y}px"
+      top: "#{height + offset.top + mc.offset.y}px"
     mc.render().css(position).show()
     overlap = mc.$cal.width() + mc.$cal.offset().left - $(window).width()
     if overlap > 0
-      mc.$cal.css("left", offset.left - overlap- 10)
+      mc.$cal.css("left", offset.left - overlap - 10)
     mc.attachCalendarKeyEvents()
   hideCalendar: (e) ->
     mc = @
@@ -178,7 +182,7 @@ minical =
       mc = $(e.target).data("minical")
       setTimeout(->
         $e = $(document.activeElement)
-        if !$e.is("body") and !$e.is(mc.$trigger) and !$e.is(mc.$el) and !$e.closest(mc.$cal).length
+        if !$e.is("body") and !$e.is(mc.$trigger) and !$e.is(mc.$el)
           mc.$cal.hide()
           mc.detachCalendarKeyEvents()
       , 1)
@@ -232,7 +236,7 @@ minical =
   init: ->
     @id = $(".minical").length
     mc = @
-    @$cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" }).data("minical", @).appendTo($("body"))
+    @$cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" }).data("minical", @).appendTo(@appendTo.apply(@$el))
     if @trigger
       @$trigger = @$el.find(@trigger)
       @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
@@ -252,8 +256,7 @@ minical =
         .on("focus.minical click.minical", @showCalendar)
         .on("blur.minical", @hideCalendar)
         .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
-      initial_date = @$el.attr("data-minical-initial") || @$el.val()
-      @selected_day = if initial_date then new Date(initial_date) else new Date()
+      @selected_day = if @$el.val() then new Date(@$el.val()) else new Date()
     else
       dr = @dropdowns
       dr.$year = @$el.find(dr.year).data("minical", @).change(@dropdownChange) if dr.year
@@ -274,10 +277,6 @@ minical =
       .on("hover.minical", "td a", @highlightDay)
       .on("click.minical", "a.minical_next", @nextMonth)
       .on("click.minical", "a.minical_prev", @prevMonth)
-    $(window).resize(() ->
-      $cal = $(".minical:visible")
-      $cal.length && $cal.hide().data("minical").showCalendar()
-    )
     $("body").on("click.minical touchend.minical", (e) => @outsideClick.call(@, e))
 
 do (minical) ->
