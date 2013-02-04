@@ -57,6 +57,7 @@ To aid in customization and general sanity, its markup is also nice and lean. He
 - `from` and `to`: date objects specifying min and max valid dates (defaults to null, autodetected if using dropdowns)
 - `date_changed`: callback that fires after the input or dropdowns have changed value
 - `month_drawn`: callback that fires when a new month is rendered
+- `appendCalendarTo`: should return a jQuery object; the calendar element will attach to this (defaults to `<body>`)
 
 ## Attributes
 
