@@ -164,14 +164,13 @@ minical =
     $other_cals = $("[id^='minical_calendar']").not(mc.$cal)
     $other_cals.data("minical").hideCalendar() if $other_cals.length
     return true if mc.$cal.is(":visible")
-    offset_method = if mc.$cal.parent().is("body") then "offset" else "position"
-    offset = if mc.align_to_trigger then mc.$trigger[offset_method]() else mc.$el[offset_method]()
+    offset = if mc.align_to_trigger then mc.$trigger[mc.offset_method]() else mc.$el[mc.offset_method]()
     height = if mc.align_to_trigger then mc.$trigger.outerHeight() else mc.$el.outerHeight()
     position =
       left: "#{offset.left + mc.offset.x}px",
       top: "#{height + offset.top + mc.offset.y}px"
     mc.render().css(position).show()
-    overlap = mc.$cal.width() + mc.$cal[offset_method]().left - $(window).width()
+    overlap = mc.$cal.width() + mc.$cal[mc.offset_method]().left - $(window).width()
     if overlap > 0
       mc.$cal.css("left", offset.left - overlap - 10)
     mc.attachCalendarKeyEvents()
@@ -236,6 +235,7 @@ minical =
     @id = $(".minical").length
     mc = @
     @$cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" }).data("minical", @).appendTo(@appendCalendarTo.apply(@$el))
+    @offset_method = if mc.$cal.parent().is("body") then "offset" else "position"
     if @trigger
       @$trigger = @$el.find(@trigger)
       @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
