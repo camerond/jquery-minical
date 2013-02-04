@@ -1,6 +1,6 @@
 // jQuery Minical Plugin
 // http://github.com/camerond/jquery-minical
-// version 0.5.4
+// version 0.5.5
 //
 // Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 //
@@ -57,11 +57,15 @@
     },
     trigger: null,
     align_to_trigger: true,
+    move_on_resize: true,
     read_only: false,
     dropdowns: {
       month: null,
       day: null,
       year: null
+    },
+    appendCalendarTo: function() {
+      return $('body');
     },
     date_format: function(date) {
       return [date.getMonth() + 1, date.getDate(), date.getFullYear()].join("/");
@@ -146,7 +150,7 @@
       mc.selected_day = new Date($td.data("minical_date"));
       if (mc.$el.is(":text")) {
         mc.$el.val(mc.date_format(mc.selected_day));
-        mc.date_changed.apply(mc.$input);
+        mc.date_changed.apply(mc.$el);
       } else {
         mc.dropdowns.$month.val(mc.selected_day.getMonth() + 1);
         mc.dropdowns.$day.val(mc.selected_day.getDate());
@@ -217,14 +221,14 @@
       if (mc.$cal.is(":visible")) {
         return true;
       }
-      offset = mc.align_to_trigger ? mc.$trigger.offset() : mc.$el.offset();
+      offset = mc.align_to_trigger ? mc.$trigger[mc.offset_method]() : mc.$el[mc.offset_method]();
       height = mc.align_to_trigger ? mc.$trigger.outerHeight() : mc.$el.outerHeight();
       position = {
         left: "" + (offset.left + mc.offset.x) + "px",
-        top: "" + (offset.top + height + mc.offset.y) + "px"
+        top: "" + (height + offset.top + mc.offset.y) + "px"
       };
       mc.render().css(position).show();
-      overlap = mc.$cal.width() + mc.$cal.offset().left - $(window).width();
+      overlap = mc.$cal.width() + mc.$cal[mc.offset_method]().left - $(window).width();
       if (overlap > 0) {
         mc.$cal.css("left", offset.left - overlap - 10);
       }
@@ -238,7 +242,7 @@
         return setTimeout(function() {
           var $e;
           $e = $(document.activeElement);
-          if (!$e.is("body") && !$e.is(mc.$trigger) && !$e.is(mc.$el) && !$e.closest(mc.$cal).length) {
+          if (!$e.is("body") && !$e.is(mc.$trigger) && !$e.is(mc.$el)) {
             mc.$cal.hide();
             return mc.detachCalendarKeyEvents();
           }
@@ -341,7 +345,8 @@
       this.$cal = $("<ul />", {
         id: "minical_calendar_" + this.id,
         "class": "minical"
-      }).data("minical", this).appendTo($("body"));
+      }).data("minical", this).appendTo(this.appendCalendarTo.apply(this.$el));
+      this.offset_method = mc.$cal.parent().is("body") ? "offset" : "position";
       if (this.trigger) {
         this.$trigger = this.$el.find(this.trigger);
         if (!this.$trigger.length) {
@@ -399,11 +404,13 @@
         dr.$year.change();
       }
       this.$cal.on("click.minical", "td a", this.selectDay).on("hover.minical", "td a", this.highlightDay).on("click.minical", "a.minical_next", this.nextMonth).on("click.minical", "a.minical_prev", this.prevMonth);
-      $(window).resize(function() {
-        var $cal;
-        $cal = $(".minical:visible");
-        return $cal.length && $cal.hide().data("minical").showCalendar();
-      });
+      if (this.move_on_resize) {
+        $(window).resize(function() {
+          var $cal;
+          $cal = $(".minical:visible");
+          return $cal.length && $cal.hide().data("minical").showCalendar();
+        });
+      }
       return $("body").on("click.minical touchend.minical", function(e) {
         return _this.outsideClick.call(_this, e);
       });
