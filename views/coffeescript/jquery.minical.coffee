@@ -49,7 +49,7 @@ minical =
     month: null
     day: null
     year: null
-  appendTo: -> $('body')
+  appendCalendarTo: -> $('body')
   date_format: (date) ->
     [date.getMonth()+1, date.getDate(), date.getFullYear()].join("/")
   from: null
@@ -164,7 +164,7 @@ minical =
     $other_cals = $("[id^='minical_calendar']").not(mc.$cal)
     $other_cals.data("minical").hideCalendar() if $other_cals.length
     return true if mc.$cal.is(":visible")
-    offset_method = if mc.appendTo().is("body") then "offset" else "position"
+    offset_method = if mc.$cal.parent().is("body") then "offset" else "position"
     offset = if mc.align_to_trigger then mc.$trigger[offset_method]() else mc.$el[offset_method]()
     height = if mc.align_to_trigger then mc.$trigger.outerHeight() else mc.$el.outerHeight()
     position =
@@ -235,7 +235,7 @@ minical =
   init: ->
     @id = $(".minical").length
     mc = @
-    @$cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" }).data("minical", @).appendTo(@appendTo.apply(@$el))
+    @$cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" }).data("minical", @).appendTo(@appendCalendarTo.apply(@$el))
     if @trigger
       @$trigger = @$el.find(@trigger)
       @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
