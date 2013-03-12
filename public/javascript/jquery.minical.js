@@ -1,6 +1,6 @@
 // jQuery Minical Plugin
 // http://github.com/camerond/jquery-minical
-// version 0.5.5
+// version 0.5.6
 //
 // Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 //
@@ -235,18 +235,15 @@
       return mc.attachCalendarKeyEvents();
     },
     hideCalendar: function(e) {
-      var mc;
+      var $lc, mc;
       mc = this;
       if (e && (e.type === "focusout" || e.type === "blur")) {
         mc = $(e.target).data("minical");
-        return setTimeout(function() {
-          var $e;
-          $e = $(document.activeElement);
-          if (!$e.is("body") && !$e.is(mc.$trigger) && !$e.is(mc.$el)) {
-            mc.$cal.hide();
-            return mc.detachCalendarKeyEvents();
-          }
-        }, 1);
+        $lc = mc.$last_clicked;
+        if ($lc && !$lc.is(mc.$trigger) && !$lc.is(mc.$el) && !$lc.closest(".minical").length) {
+          mc.$cal.hide();
+          return mc.detachCalendarKeyEvents();
+        }
       } else {
         mc.$cal.hide();
         return mc.detachCalendarKeyEvents();
@@ -332,6 +329,7 @@
     outsideClick: function(e) {
       var $t;
       $t = $(e.target);
+      this.$last_clicked = $t;
       if ($t.is(this.$el) || $t.is(this.$trigger) || $t.closest(".minical").length) {
         return true;
       }

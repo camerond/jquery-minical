@@ -1,6 +1,6 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.5.5
+# version 0.5.6
 #
 # Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 #
@@ -178,12 +178,10 @@ minical =
     mc = @
     if e and (e.type == "focusout" or e.type == "blur")
       mc = $(e.target).data("minical")
-      setTimeout(->
-        $e = $(document.activeElement)
-        if !$e.is("body") and !$e.is(mc.$trigger) and !$e.is(mc.$el)
-          mc.$cal.hide()
-          mc.detachCalendarKeyEvents()
-      , 1)
+      $lc = mc.$last_clicked
+      if $lc and !$lc.is(mc.$trigger) and !$lc.is(mc.$el) and !$lc.closest(".minical").length
+        mc.$cal.hide()
+        mc.detachCalendarKeyEvents()
     else
       mc.$cal.hide()
       mc.detachCalendarKeyEvents()
@@ -229,6 +227,7 @@ minical =
     mc.render() if mc.$cal.is(":visible")
   outsideClick: (e) ->
     $t = $(e.target)
+    @$last_clicked = $t
     return true if $t.is(@$el) or $t.is(@$trigger) or $t.closest(".minical").length
     @hideCalendar()
   init: ->
