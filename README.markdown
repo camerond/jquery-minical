@@ -36,7 +36,7 @@ To aid in customization and general sanity, its markup is also nice and lean. He
           - `tbody`
             - `tr`
               - `td.minical_day` for each day
-              - `td.minical_day_[m_d_yYYY]` a unique class (e.g. `minical_day_1_1_2011`) for each day
+              - `td.minical_day_[m_d_yyyy]` for each unique day (e.g. `minical_day_1_1_2011`)
               - `td.minical_today` for the current day
               - `td.minical_past_month` for days of previous month
               - `td.minical_future_month` for days of next month
