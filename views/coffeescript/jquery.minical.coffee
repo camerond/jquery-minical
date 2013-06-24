@@ -1,6 +1,6 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.5.6
+# version 0.5.7
 #
 # Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 #
@@ -44,7 +44,7 @@ minical =
   trigger: null
   align_to_trigger: true
   move_on_resize: true
-  read_only: false
+  read_only: true
   dropdowns:
     month: null
     day: null
@@ -206,7 +206,7 @@ minical =
     if keys[key]
       keys[key]()
     else if !e.metaKey and !e.ctrlKey
-      false
+      !mc.read_only
   preventKeystroke: (e) ->
     mc = @
     if mc.$cal.is(":visible") then return true

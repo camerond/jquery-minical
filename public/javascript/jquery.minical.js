@@ -1,6 +1,6 @@
 // jQuery Minical Plugin
 // http://github.com/camerond/jquery-minical
-// version 0.5.6
+// version 0.5.7
 //
 // Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 //
@@ -58,7 +58,7 @@
     trigger: null,
     align_to_trigger: true,
     move_on_resize: true,
-    read_only: false,
+    read_only: true,
     dropdowns: {
       month: null,
       day: null,
@@ -288,7 +288,7 @@
       if (keys[key]) {
         return keys[key]();
       } else if (!e.metaKey && !e.ctrlKey) {
-        return false;
+        return !mc.read_only;
       }
     },
     preventKeystroke: function(e) {
