@@ -131,7 +131,8 @@ minical =
     $td = $(e.target).closest("td")
     klass = "minical_highlighted"
     $td.closest("tbody").find(".#{klass}").removeClass(klass)
-    $td.addClass(klass)
+    if e.type == "mouseenter" then $td.addClass(klass)
+    true
   moveToDay: (x, y) ->
     return true if !@$cal.is(":visible")
     $selected = if @$cal.find(".minical_highlighted").length then @$cal.find(".minical_highlighted") else @$cal.find("tbody td").eq(0)
@@ -273,7 +274,7 @@ minical =
       dr.$year.change()
     @$cal
       .on("click.minical", "td a", @selectDay)
-      .on("hover.minical", "td a", @highlightDay)
+      .on("mouseenter.minical mouseleave.minical", "td a", @highlightDay)
       .on("click.minical", "a.minical_next", @nextMonth)
       .on("click.minical", "a.minical_prev", @prevMonth)
       if @move_on_resize
