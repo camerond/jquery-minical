@@ -192,7 +192,7 @@ test "clicking a day sets dropdowns to that value", ->
 test "changing dropdowns updates visible calendar", ->
   $el = tester.initDropdowns()
   $el.find(".trigger").click()
-  $el.find(".years option:contains('2011')").attr("selected", true).parent().change()
+  $el.find(".years option:contains('2011')").prop("selected", true).parent().change()
   tester.cal("h1").shouldSay("Dec 2011")
   tester.cal("td.minical_day_12_21_2011").shouldBe(".minical_selected")
 

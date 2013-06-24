@@ -1,6 +1,6 @@
 // jQuery Minical Plugin
 // http://github.com/camerond/jquery-minical
-// version 0.5.7
+// version 0.5.8
 //
 // Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 //
@@ -165,7 +165,10 @@
       $td = $(e.target).closest("td");
       klass = "minical_highlighted";
       $td.closest("tbody").find("." + klass).removeClass(klass);
-      return $td.addClass(klass);
+      if (e.type === "mouseenter") {
+        $td.addClass(klass);
+      }
+      return true;
     },
     moveToDay: function(x, y) {
       var $selected, $tr, move_from, move_to;
@@ -401,7 +404,7 @@
         this.align_to_trigger = true;
         dr.$year.change();
       }
-      this.$cal.on("click.minical", "td a", this.selectDay).on("hover.minical", "td a", this.highlightDay).on("click.minical", "a.minical_next", this.nextMonth).on("click.minical", "a.minical_prev", this.prevMonth);
+      this.$cal.on("click.minical", "td a", this.selectDay).on("mouseenter.minical mouseleave.minical", "td a", this.highlightDay).on("click.minical", "a.minical_next", this.nextMonth).on("click.minical", "a.minical_prev", this.prevMonth);
       if (this.move_on_resize) {
         $(window).resize(function() {
           var $cal;
