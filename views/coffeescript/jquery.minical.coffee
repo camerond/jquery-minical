@@ -243,9 +243,9 @@ minical =
         .data("minical", @)
         .on("blur.minical", @hideCalendar)
         .on("focus.minical", @showCalendar)
-        .on("click.minical", () ->
+        .on("click.minical", (e) ->
           mc.$trigger.focus()
-          false
+          e.preventDefault()
         )
     else
       @align_to_trigger = false
