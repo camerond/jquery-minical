@@ -221,7 +221,7 @@
       if ($other_cals.length) {
         $other_cals.data("minical").hideCalendar();
       }
-      if (mc.$cal.is(":visible")) {
+      if (mc.$cal.is(":visible") || mc.$el.is(":disabled")) {
         return true;
       }
       offset = mc.align_to_trigger ? mc.$trigger[mc.offset_method]() : mc.$el[mc.offset_method]();
@@ -353,9 +353,9 @@
         if (!this.$trigger.length) {
           this.$trigger = this.$el.parent().find(this.trigger);
         }
-        this.$trigger.data("minical", this).on("blur.minical", this.hideCalendar).on("focus.minical", this.showCalendar).on("click.minical", function() {
+        this.$trigger.data("minical", this).on("blur.minical", this.hideCalendar).on("focus.minical", this.showCalendar).on("click.minical", function(e) {
           mc.$trigger.focus();
-          return false;
+          return e.preventDefault();
         });
       } else {
         this.align_to_trigger = false;
