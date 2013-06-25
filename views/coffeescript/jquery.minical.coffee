@@ -164,7 +164,7 @@ minical =
     mc = if e then $(e.target).data("minical") else @
     $other_cals = $("[id^='minical_calendar']").not(mc.$cal)
     $other_cals.data("minical").hideCalendar() if $other_cals.length
-    return true if mc.$cal.is(":visible")
+    return true if mc.$cal.is(":visible") or mc.$el.is(":disabled")
     offset = if mc.align_to_trigger then mc.$trigger[mc.offset_method]() else mc.$el[mc.offset_method]()
     height = if mc.align_to_trigger then mc.$trigger.outerHeight() else mc.$el.outerHeight()
     position =

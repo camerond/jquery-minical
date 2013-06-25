@@ -123,6 +123,14 @@ test "minical triggers from a separate trigger element", ->
   $el.data("minical").$trigger.click()
   tester.cal().shouldBe(":visible")
 
+test "minical does not show from trigger if input is disabled", ->
+  opts =
+    trigger: ".trigger"
+  $el = tester.init(opts)
+  $el.prop("disabled", true)
+  $el.data("minical").$trigger.click()
+  tester.cal().shouldNotBe(":visible")
+
 module "Navigating between months"
 
 test "click to view next month", ->
