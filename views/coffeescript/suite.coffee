@@ -123,6 +123,16 @@ test "minical triggers from a separate trigger element", ->
   $el.data("minical").$trigger.click()
   tester.cal().shouldBe(":visible")
 
+test "minical triggers from a trigger element defined through a function", ->
+  $('.calendar').after($("<a />", class: "other_trigger"))
+  opts =
+    trigger: ->
+      $(@).closest('.calendar').siblings().filter(".other_trigger")
+  $el = tester.init(opts)
+  equal($el.data("minical").$trigger.length, 1, "trigger exists")
+  $el.data("minical").$trigger.click()
+  tester.cal().shouldBe(":visible")
+
 test "minical does not show from trigger if input is disabled", ->
   opts =
     trigger: ".trigger"
@@ -318,13 +328,16 @@ test "Highlight triggers on mouse hover", ->
 test "Enter on trigger or input toggles calendar and selects highlighted day", ->
   opts =
     trigger: ".trigger"
-  $input = tester.init().focus()
+  $input = tester.init(opts).focus()
   tester.cal("td.minical_day_11_25_2012 a").trigger("mouseover")
   tester.keydown(13, "enter")
   tester.cal().shouldNotBe(":visible")
   $input.shouldHaveValue("11/25/2012")
-  tester.keydown(13, "enter", $input.data("minical").$trigger)
-  tester.cal().shouldBe(":visible")
+  $input.data('minical').$trigger.focus()
+  tester.cal("td.minical_day_11_27_2012 a").trigger("mouseover")
+  tester.keydown(13, "enter")
+  tester.cal().shouldNotBe(":visible")
+  $input.shouldHaveValue("11/27/2012")
 
 test "Arrow keys move around current month", ->
   tester.init().focus()

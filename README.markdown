@@ -50,7 +50,7 @@ To aid in customization and general sanity, its markup is also nice and lean. He
 - `offset`: positions calendar relative to the bottom-left corner of the input
   - `x` defaults to 0
   - `y` defaults to 5
-- `trigger`: a string selector to specify a trigger element (like the calendar icon in the examples). It can be a child or sibling of the element on which you call `.minical()`.
+- `trigger`: A function (run in the context of the minical-enhanced input) that returns a jQuery object of the desired trigger, or a string selector to specify a trigger element (like the calendar icon in the examples). The string selector can be a child or sibling of the element on which you call `.minical()`.
 - `align_to_trigger`: set to `true` to align the calendar to the trigger instead of the input. (Defaults to true if a trigger is available)
 - `read_only`: makes the date/text input only modifiable by the calendar (defaults to true)
 - `date_format`: allows you to output a custom date format from the chosen Date object (defaults to MM/DD/YYYY)

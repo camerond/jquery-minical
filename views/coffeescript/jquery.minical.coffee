@@ -1,6 +1,6 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.5.8
+# version 0.5.9
 #
 # Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 #
@@ -231,24 +231,29 @@ minical =
     @$last_clicked = $t
     return true if $t.is(@$el) or $t.is(@$trigger) or $t.closest(".minical").length
     @hideCalendar()
-  init: ->
-    @id = $(".minical").length
-    mc = @
-    @$cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" }).data("minical", @).appendTo(@appendCalendarTo.apply(@$el))
-    @offset_method = if mc.$cal.parent().is("body") then "offset" else "position"
-    if @trigger
+  assignTrigger: ->
+    if $.isFunction(@trigger)
+      @$trigger = $.proxy(@trigger, @$el)()
+    else
       @$trigger = @$el.find(@trigger)
       @$trigger = @$el.parent().find(@trigger) if !@$trigger.length
+    if @$trigger.length
       @$trigger
         .data("minical", @)
         .on("blur.minical", @hideCalendar)
         .on("focus.minical", @showCalendar)
         .on("click.minical", (e) ->
-          mc.$trigger.focus()
+          $(@).data('minical').showCalendar()
           e.preventDefault()
         )
     else
       @align_to_trigger = false
+  init: ->
+    @id = $(".minical").length
+    mc = @
+    @$cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" }).data("minical", @).appendTo(@appendCalendarTo.apply(@$el))
+    @offset_method = if mc.$cal.parent().is("body") then "offset" else "position"
+    @assignTrigger()
     if @$el.is("input")
       @$el
         .addClass("minical_input")
