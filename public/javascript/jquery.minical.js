@@ -1,6 +1,6 @@
 // jQuery Minical Plugin
 // http://github.com/camerond/jquery-minical
-// version 0.5.9
+// version 0.6.0
 //
 // Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 //
@@ -59,6 +59,7 @@
     align_to_trigger: true,
     move_on_resize: true,
     read_only: true,
+    write_initial_value: true,
     dropdowns: {
       month: null,
       day: null,
@@ -338,6 +339,24 @@
       }
       return this.hideCalendar();
     },
+    assignTrigger: function() {
+      if ($.isFunction(this.trigger)) {
+        this.$trigger = $.proxy(this.trigger, this.$el)();
+      } else {
+        this.$trigger = this.$el.find(this.trigger);
+        if (!this.$trigger.length) {
+          this.$trigger = this.$el.parent().find(this.trigger);
+        }
+      }
+      if (this.$trigger.length) {
+        return this.$trigger.data("minical", this).on("blur.minical", this.hideCalendar).on("focus.minical", this.showCalendar).on("click.minical", function(e) {
+          $(this).data('minical').showCalendar();
+          return e.preventDefault();
+        });
+      } else {
+        return this.align_to_trigger = false;
+      }
+    },
     init: function() {
       var dr, initial_date, max_year, mc, min_day, min_month, min_year,
         _this = this;
@@ -348,24 +367,17 @@
         "class": "minical"
       }).data("minical", this).appendTo(this.appendCalendarTo.apply(this.$el));
       this.offset_method = mc.$cal.parent().is("body") ? "offset" : "position";
-      if (this.trigger) {
-        this.$trigger = this.$el.find(this.trigger);
-        if (!this.$trigger.length) {
-          this.$trigger = this.$el.parent().find(this.trigger);
-        }
-        this.$trigger.data("minical", this).on("blur.minical", this.hideCalendar).on("focus.minical", this.showCalendar).on("click.minical", function(e) {
-          mc.$trigger.focus();
-          return e.preventDefault();
-        });
-      } else {
-        this.align_to_trigger = false;
-      }
+      this.assignTrigger();
       if (this.$el.is("input")) {
         this.$el.addClass("minical_input").on("focus.minical click.minical", this.showCalendar).on("blur.minical", this.hideCalendar).on("keydown.minical", function(e) {
           return mc.preventKeystroke.call(mc, e);
         });
         initial_date = this.$el.attr("data-minical-initial") || this.$el.val();
+        initial_date = /^\d+$/.test(initial_date) ? +initial_date : initial_date;
         this.selected_day = initial_date ? new Date(initial_date) : new Date();
+        if (this.write_initial_value && this.$el.attr("data-minical-initial")) {
+          this.$el.val(this.date_format(this.selected_day));
+        }
       } else {
         dr = this.dropdowns;
         if (dr.year) {
