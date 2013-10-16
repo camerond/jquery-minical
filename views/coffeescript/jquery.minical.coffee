@@ -262,6 +262,7 @@ minical =
         .on("blur.minical", @hideCalendar)
         .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
       initial_date = @$el.attr("data-minical-initial") || @$el.val()
+      initial_date = if /^\d+$/.test(initial_date) then +initial_date else initial_date
       @selected_day = if initial_date then new Date(initial_date) else new Date()
       if @write_initial_value and @$el.attr("data-minical-initial") then @$el.val(@date_format(@selected_day));
     else

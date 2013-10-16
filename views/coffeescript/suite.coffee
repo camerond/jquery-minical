@@ -395,6 +395,12 @@ test "Initialize with data-minical-initial attribute if provided", ->
   tester.init({ write_initial_value: false }).focus()
   tester.cal("td.minical_day_8_7_2012").shouldBe(".minical_highlighted")
 
+test "Support integer data-minical-initial attribute", ->
+  $(".calendar :text")
+    .attr("data-minical-initial", "1381937430000")
+  tester.init().focus()
+  tester.cal("td.minical_day_10_16_2013").shouldBe(".minical_highlighted")
+
 test "Callback when date is changed", ->
   callback = false
   opts =
@@ -431,6 +437,7 @@ test "Write initial date value by default via custom date format output if provi
   $el = tester.init(opts).focus()
   tester.cal("td.minical_day_8_7_2012").shouldBe(".minical_highlighted")
   $el.shouldHaveValue("7-8-2012")
+
 
 QUnit.done ->
   $(".minical").remove()
