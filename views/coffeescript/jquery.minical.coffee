@@ -1,6 +1,6 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.5.9
+# version 0.6.0
 #
 # Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 #
