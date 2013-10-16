@@ -45,6 +45,7 @@ minical =
   align_to_trigger: true
   move_on_resize: true
   read_only: true
+  write_initial_value: true
   dropdowns:
     month: null
     day: null
@@ -262,6 +263,7 @@ minical =
         .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
       initial_date = @$el.attr("data-minical-initial") || @$el.val()
       @selected_day = if initial_date then new Date(initial_date) else new Date()
+      if @write_initial_value and @$el.attr("data-minical-initial") then @$el.val(@date_format(@selected_day));
     else
       dr = @dropdowns
       dr.$year = @$el.find(dr.year).data("minical", @).change(@dropdownChange) if dr.year
