@@ -66,10 +66,10 @@ Javascript date parsing is a pain, and it's entirely possible that the date form
 
 In this case, you can just output a `data-minical-initial` attribute on your input element, give it a Javascript-parseable string, and Minical will initialize using that attribute instead of attempting to parse the value of your input.
 
-Either string or integer formats will work, but the most foolproof `data-minical-initial` attribute is the Unix timestamp:
+Either string or integer formats will work, but the most foolproof `data-minical-initial` attribute seems to be JavaScript's conversion of a date object to an integer (e.g. `+my_date_object`):
 
 ```
-<input data-minical-initial="1381937833">
+<input data-minical-initial="1386967591204">
 ```
 
 ### If you're using `<select>` tags (like in the second example above):

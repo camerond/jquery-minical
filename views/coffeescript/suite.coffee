@@ -181,6 +181,16 @@ test "Maximum date specified", ->
   tester.cal().shouldBe(":visible")
   $input.shouldHaveValue("12/1/2012")
 
+test "Min and max can be specified via data attributes", ->
+  $input = $(".calendar :text")
+  from = new Date("November 15, 2012")
+  to = new Date("January 15, 2013")
+  $input.attr('data-minical-from', +from)
+  $input.attr('data-minical-to', +to)
+  $input = tester.init()
+  deepEqual from, $input.data('minical').from, "`from` value should assign from data attribute"
+  deepEqual to, $input.data('minical').to, "`to` value should assign from data attribute"
+
 module "Firing using dropdowns"
 
 test "displays when trigger clicked and dropdowns specified", ->

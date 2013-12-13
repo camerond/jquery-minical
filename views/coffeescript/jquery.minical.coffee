@@ -249,9 +249,15 @@ minical =
         )
     else
       @align_to_trigger = false
+  detectDataAttributeOptions: ->
+    from = @$el.attr('data-minical-from')
+    if from and /^\d+$/.test(from) then @from = new Date(+from)
+    to = @$el.attr('data-minical-to')
+    if to and /^\d+$/.test(to) then @to = new Date(+to)
   init: ->
     @id = $(".minical").length
     mc = @
+    @detectDataAttributeOptions()
     @$cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" }).data("minical", @).appendTo(@appendCalendarTo.apply(@$el))
     @offset_method = if mc.$cal.parent().is("body") then "offset" else "position"
     @assignTrigger()
