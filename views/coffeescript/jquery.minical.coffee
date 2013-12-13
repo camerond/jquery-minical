@@ -96,7 +96,7 @@ minical =
     $li.find(".#{@getDayClass(new Date())}").addClass("minical_today")
     $li.find(".#{@getDayClass(@selected_day)}").addClass("minical_selected").addClass("minical_highlighted") if @selected_day
     $li.find("td").not(".minical_disabled, .minical_past_month").eq(0).addClass("minical_highlighted") if !$li.find(".minical_highlighted").length
-    $li.find(".minical_next").hide() if @to and @to < new Date($li.find("td").last().data("minical_date"))
+    $li.find(".minical_next").hide() if @to and @to <= new Date($li.find("td").last().data("minical_date"))
     @month_drawn.apply(@$el)
     @$cal.empty().append($li)
   renderDay: (d, base_date) ->
@@ -130,6 +130,8 @@ minical =
     false
   highlightDay: (e) ->
     $td = $(e.target).closest("td")
+    console.log "highlighting #{$td.attr('class')}"
+    return false if $td.hasClass("minical_disabled")
     klass = "minical_highlighted"
     $td.closest("tbody").find(".#{klass}").removeClass(klass)
     if e.type == "mouseenter" then $td.addClass(klass)

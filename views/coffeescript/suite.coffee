@@ -382,7 +382,7 @@ test "Arrow keys should not go to inaccessible months", ->
   options =
     opts:
       trigger: ".trigger"
-      to: new Date("December 31, 2012")
+      to: new Date("January 5, 2013")
   tester.initDropdowns(options).find(".trigger").click()
   tester.cal(".minical_next").shouldNotBe(":visible")
   tester.keydown(40, "down arrow")
@@ -390,6 +390,20 @@ test "Arrow keys should not go to inaccessible months", ->
   tester.cal("td.minical_day_1_4_2013").shouldBe(".minical_highlighted")
   tester.keydown(40, "down arrow")
   tester.cal("td.minical_day_1_4_2013").shouldBe(".minical_highlighted")
+
+test "Arrow keys should not go to inaccessible days", ->
+  opts =
+    to: new Date("December 17, 2012")
+  tester.init(opts).focus()
+  tester.keydown(40, "down arrow")
+  tester.keydown(40, "down arrow")
+  tester.cal("td.minical_day_12_15_2012").shouldBe(".minical_highlighted")
+  tester.keydown(40, "down arrow")
+  tester.cal("td.minical_day_12_15_2012").shouldBe(".minical_highlighted")
+  tester.keydown(39, "right arrow")
+  tester.keydown(39, "right arrow")
+  tester.keydown(39, "right arrow")
+  tester.cal("td.minical_day_12_17_2012").shouldBe(".minical_highlighted")
 
 test "Arrow keys fire anywhere on page as long as calendar is visible", ->
   tester.initDropdowns().find(".trigger").click()
