@@ -1,0 +1,262 @@
+<html>
+  <head>
+    <title>jQuery.minical</title>
+    <script src="javascripts/jquery-2.0.3.min.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.minical.js" type="text/javascript"></script>
+    <script src="javascripts/demo.js" type="text/javascript"></script>
+    <link href="stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="stylesheets/jquery.minical.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href='favicon.png' rel='icon' type='image/png'>
+    <script src='http://use.typekit.com/aqp8xdq.js' type='text/javascript'></script>
+    <script>
+      try{Typekit.load();}catch(e){}
+    </script>
+    <meta content='width=device-width, minimum-scale=1.0, maximum-scale=1.0' name='viewport'>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <header><h1>jQuery<span>.minical</span></h1><h2>a lightweight datepicker plugin</h2>
+        <p>
+          by
+          <a href='http://camerondaigle.com'>Cameron Daigle</a>
+        </p>
+      </header>
+      <form id='input_example'>
+        <dl>
+          <dt>
+            <label>Date using a text input:</label>
+          </dt>
+          <dd>
+            <input type='text'>
+            <a class='calendar_icon' href='#'></a>
+          </dd>
+        </dl>
+      </form>
+      <form id='dropdown_example'>
+        <dl>
+          <dt>
+            <label>Date using dropdowns:</label>
+          </dt>
+          <dd>
+            <select class='month'>
+              <option value='1'>January</option>
+              <option value='2'>February</option>
+              <option value='3'>March</option>
+              <option value='4'>April</option>
+              <option value='5'>May</option>
+              <option value='6'>June</option>
+              <option value='7'>July</option>
+              <option value='8'>August</option>
+              <option value='9'>September</option>
+              <option value='10'>October</option>
+              <option value='11'>November</option>
+              <option value='12'>December</option>
+            </select>
+            <select class='day'>
+              <option value='1'>1</option>
+              <option value='2'>2</option>
+              <option value='3'>3</option>
+              <option value='4'>4</option>
+              <option value='5'>5</option>
+              <option value='6'>6</option>
+              <option value='7'>7</option>
+              <option value='8'>8</option>
+              <option value='9'>9</option>
+              <option value='10'>10</option>
+              <option value='11'>11</option>
+              <option value='12'>12</option>
+              <option value='13'>13</option>
+              <option value='14'>14</option>
+              <option value='15'>15</option>
+              <option value='16'>16</option>
+              <option value='17'>17</option>
+              <option value='18'>18</option>
+              <option value='19'>19</option>
+              <option value='20'>20</option>
+              <option value='21'>21</option>
+              <option value='22'>22</option>
+              <option value='23'>23</option>
+              <option value='24'>24</option>
+              <option value='25'>25</option>
+              <option value='26'>26</option>
+              <option value='27'>27</option>
+              <option value='28'>28</option>
+              <option value='29'>29</option>
+              <option value='30'>30</option>
+              <option value='31'>31</option>
+            </select>
+            <select class='year'>
+              <option value='2012'>2012</option>
+              <option value='2011'>2011</option>
+              <option value='2010'>2010</option>
+              <option value='2009'>2009</option>
+              <option value='2008'>2008</option>
+              <option value='2007'>2007</option>
+              <option value='2006'>2006</option>
+              <option value='2005'>2005</option>
+              <option value='2004'>2004</option>
+              <option value='2003'>2003</option>
+              <option value='2002'>2002</option>
+              <option value='2001'>2001</option>
+              <option value='2000'>2000</option>
+            </select>
+            <a class='calendar_icon' href='#'></a>
+          </dd>
+        </dl>
+      </form>
+      <article id='readme'>
+        <h1 id="jqueryminical">jQuery.minical</h1>
+        
+        <h2 id="usage">Usage</h2>
+        
+        <p>Call <code>.minical()</code> on a text (or date) input, or the element containing a set of month/day/year dropdowns.</p>
+        
+        <h2 id="requirements">Requirements</h2>
+        
+        <ul>
+          <li>jQuery (tested through 2.0.3)</li>
+          <li><a href="https://github.com/camerond/jquery-minical/blob/master/views/coffeescript/jquery.minical.coffee">jquery.minical.coffee</a> (or the <a href="https://github.com/camerond/jquery-minical/blob/master/public/javascript/jquery.minical.js">generated javascript</a>)</li>
+          <li><a href="https://github.com/camerond/jquery-minical/blob/master/views/stylesheets/jquery.minical.sass">jquery.minical.sass</a> (or the <a href="http://jquery-minical.heroku.com/stylesheets/jquery.minical.css">generated css</a>)</li>
+          <li><a href="https://github.com/camerond/jquery-minical/blob/master/public/images/jquery_minical_icons.png">jquery_minical_icons.png</a></li>
+        </ul>
+        
+        <p>Feel free to <a href="https://github.com/camerond/jquery-minical">check out the source on GitHub</a>.</p>
+        
+        <h2 id="why-its-awesome">Why It's Awesome</h2>
+        
+        <p>Minical is teeny (~4KB minified and gzipped), with no dependencies other than its icon PNG and stylesheet (which has SASS variables for easy customization).</p>
+        
+        <p>It has full keyboard support (press enter to open/close the calendar, arrows to choose a day, enter to select a day) and also defaults to make the associated input read-only, so its value can only be changed by the date format specified in the plugin. (It also works great in iOS, with just enough touch event handling to behave properly.)</p>
+        
+        <p>To aid in customization and general sanity, its markup is also nice and lean. Here's the DOM construction of Minical:</p>
+        
+        <ul>
+          <li><code>ul.minical</code> contains all elements, with id <code>#minical_calendar_0</code> and so on (for multiple instances on a page).
+            <ul>
+              <li><code>li</code> - given class <code>.minical_jan</code> and so on for each month.
+                <ul>
+                  <li><code>article</code>
+                    <ul>
+                      <li><code>header</code>
+                        <ul>
+                          <li><code>a.minical_next</code></li>
+                          <li><code>a.minical_prev</code></li>
+                          <li><code>h1</code></li>
+                        </ul>
+                      </li>
+                      <li><code>section</code>
+                        <ul>
+                          <li><code>table</code>
+                            <ul>
+                              <li><code>thead</code>
+                                <ul>
+                                  <li><code>tr</code>
+                                    <ul>
+                                      <li><code>th</code></li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>
+                              <li><code>tbody</code>
+                                <ul>
+                                  <li><code>tr</code>
+                                    <ul>
+                                      <li><code>td.minical_day</code> for each day</li>
+                                      <li><code>td.minical_day_[m_d_yyyy]</code> for each unique day (e.g. <code>minical_day_1_1_2011</code>)</li>
+                                      <li><code>td.minical_today</code> for the current day</li>
+                                      <li><code>td.minical_past_month</code> for days of previous month</li>
+                                      <li><code>td.minical_future_month</code> for days of next month</li>
+                                      <li><code>td.minical_disabled</code> for unselectable days</li>
+                                      <li><code>td.minical_selected</code> for the currently selected day in inputs/dropdowns</li>
+                                      <li><code>td.minical_highlighted</code> for the currently highlighted day
+                                        <ul>
+                                          <li><code>a</code></li>
+                                        </ul>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        
+        <h2 id="options">Options</h2>
+        
+        <ul>
+          <li><code>offset</code>: positions calendar relative to the bottom-left corner of the input
+            <ul>
+              <li><code>x</code> defaults to 0</li>
+              <li><code>y</code> defaults to 5</li>
+            </ul>
+          </li>
+          <li><code>trigger</code>: A function (run in the context of the minical-enhanced input) that returns a jQuery object of the desired trigger, or a string selector to specify a trigger element (like the calendar icon in the examples). The string selector can be a child or sibling of the element on which you call <code>.minical()</code>.</li>
+          <li><code>align_to_trigger</code>: set to <code>true</code> to align the calendar to the trigger instead of the input. (Defaults to true if a trigger is available)</li>
+          <li><code>read_only</code>: makes the date/text input only modifiable by the calendar (defaults to true)</li>
+          <li><code>date_format</code>: allows you to output a custom date format from the chosen Date object (defaults to MM/DD/YYYY)</li>
+          <li><code>from</code> and <code>to</code>: date objects specifying min and max valid dates (defaults to null, autodetected if using dropdowns)</li>
+          <li><code>date_changed</code>: callback that fires after the input or dropdowns have changed value</li>
+          <li><code>month_drawn</code>: callback that fires when a new month is rendered</li>
+          <li><code>appendCalendarTo</code>: should return a jQuery object; the calendar element will attach to this (defaults to <code>&lt;body&gt;</code>)</li>
+          <li><code>write_initial_value</code>: true by default; writes an initial value to the input element if one is provided via data attribute (see 'Initializing' below)</li>
+        </ul>
+        
+        <h2 id="initializing">Initializing</h2>
+        
+        <p>Javascript date parsing is a pain, and it's entirely possible that the date format you want displayed in your input is not one that JS can parse. If your page ever loads with a value already in the Minical-enabled input, Minical needs a Javascript-parseable date in order to set its initial value properly.</p>
+        
+        <p>In this case, you can just output a <code>data-minical-initial</code> attribute on your input element, give it a Javascript-parseable string, and Minical will initialize using that attribute instead of attempting to parse the value of your input.</p>
+        
+        <p>Either string or integer formats will work, but the most foolproof <code>data-minical-initial</code> attribute seems to be JavaScript's conversion of a date object to an integer (e.g. <code>+my_date_object</code>):</p>
+        
+        <p><code>
+        &lt;input data-minical-initial="1386967591204"&gt;
+        </code></p>
+        
+        <h3 id="if-youre-using-select-tags-like-in-the-second-example-above">If you're using <code>&lt;select&gt;</code> tags (like in the second example above):</h3>
+        
+        <ul>
+          <li><code>dropdowns.month</code>, <code>dropdowns.day</code>, <code>dropdowns.year</code> string selectors specifying each select tag</li>
+        </ul>
+        
+        <h2 id="sweet-can-you-make-it-animate--display-more-than-one-month--select-a-range--display-on-the-page-permanently--select-the-time-also--fix-me-a-delicious-omelet">Sweet! Can you make it animate / display more than one month / select a range / display on the page permanently / select the time also / fix me a delicious omelet?</h2>
+        
+        <p>I'll be adding features as required by Hashrocket projects, and don't have any intention of reaching feature parity with a robust platform like jQuery UI. Just use the jQuery UI Datepicker if you need that stuff (I'm not certain whether it makes omelets, however).</p>
+      </article>
+    </div>
+    <div id='social'>
+      <!-- AddThis Button BEGIN -->
+      <div class="addthis_toolbox addthis_floating_style addthis_32x32_style" style="right:10px;top:10px;">
+      <a class="addthis_button_preferred_1"></a>
+      <a class="addthis_button_preferred_2"></a>
+      <a class="addthis_button_preferred_3"></a>
+      <a class="addthis_button_preferred_4"></a>
+      <a class="addthis_button_preferred_5"></a>
+      <a class="addthis_button_preferred_6"></a>
+      <a class="addthis_button_compact"></a>
+      </div>
+      <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+      <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4fad554c32392cd8"></script>
+      <!-- AddThis Button END -->
+    </div>
+    <script>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-308731-15']);
+      _gaq.push(['_trackPageview']);
+      
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>

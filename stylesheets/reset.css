@@ -1,0 +1,37 @@
+/*
+----------------------------------------
+Tantek Celik's Whitespace Reset
+     Author:  	Tantek Celik, Shane Riley, and Cameron Daigle (font weight! COME ON)
+    Version:  	(CC) 2010 Some Rights Reserved - http://creativecommons.org/licenses/by/2.0
+Description:	Resets default styling of common browsers to a common base
+----------------------------------------
+*/
+/* line 11, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
+ul, ol {
+  list-style: none; }
+
+/* line 12, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
+h1, h2, h3, h4, h5, h6, pre, code {
+  font-size: 1em;
+  font-weight: normal; }
+
+/* line 13, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
+ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fieldset, input, dl, dt, dd {
+  margin: 0;
+  padding: 0; }
+
+/* line 16, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
+a img, :link img, :visited img, fieldset {
+  border: none; }
+
+/* line 17, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
+address {
+  font-style: normal; }
+
+/* line 18, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
+header, section, article, nav, footer, hgroup {
+  display: block; }
+
+/* line 19, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
+a {
+  text-decoration: none; }
