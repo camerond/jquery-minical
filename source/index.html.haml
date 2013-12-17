@@ -1,16 +1,10 @@
 %html
   %head
     %title jQuery.minical
-    %meta(name="google-site-verification" content="0jqHPVEpbfOB11FNzDpxKD-FJ6ZF-bUh5e8niqW-7NA")
-    %link(rel="stylesheet" href="/stylesheets/application.css")
-    %link(rel="stylesheet" href="/stylesheets/jquery.minical.css")
-    %link(rel='icon' type='image/png' href='/favicon.png')
-    %script(type="text/javascript" src="/javascript/jquery-2.0.3.min.js")
-    %script(type="text/javascript" src="/javascript/jquery.minical.coffee")
-    %script(type="text/javascript" src="/javascript/demo.js")
+    = javascript_include_tag 'jquery-2.0.3.min', 'jquery.minical', 'demo'
+    = stylesheet_link_tag 'application', 'jquery.minical'
+    %link(rel='icon' type='image/png' href='favicon.png')
     %script(type="text/javascript" src="http://use.typekit.com/aqp8xdq.js")
-    /[if IE]
-      %script(type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js")
     :javascript
       try{Typekit.load();}catch(e){}
     %meta(name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0")
@@ -46,7 +40,7 @@
               - 2012.downto(2000) do |n|
                 %option(value=n)= n
             %a(href="#" class="calendar_icon")
-      %article#readme= markdown @readme
+      %article#readme= partial 'documentation'
     #social
       <!-- AddThis Button BEGIN -->
       <div class="addthis_toolbox addthis_floating_style addthis_32x32_style" style="right:10px;top:10px;">

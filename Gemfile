@@ -1,17 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'haml'
-gem 'sass'
-gem 'hassle'
-gem 'sinatra'
-gem 'rdiscount'
-gem 'coffee-script'
-
-group :development do
-  gem 'heroku'
-  gem 'sinatra-reloader'
-end
-
-group :production do
-  gem 'therubyracer-heroku', '0.8.1.pre3'
-end
+gem "middleman", "~>3.1.2"
+gem "middleman-livereload", "~> 3.1.0"
+gem "middleman-syntax"
+gem "middleman-deploy"
+gem "redcarpet"

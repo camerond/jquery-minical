@@ -1,0 +1,12 @@
+%html
+  %head
+    %title jQuery.minical Test Suite
+    = javascript_include_tag 'jquery-2.0.3.min', 'lib/qunit', 'jquery.minical', 'suite'
+    = stylesheet_link_tag 'lib/qunit', 'jquery.minical'
+  %body
+    #qunit
+    #qunit-fixture
+      .calendar
+        %label Test Calendar 1
+        %input(type="text")
+        %a.trigger(href="#") trigger
