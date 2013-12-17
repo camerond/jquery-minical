@@ -67,74 +67,70 @@ body {
     #wrapper {
       padding: 20px; } }
 
-@media screen and (max-width: 480px) {
-  /* line 31, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  #social {
-    display: none; } }
-/* line 34, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+/* line 30, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 a {
   text-decoration: none;
   color: #f13937; }
-  /* line 37, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 33, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   a:hover {
     color: #be0604; }
 
-/* line 40, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+/* line 36, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 code {
   font-weight: bold;
   background: #efece4;
   padding: 1px 4px;
   margin: 0 4px; }
 
-/* line 47, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+/* line 43, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 header h1 {
   font-size: 80px;
   font-family: "chunk-1", "chunk-2", "Helvetica Neue", helvetica, sans-serif; }
-  /* line 50, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 46, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   header h1 span {
     color: #f13937; }
   @media screen and (max-width: 850px) {
-    /* line 47, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+    /* line 43, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
     header h1 {
       font-size: 50px; } }
   @media screen and (max-width: 480px) {
-    /* line 47, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+    /* line 43, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
     header h1 {
       font-size: 30px; } }
-/* line 56, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+/* line 52, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 header h2 {
   font-size: 40px;
   font-family: "chunk-1", "chunk-2", "Helvetica Neue", helvetica, sans-serif;
   margin: 0 0 20px 0; }
   @media screen and (max-width: 850px) {
-    /* line 56, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+    /* line 52, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
     header h2 {
       font-size: 20px; } }
-/* line 62, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+/* line 58, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 header p {
   font-weight: bold;
   margin: 0 0 40px 0; }
 
-/* line 66, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+/* line 62, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 form {
   margin: 0 60px 40px 0;
   float: left; }
   @media screen and (max-width: 480px) {
-    /* line 66, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+    /* line 62, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
     form {
       float: none;
       margin-right: 0;
       overflow: hidden; } }
-  /* line 73, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 69, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   form label {
     font-weight: bold;
     display: block;
     margin: 0 0 5px 0; }
-  /* line 77, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 73, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   form select {
     float: left;
     margin: 4px 5px 0 0; }
-  /* line 80, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 76, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   form a.calendar_icon {
     cursor: pointer;
     display: block;
@@ -143,7 +139,7 @@ form {
     width: 16px;
     height: 16px;
     background: url("/images/icon_calendar.png"); }
-  /* line 88, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 84, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   form input {
     display: block;
     float: left;
@@ -155,50 +151,50 @@ form {
     width: 140px;
     border: 1px solid #a9a497; }
 
-/* line 99, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+/* line 95, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 #readme {
   clear: both;
   font-weight: normal; }
-  /* line 102, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 98, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   #readme h1 {
     display: none; }
-  /* line 104, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 100, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   #readme h2 {
     font-size: 16px;
     font-weight: bold;
     margin: 0 0 20px 0; }
-  /* line 108, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 104, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   #readme h3 {
     font-size: 14px;
     font-weight: bold;
     margin: 0 0 20px 20px; }
-  /* line 112, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 108, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   #readme p {
     font-size: 13px;
     line-height: 20px;
     margin: 0 0 20px 0;
     padding: 0 40px; }
-  /* line 117, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 113, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   #readme ul {
     margin: 0 0 20px 0;
     padding: 0 40px;
     font-size: 13px;
     line-height: 20px; }
-    /* line 122, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+    /* line 118, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
     #readme ul ul {
       padding: 0 20px;
       margin: 0; }
-  /* line 125, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  /* line 121, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   #readme p + ul {
     padding-left: 60px;
     padding-right: 60px; }
   @media screen and (max-width: 480px) {
-    /* line 129, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+    /* line 125, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
     #readme h3 {
       margin-left: 0; }
-    /* line 131, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+    /* line 127, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
     #readme p, #readme ul, #readme p + ul {
       padding: 0; }
-    /* line 133, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+    /* line 129, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
     #readme ul ul {
       padding: 0 10px; } }
