@@ -7,9 +7,9 @@ Call `.minical()` on a text (or date) input, or the element containing a set of 
 ## Requirements
 
 - jQuery (tested through 2.0.3)
-- [jquery.minical.coffee](https://github.com/camerond/jquery-minical/blob/master/views/coffeescript/jquery.minical.coffee) (or the [generated javascript](https://github.com/camerond/jquery-minical/blob/master/public/javascript/jquery.minical.js))
-- [jquery.minical.sass](https://github.com/camerond/jquery-minical/blob/master/views/stylesheets/jquery.minical.sass) (or the [generated css](http://jquery-minical.heroku.com/stylesheets/jquery.minical.css))
-- [jquery_minical_icons.png](https://github.com/camerond/jquery-minical/blob/master/public/images/jquery_minical_icons.png)
+- [jquery.minical.coffee](https://github.com/camerond/jquery-minical/blob/master/source/javascripts/jquery.minical.js.coffee) (or the [generated javascript](https://github.com/camerond/jquery-minical/blob/master/source/javascripts/jquery.minical.plain.js))
+- [jquery.minical.sass](https://github.com/camerond/jquery-minical/blob/master/source/stylesheets/jquery.minical.css.sass) (or the [generated css](http://camerond.github.io/jquery-minical/stylesheets/jquery.minical.css))
+- [jquery_minical_icons.png](https://github.com/camerond/jquery-minical/blob/master/source/images/jquery_minical_icons.png)
 
 Feel free to [check out the source on GitHub](https://github.com/camerond/jquery-minical).
 
