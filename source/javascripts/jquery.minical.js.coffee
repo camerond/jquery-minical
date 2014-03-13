@@ -130,7 +130,6 @@ minical =
     false
   highlightDay: (e) ->
     $td = $(e.target).closest("td")
-    console.log "highlighting #{$td.attr('class')}"
     return false if $td.hasClass("minical_disabled")
     klass = "minical_highlighted"
     $td.closest("tbody").find(".#{klass}").removeClass(klass)
