@@ -162,6 +162,7 @@ minical =
     return false if $td.hasClass("minical_disabled")
     @selectDay($td.data('minical_date'))
     @$cal.trigger('hide.minical')
+    false
   hoverDay: (e) ->
     @highlightDay($(e.target).closest("td").data('minical_date'))
   nextMonth: (e) ->
@@ -279,7 +280,7 @@ minical =
     @$el
       .addClass("minical_input")
       .on("focus.minical click.minical", => @$cal.trigger('show.minical'))
-      .on("blur.minical", => @$cal.trigger('hide.minical'))
+      .on("blur.minical", $.proxy(@hideCalendar, @))
       .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
     @$cal
       .on("click.minical", "td a", $.proxy(@clickDay, @))
