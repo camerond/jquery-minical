@@ -174,10 +174,8 @@ minical =
     @render(prev)
     false
   showCalendar: (e) ->
-    $other_cals = $("[id^='minical_calendar']").not(@$cal)
-    if $other_cals.length then $other_cals.trigger('hide.minical')
+    $(".minical").not(@$cal).trigger('hide.minical')
     return if @$cal.is(":visible") or @$el.is(":disabled")
-    if !@$cal.find('.minical_day').length then @render()
     @markSelectedDay()
     @highlightDay(@selected_day)
     @positionCalendar().show()
@@ -288,6 +286,7 @@ minical =
       .on("click.minical", "a.minical_prev", $.proxy(@prevMonth, @))
       .on("hide.minical", $.proxy(@hideCalendar, @))
       .on("show.minical", $.proxy(@showCalendar, @))
+    @render()
 
 $.fn.minical = (opts) ->
   $els = @
