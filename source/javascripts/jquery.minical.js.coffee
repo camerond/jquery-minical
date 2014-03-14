@@ -181,7 +181,7 @@ minical =
     @markSelectedDay()
     @highlightDay(@selected_day)
     @positionCalendar().show()
-    @attachCalendarKeyEvents()
+    @attachCalendarEvents()
     e.preventDefault()
   hideCalendar: (e) ->
     if e and (e.type == "focusout" or e.type == "blur")
@@ -189,19 +189,22 @@ minical =
       $lc = mc.$last_clicked
       if $lc and !$lc.is(mc.$trigger) and !$lc.is(mc.$el) and !$lc.closest(".minical").length
         mc.$cal.hide()
-        mc.detachCalendarKeyEvents()
+        mc.detachCalendarEvents()
     else
       @$cal.hide()
-      @detachCalendarKeyEvents()
-  attachCalendarKeyEvents: ->
-    @detachCalendarKeyEvents()
+      @detachCalendarEvents()
+  attachCalendarEvents: ->
+    @detachCalendarEvents()
     $(document)
       .on("keydown.minical_#{@id}", $.proxy(@keydown, @))
       .on("click.minical touchend.minical", $.proxy(@outsideClick, @))
-  detachCalendarKeyEvents: ->
+    if @move_on_resize
+      $(window).on('resize.minical', $.proxy(@positionCalendar, @))
+  detachCalendarEvents: ->
     $(document)
       .off("keydown.minical_#{@id}")
       .off("click.minical touchend.minical")
+    $(window).off('resize.minical')
   keydown: (e) ->
     key = e.which
     mc = @
@@ -285,10 +288,6 @@ minical =
       .on("click.minical", "a.minical_prev", $.proxy(@prevMonth, @))
       .on("hide.minical", $.proxy(@hideCalendar, @))
       .on("show.minical", $.proxy(@showCalendar, @))
-    if @move_on_resize
-      $(window).resize ->
-        $(".minical:visible").each ->
-          @data('minical').positionCalendar()
 
 $.fn.minical = (opts) ->
   $els = @
