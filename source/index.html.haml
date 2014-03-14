@@ -18,29 +18,18 @@
         %p
           by
           %a(href="http://camerondaigle.com") Cameron Daigle
-      %form#input_example
+      %form
         %dl
           %dt
-            %label Date using a text input:
+            %label Pick a date:
           %dd
             %input(type="text")
             %a(href="#" class="calendar_icon")
-      %form#dropdown_example
-        %dl
-          %dt
-            %label Date using dropdowns:
-          %dd
-            %select.month
-              - ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].each_with_index do |month, i|
-                %option{:value => i+1}= month
-            %select.day
-              - (1..31).each do |n|
-                %option(value=n)= n
-            %select.year
-              - 2012.downto(2000) do |n|
-                %option(value=n)= n
-            %a(href="#" class="calendar_icon")
       %article#readme= partial 'documentation'
+    :javascript
+      $("form :text").minical({
+        trigger: "a.calendar_icon"
+      });
     - if build?
       :javascript
       var _gaq = _gaq || [];
