@@ -2,7 +2,7 @@
 
 ## Usage
 
-Call `.minical()` on a text (or date) input, or the element containing a set of month/day/year dropdowns.
+$my_cool_input.minical()
 
 ## Requirements
 
@@ -17,7 +17,7 @@ Feel free to [check out the source on GitHub](https://github.com/camerond/jquery
 
 Minical is teeny (~4KB minified and gzipped), with no dependencies other than its icon PNG and stylesheet (which has SASS variables for easy customization).
 
-It has full keyboard support (press enter to open/close the calendar, arrows to choose a day, enter to select a day) and also defaults to make the associated input read-only, so its value can only be changed by the date format specified in the plugin. (It also works great in iOS, with just enough touch event handling to behave properly.)
+It has full keyboard support and also defaults to make the associated input read-only, so its value can only be changed by the date format specified in the plugin. (It also works great on mobile, with just enough touch event handling to behave properly.)
 
 To aid in customization and general sanity, its markup is also nice and lean. Here's the DOM construction of Minical:
 
@@ -35,13 +35,13 @@ To aid in customization and general sanity, its markup is also nice and lean. He
               - `th`
           - `tbody`
             - `tr`
-              - `td.minical_day` for each day
+              - `td.minical_day` for each day of current month
               - `td.minical_day_[m_d_yyyy]` for each unique day (e.g. `minical_day_1_1_2011`)
               - `td.minical_today` for the current day
               - `td.minical_past_month` for days of previous month
               - `td.minical_future_month` for days of next month
               - `td.minical_disabled` for unselectable days
-              - `td.minical_selected` for the currently selected day in inputs/dropdowns
+              - `td.minical_selected` for the currently selected day
               - `td.minical_highlighted` for the currently highlighted day
                 - `a`
 
@@ -51,14 +51,13 @@ To aid in customization and general sanity, its markup is also nice and lean. He
   - `x` defaults to 0
   - `y` defaults to 5
 - `trigger`: A function (run in the context of the minical-enhanced input) that returns a jQuery object of the desired trigger, or a string selector to specify a trigger element (like the calendar icon in the examples). The string selector can be a child or sibling of the element on which you call `.minical()`.
-- `align_to_trigger`: set to `true` to align the calendar to the trigger instead of the input. (Defaults to true if a trigger is available)
-- `read_only`: makes the date/text input only modifiable by the calendar (defaults to true)
+- `align_to_trigger`: (boolean) align the calendar to the trigger instead of the input. Defaults to `true`.
+- `read_only`: makes the date/text input only modifiable by the calendar. Defaults to `true`.
 - `date_format`: allows you to output a custom date format from the chosen Date object (defaults to MM/DD/YYYY)
-- `from` and `to`: date objects specifying min and max valid dates (defaults to null, autodetected if using dropdowns)
-- `date_changed`: callback that fires after the input or dropdowns have changed value
-- `month_drawn`: callback that fires when a new month is rendered
-- `appendCalendarTo`: should return a jQuery object; the calendar element will attach to this (defaults to `<body>`)
-- `write_initial_value`: true by default; writes an initial value to the input element if one is provided via data attribute (see 'Initializing' below)
+- `from` and `to`: date objects specifying min and max valid dates.
+- `date_changed`: callback that fires after the input or dropdowns have changed value.
+- `month_drawn`: callback that fires when a new month is rendered.
+- `appendCalendarTo`: function; should return jQuery element. Minical appends to `body` by default.
 
 ## Initializing
 
@@ -72,10 +71,6 @@ Either string or integer formats will work, but the most foolproof `data-minical
 <input data-minical-initial="1386967591204">
 ```
 
-### If you're using `<select>` tags (like in the second example above):
+## What about dropdowns?
 
-- `dropdowns.month`, `dropdowns.day`, `dropdowns.year` string selectors specifying each select tag
-
-## Sweet! Can you make it animate / display more than one month / select a range / display on the page permanently / select the time also / fix me a delicious omelet?
-
-I'll be adding features as required by Hashrocket projects, and don't have any intention of reaching feature parity with a robust platform like jQuery UI. Just use the jQuery UI Datepicker if you need that stuff (I'm not certain whether it makes omelets, however).
+If you've been using Minical a while, you might notice that it no longer supports month/day/year in `<select>` tags. That feature caused a ton of complexity and while it seemed like a good idea at the time, I've literally never used it. Version 0.7 includes a _ton_ of code cleanup, and I stripped the dropdown support in the process.
