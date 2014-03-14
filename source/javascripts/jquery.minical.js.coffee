@@ -85,6 +85,8 @@ minical =
   to: null
   date_changed: $.noop
   month_drawn: $.noop
+  fireCallback: (name) ->
+    @[name] && @[name].apply(@$el)
   buildCalendarContainer: ->
     $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" })
       .data("minical", @)
@@ -102,7 +104,7 @@ minical =
       $tr.appendTo($li.find('tbody')) if $tr.find('.minical_day').length
     $li.find(".#{date_tools.getDayClass(new Date())}").addClass("minical_today")
     $li.find(".minical_next").detach() if @to and @to <= new Date($li.find("td").last().data("minical_date"))
-    @month_drawn.apply(@$el)
+    @fireCallback('month_drawn')
     @$cal.empty().append($li)
     @$cal
   renderDay: (d, base_date) ->
@@ -131,7 +133,7 @@ minical =
   selectDay: (date) ->
     @selected_day = date
     @$el.val(@date_format(@selected_day))
-    @date_changed.apply(@$el)
+    @fireCallback('date_changed')
   markSelectedDay: ->
     klass = 'minical_selected'
     @$cal.find('td').removeClass(klass)
@@ -157,10 +159,9 @@ minical =
     @$cal
   clickDay: (e) ->
     $td = $(e.target).closest('td')
-    if !$td.hasClass("minical_disabled")
-      @selectDay($td.data('minical_date'))
-      @$cal.trigger('hide.minical')
-    false
+    return false if $td.hasClass("minical_disabled")
+    @selectDay($td.data('minical_date'))
+    @$cal.trigger('hide.minical')
   hoverDay: (e) ->
     @highlightDay($(e.target).closest("td").data('minical_date'))
   nextMonth: (e) ->
@@ -191,6 +192,7 @@ minical =
     else
       @$cal.hide()
       @detachCalendarEvents()
+    false
   attachCalendarEvents: ->
     @detachCalendarEvents()
     $(document)

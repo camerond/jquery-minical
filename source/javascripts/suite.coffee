@@ -200,7 +200,7 @@ test "Calendar should be appended to the body by default", ->
 
 test "Calendar can be overridden to append to an arbitrary element", ->
   tester.init(
-    appendCalendarTo: -> this.parents(".calendar")
+    appendCalendarTo: -> @parents(".calendar")
   )
   ok tester.cal().parent().is(".calendar"), "Calendar is appended to the .calendar element"
 
