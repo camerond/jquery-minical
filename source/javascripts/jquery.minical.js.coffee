@@ -104,8 +104,8 @@ minical =
       $tr.appendTo($li.find('tbody')) if $tr.find('.minical_day').length
     $li.find(".#{date_tools.getDayClass(new Date())}").addClass("minical_today")
     $li.find(".minical_next").detach() if @to and @to <= new Date($li.find("td").last().data("minical_date"))
-    @fireCallback('month_drawn')
     @$cal.empty().append($li)
+    @fireCallback('month_drawn')
     @$cal
   renderDay: (d, base_date) ->
     $td = templates.day(d)
