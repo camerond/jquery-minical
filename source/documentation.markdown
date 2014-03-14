@@ -15,9 +15,9 @@ Feel free to [check out the source on GitHub](https://github.com/camerond/jquery
 
 ## Why It's Awesome
 
-Minical is teeny (~4KB minified and gzipped), with no dependencies other than its icon PNG and stylesheet (which has SASS variables for easy customization).
+Minical is teeny (~300 lines of Coffeescript), and has no dependencies other than jQuery, its icon PNG and stylesheet (which has SASS variables for easy customization).
 
-It has full keyboard support and also defaults to make the associated input read-only, so its value can only be changed by the date format specified in the plugin. (It also works great on mobile, with just enough touch event handling to behave properly.)
+It has full keyboard support and also defaults to make the associated input read-only, so its value can only be changed by the date format specified in the plugin, alleviating unexpected JavaScript date-parsing drama. (It also works great on mobile, with just enough touch event handling to behave properly.)
 
 To aid in customization and general sanity, its markup is also nice and lean. Here's the DOM construction of Minical:
 
@@ -61,11 +61,11 @@ To aid in customization and general sanity, its markup is also nice and lean. He
 
 ## Initializing
 
-Javascript date parsing is a pain, and it's entirely possible that the date format you want displayed in your input is not one that JS can parse. If your page ever loads with a value already in the Minical-enabled input, Minical needs a Javascript-parseable date in order to set its initial value properly.
+JavaScript date parsing is a pain, and it's entirely possible that the date format you want displayed in your input won't be one that JS can parse. If your page ever loads with a value already in the Minical-enabled input, Minical needs a JavaScript-parseable date in order to set its initial value properly.
 
-In this case, you can just output a `data-minical-initial` attribute on your input element, give it a Javascript-parseable string, and Minical will initialize using that attribute instead of attempting to parse the value of your input.
+In this case, you can just output a `data-minical-initial` attribute on your input element, give it a Javascript-parseable string, and Minical will initialize using that attribute instead of attempting to parse the value of your input. (Minical will also write that value to the input via the `date_format` method, so you don't even need to set an initial value for the input itself.)
 
-Either string or integer formats will work, but the most foolproof `data-minical-initial` attribute seems to be JavaScript's conversion of a date object to an integer (e.g. `+my_date_object`):
+Either string or integer formats will work, but the most foolproof `data-minical-initial` attribute seems to be JavaScript's conversion of a date object to an integer (e.g. `+my_date_object`). This renders a value of `12/13/2013` using the default date_format method:
 
 ```
 <input data-minical-initial="1386967591204">
