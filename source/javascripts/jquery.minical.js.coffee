@@ -78,10 +78,6 @@ minical =
   move_on_resize: true
   read_only: true
   write_initial_value: true
-  dropdowns:
-    month: null
-    day: null
-    year: null
   appendCalendarTo: -> $('body')
   date_format: (date) ->
     [date.getMonth()+1, date.getDate(), date.getFullYear()].join("/")
@@ -126,14 +122,8 @@ minical =
     return false if $td.hasClass("minical_disabled")
     mc = $td.closest("ul").data("minical")
     mc.selected_day = new Date($td.data("minical_date"))
-    if (mc.$el.is(":text"))
-      mc.$el.val(mc.date_format(mc.selected_day))
-      mc.date_changed.apply(mc.$el)
-    else
-      mc.dropdowns.$month.val(mc.selected_day.getMonth() + 1)
-      mc.dropdowns.$day.val(mc.selected_day.getDate())
-      mc.dropdowns.$year.val(mc.selected_day.getFullYear())
-      mc.date_changed.apply(mc.dropdowns)
+    mc.$el.val(mc.date_format(mc.selected_day))
+    mc.date_changed.apply(mc.$el)
     mc.hideCalendar()
     false
   highlightDay: (e) ->
@@ -233,14 +223,6 @@ minical =
           mc.showCalendar()
           false
     if keys[key] then return keys[key]() else return !mc.read_only
-  dropdownChange: (e) ->
-    mc = $(e.target).data("minical")
-    dr = mc.dropdowns
-    if dr.$year.val() and dr.$month.val() and dr.$day.val()
-      mc.selected_day = new Date(dr.$year.val(), dr.$month.val() - 1, dr.$day.val())
-    else
-      mc.selected_day = new Date()
-    mc.render() if mc.$cal.is(":visible")
   outsideClick: (e) ->
     $t = $(e.target)
     @$last_clicked = $t
@@ -275,31 +257,15 @@ minical =
     @$cal = @buildCalendarContainer()
     @offset_method = if @$cal.parent().is("body") then "offset" else "position"
     @assignTrigger()
-    if @$el.is("input")
-      @$el
-        .addClass("minical_input")
-        .on("focus.minical click.minical", @showCalendar)
-        .on("blur.minical", @hideCalendar)
-        .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
-      initial_date = @$el.attr("data-minical-initial") || @$el.val()
-      initial_date = if /^\d+$/.test(initial_date) then +initial_date else initial_date
-      @selected_day = if initial_date then new Date(initial_date) else new Date()
-      if @write_initial_value and @$el.attr("data-minical-initial") then @$el.val(@date_format(@selected_day));
-    else
-      dr = @dropdowns
-      dr.$year = @$el.find(dr.year).data("minical", @).change(@dropdownChange) if dr.year
-      dr.$month = @$el.find(dr.month).data("minical", @).change(@dropdownChange) if dr.month
-      dr.$day = @$el.find(dr.day).data("minical", @).change(@dropdownChange) if dr.day
-      if !@from
-        min_year = Math.min.apply(Math, dr.$year.children().map(() -> $(@).val() if $(@).val()).get())
-        min_month = Math.min.apply(Math, dr.$month.children().map(() -> $(@).val() if $(@).val()).get())
-        min_day = Math.min.apply(Math, dr.$day.children().map(() -> $(@).val() if $(@).val()).get())
-        @from = new Date(min_year, min_month - 1, min_day)
-      if !@to
-        max_year = Math.max.apply(Math, dr.$year.children().map(() -> $(@).val()).get())
-        @to = new Date(max_year, dr.$month.find("option").eq(-1).val() - 1, dr.$day.find("option").eq(-1).val())
-      @align_to_trigger = true
-      dr.$year.change()
+    @$el
+      .addClass("minical_input")
+      .on("focus.minical click.minical", @showCalendar)
+      .on("blur.minical", @hideCalendar)
+      .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
+    initial_date = @$el.attr("data-minical-initial") || @$el.val()
+    initial_date = if /^\d+$/.test(initial_date) then +initial_date else initial_date
+    @selected_day = if initial_date then new Date(initial_date) else new Date()
+    if @write_initial_value and @$el.attr("data-minical-initial") then @$el.val(@date_format(@selected_day));
     @$cal
       .on("click.minical", "td a", @selectDay)
       .on("mouseenter.minical mouseleave.minical", "td a", @highlightDay)

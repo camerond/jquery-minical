@@ -9,39 +9,6 @@ tester =
     $e = $.Event('keydown')
     $e.keyCode = $e.which = k
     $el.trigger($e)
-  initDropdowns: (options) ->
-    defaults =
-      opts: {}
-      month: 12
-      day: 21
-      year: 2012
-      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-      days: [1..31]
-      years: [2000..2020].reverse()
-      blank: true
-    opts = $.extend(true, defaults, options)
-    $div = $(".calendar")
-    $div.find(":text").remove()
-    $m = $("<select />", { class: "months"} ).appendTo($div)
-    $d = $("<select />", { class: "days"} ).appendTo($div)
-    $y = $("<select />", { class: "years"} ).appendTo($div)
-    $m.append($("<option />", { text: m, value: i+1 })) for m, i in opts.months
-    $d.append($("<option />", { text: d, value: d })) for d in opts.days
-    $y.append($("<option />", { text: y, value: y })) for y in opts.years
-    if opts.blank
-      $m.prepend($("<option />", { value: "" }))
-      $d.prepend($("<option />", { value: "" }))
-      $y.prepend($("<option />", { value: "" }))
-    $m.val(opts.month)
-    $d.val(opts.day)
-    $y.val(opts.year)
-    dropdown_opts =
-      trigger: ".trigger",
-      dropdowns:
-        month: ".months"
-        day: ".days"
-        year: ".years"
-    @$el = $(".calendar").minical($.extend(opts.opts, dropdown_opts))
   cal: (selector) ->
     $cal = @$el.data("minical").$cal
     if selector then $cal.find(selector) else $cal
@@ -191,74 +158,6 @@ test "Min and max can be specified via data attributes", ->
   deepEqual from, $input.data('minical').from, "`from` value should assign from data attribute"
   deepEqual to, $input.data('minical').to, "`to` value should assign from data attribute"
 
-module "Firing using dropdowns"
-
-test "displays when trigger clicked and dropdowns specified", ->
-  tester.initDropdowns().find(".trigger").click()
-  tester.cal("h1").shouldSay("Dec 2012")
-
-test "defaults to today if dropdowns are blank", ->
-  options =
-    month: ''
-    day: ''
-    year: ''
-    blank: true
-  today = new Date()
-  today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]
-  $el = tester.initDropdowns(options)
-  $el.data("minical").$trigger.click()
-  tester.cal("td.minical_day_#{today_array.join('_')}").shouldBe(":visible")
-
-test "clicking a day sets dropdowns to that value", ->
-  $el = tester.initDropdowns()
-  $el.data("minical").$trigger.click()
-  tester.cal("td.minical_12_21_2012").click()
-  $el.find(".months").shouldHaveValue(12)
-  $el.find(".days").shouldHaveValue(21)
-  $el.find(".years").shouldHaveValue(2012)
-
-test "changing dropdowns updates visible calendar", ->
-  $el = tester.initDropdowns()
-  $el.find(".trigger").click()
-  $el.find(".years option:contains('2011')").prop("selected", true).parent().change()
-  tester.cal("h1").shouldSay("Dec 2011")
-  tester.cal("td.minical_day_12_21_2011").shouldBe(".minical_selected")
-
-test "Minimum date is autodetected from dropdown content", ->
-  opts =
-    month: 1
-    day: 1
-    year: 2000
-  $el = tester.initDropdowns(opts).data("minical").$trigger.click()
-  tester.cal("td.minical_day_12_31_1999").shouldBe(".minical_disabled")
-  tester.cal("td.minical_day_1_1_2000").shouldNotBe(".minical_disabled")
-  tester.cal(".minical_prev").shouldNotBe(":visible")
-
-test "Maximum date is autodetected from dropdown content", ->
-  opts =
-    month: 12
-    day: 25
-    year: 2020
-  $el = tester.initDropdowns(opts).data("minical").$trigger.click()
-  tester.cal(".minical_next").shouldNotBe(":visible")
-
-test "Dropdown date detection works with ascending or descending year values", ->
-  opts =
-    months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    days: [1..31]
-    years: [2000..2020]
-    month: 12
-    day: 15
-    year: 2000
-  $el = tester.initDropdowns(opts)
-  $el.data("minical").$trigger.click()
-  tester.cal(".minical_next").click()
-  tester.cal("td.minical_day_1_8_2001 a").click()
-  $el.find(".months").shouldHaveValue(1)
-  $el.find(".days").shouldHaveValue(8)
-  $el.find(".years").shouldHaveValue(2001)
-  tester.cal().shouldNotBe(":visible")
-
 module "Testing alignment"
 
 test "Calendar aligns to trigger if one is specified", ->
@@ -279,12 +178,6 @@ test "Calendar offset can be specified", ->
   $trigger = $el.data("minical").$trigger.click()
   equal $trigger.offset().left + 20, tester.cal().offset().left, "Calendar is 20px to the right of trigger"
   equal $trigger.offset().top + $trigger.outerHeight() + 20, tester.cal().offset().top, "Calendar is 20px below trigger"
-
-test "Calendar aligns to trigger if dropdowns are used", ->
-  $el = tester.initDropdowns()
-  $trigger = $el.data("minical").$trigger.click()
-  equal $trigger.offset().left, tester.cal().offset().left, "Calendar and trigger left offsets are identical"
-  equal $trigger.offset().top + $trigger.outerHeight() + 5, tester.cal().offset().top, "Calendar is 5px below trigger by default"
 
 test "Calendar aligns to text input if no trigger is specified", ->
   $el = tester.init().focus()
@@ -379,11 +272,9 @@ test "Arrow keys move around ends of month", ->
   tester.cal("td.minical_day_12_8_2012").shouldBe(".minical_highlighted")
 
 test "Arrow keys should not go to inaccessible months", ->
-  options =
-    opts:
-      trigger: ".trigger"
-      to: new Date("January 5, 2013")
-  tester.initDropdowns(options).find(".trigger").click()
+  opts =
+    to: new Date("January 5, 2013")
+  tester.init(opts, "12/21/2012").focus()
   tester.cal(".minical_next").shouldNotBe(":visible")
   tester.keydown(40, "down arrow")
   tester.keydown(40, "down arrow")
@@ -406,9 +297,9 @@ test "Arrow keys should not go to inaccessible days", ->
   tester.cal("td.minical_day_12_17_2012").shouldBe(".minical_highlighted")
 
 test "Arrow keys fire anywhere on page as long as calendar is visible", ->
-  tester.initDropdowns().find(".trigger").click()
+  tester.init().focus()
   tester.keydown(37, "left arrow", $("body"))
-  tester.cal("td.minical_day_12_20_2012").shouldBe(".minical_highlighted")
+  tester.cal("td.minical_day_11_30_2012").shouldBe(".minical_highlighted")
 
 module "Other options"
 
