@@ -89,7 +89,6 @@ minical =
     $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" })
       .data("minical", @)
       .appendTo(@appendCalendarTo.apply(@$el))
-  rebuild: ->
   render: (date) ->
     date ?= @selected_day
     $li = templates.month(date)
@@ -244,10 +243,6 @@ minical =
         .data("minical", @)
         .on("blur.minical", $.proxy(@hideCalendar, @))
         .on("focus.minical click.minical", $.proxy(@showCalendar, @))
-        # .on("click.minical", (e) ->
-        #   $(@).data('minical').showCalendar()
-        #   e.preventDefault()
-        # )
     else
       @align_to_trigger = false
   detectDataAttributeOptions: ->
