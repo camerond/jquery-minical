@@ -136,16 +136,6 @@ minical =
     klass = 'minical_selected'
     @$cal.find('td').removeClass(klass)
     @$cal.find(".#{date_tools.getDayClass(@selected_day)}").addClass(klass)
-  clickDay: (e) ->
-    $td = $(e.target).closest('td')
-    if !$td.hasClass("minical_disabled")
-      @selectDay($td.data('minical_date'))
-      @$cal.trigger('hide.minical')
-    false
-  hoverDay: (e) ->
-    $td = $(e.target).closest("td")
-    @highlightDay($td.data('minical_date'))
-    true
   moveToDay: (x, y) ->
     $selected = @$cal.find(".minical_highlighted")
     if !$selected.length then $selected = @$cal.find(".minical_day").eq(0)
@@ -153,16 +143,6 @@ minical =
     move_to = new Date(move_from)
     move_to.setDate(move_from.getDate() + x + y * 7)
     @highlightDay(move_to)
-    false
-  nextMonth: (e) ->
-    next = new Date(@$cal.find(".minical_day").eq(0).data("minical_date"))
-    next.setMonth(next.getMonth() + 1)
-    @render(next)
-    false
-  prevMonth: (e) ->
-    prev = new Date(@$cal.find(".minical_day").eq(0).data("minical_date"))
-    prev.setMonth(prev.getMonth() - 1)
-    @render(prev)
     false
   positionCalendar: ->
     offset = if @align_to_trigger then @$trigger[@offset_method]() else @$el[@offset_method]()
@@ -175,6 +155,24 @@ minical =
     if overlap > 0
       @$cal.css("left", offset.left - overlap - 10)
     @$cal
+  clickDay: (e) ->
+    $td = $(e.target).closest('td')
+    if !$td.hasClass("minical_disabled")
+      @selectDay($td.data('minical_date'))
+      @$cal.trigger('hide.minical')
+    false
+  hoverDay: (e) ->
+    @highlightDay($(e.target).closest("td").data('minical_date'))
+  nextMonth: (e) ->
+    next = new Date(@$cal.find(".minical_day").eq(0).data("minical_date"))
+    next.setMonth(next.getMonth() + 1)
+    @render(next)
+    false
+  prevMonth: (e) ->
+    prev = new Date(@$cal.find(".minical_day").eq(0).data("minical_date"))
+    prev.setMonth(prev.getMonth() - 1)
+    @render(prev)
+    false
   showCalendar: (e) ->
     $other_cals = $("[id^='minical_calendar']").not(@$cal)
     if $other_cals.length then $other_cals.trigger('hide.minical')
@@ -196,11 +194,10 @@ minical =
       @$cal.hide()
       @detachCalendarKeyEvents()
   attachCalendarKeyEvents: ->
-    mc = @
     @detachCalendarKeyEvents()
     $(document)
-      .on("keydown.minical_#{mc.id}", (e) -> mc.keydown.call(mc, e))
-      .on("click.minical touchend.minical", (e) => @outsideClick.call(@, e))
+      .on("keydown.minical_#{@id}", $.proxy(@keydown, @))
+      .on("click.minical touchend.minical", $.proxy(@outsideClick, @))
   detachCalendarKeyEvents: ->
     $(document)
       .off("keydown.minical_#{@id}")
@@ -227,9 +224,9 @@ minical =
     key = e.which
     keys =
       9:  -> true                  # tab
-      13: ->                    # enter
-          mc.$cal.trigger('show.minical')
-          false
+      13: ->                       # enter
+        mc.$cal.trigger('show.minical')
+        false
     if keys[key] then return keys[key]() else return !mc.read_only
   outsideClick: (e) ->
     $t = $(e.target)
@@ -250,10 +247,9 @@ minical =
     else
       @align_to_trigger = false
   detectDataAttributeOptions: ->
-    from = @$el.attr('data-minical-from')
-    if from and /^\d+$/.test(from) then @from = new Date(+from)
-    to = @$el.attr('data-minical-to')
-    if to and /^\d+$/.test(to) then @to = new Date(+to)
+    for range in ['from', 'to']
+      attr = @$el.attr("data-minical-#{range}")
+      if attr and /^\d+$/.test(attr) then @[range] = new Date(+attr)
   detectInitialDate: ->
     initial_date = @$el.attr("data-minical-initial") || @$el.val()
     if /^\d+$/.test(initial_date)
@@ -290,10 +286,9 @@ minical =
       .on("hide.minical", $.proxy(@hideCalendar, @))
       .on("show.minical", $.proxy(@showCalendar, @))
     if @move_on_resize
-      $(window).resize(() ->
-        $cal = $(".minical:visible")
-        $cal.length && $cal.hide().data("minical").positionCalendar()
-      )
+      $(window).resize ->
+        $(".minical:visible").each ->
+          @data('minical').positionCalendar()
 
 $.fn.minical = (opts) ->
   $els = @
