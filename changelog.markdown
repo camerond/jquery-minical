@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0
+
+- big cleanup & rewrite, improving readability and efficiency a bunch
+- add support for $el.minical('destroy')
+- add 'show.minical' and 'hide.minical' events on calendar element
+- remove all functionality related to <select> tag support
+
 ## 0.6.1
 
 - supports `data-minical-from` and `data-minical-to` attributes for setting selectable date bounds
