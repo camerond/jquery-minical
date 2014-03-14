@@ -36,6 +36,8 @@ $.fn.shouldSay = (text) ->
   equal @.text(), text, "#{text} is displayed within #{@.selector}"
   @
 
+QUnit.testDone -> $('.minical').remove()
+
 test "it is chainable", ->
   ok tester.init().hide().show().is(":visible"), "minical is invoked and visibility is toggled"
 
@@ -353,6 +355,9 @@ test "Write initial date value by default via custom date format output if provi
   tester.cal("td.minical_day_8_7_2012").shouldBe(".minical_highlighted")
   $el.shouldHaveValue("7-8-2012")
 
-
-QUnit.done ->
-  $(".minical").remove()
+test "Destroy", ->
+  $input = tester.init().focus()
+  tester.cal().minical('destroy')
+  equal $('.minical').length, 0, 'minical element destroyed'
+  equal $input.attr('class'), '', 'class removed from input'
+  ok !$input.data('minical'), 'data removed from input'

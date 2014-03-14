@@ -140,7 +140,7 @@ minical =
     $td = $(e.target).closest('td')
     if !$td.hasClass("minical_disabled")
       @selectDay($td.data('minical_date'))
-      @hideCalendar()
+      @$cal.trigger('hide.minical')
     false
   hoverDay: (e) ->
     $td = $(e.target).closest("td")
@@ -177,7 +177,7 @@ minical =
     @$cal
   showCalendar: (e) ->
     $other_cals = $("[id^='minical_calendar']").not(@$cal)
-    if $other_cals.length then $other_cals.data("minical").hideCalendar()
+    if $other_cals.length then $other_cals.trigger('hide.minical')
     return if @$cal.is(":visible") or @$el.is(":disabled")
     if !@$cal.find('.minical_day').length then @render()
     @markSelectedDay()
@@ -197,10 +197,14 @@ minical =
       @detachCalendarKeyEvents()
   attachCalendarKeyEvents: ->
     mc = @
-    $(document).off("keydown.minical_#{mc.id}")
-    $(document).on("keydown.minical_#{mc.id}", (e) -> mc.keydown.call(mc, e))
+    @detachCalendarKeyEvents()
+    $(document)
+      .on("keydown.minical_#{mc.id}", (e) -> mc.keydown.call(mc, e))
+      .on("click.minical touchend.minical", (e) => @outsideClick.call(@, e))
   detachCalendarKeyEvents: ->
-    $(document).off("keydown.minical_#{@id}")
+    $(document)
+      .off("keydown.minical_#{@id}")
+      .off("click.minical touchend.minical")
   keydown: (e) ->
     key = e.which
     mc = @
@@ -224,15 +228,15 @@ minical =
     keys =
       9:  -> true                  # tab
       13: ->                    # enter
-          mc.showCalendar()
+          mc.$cal.trigger('show.minical')
           false
     if keys[key] then return keys[key]() else return !mc.read_only
   outsideClick: (e) ->
     $t = $(e.target)
     @$last_clicked = $t
     return true if $t.is(@$el) or $t.is(@$trigger) or $t.closest(".minical").length
-    @hideCalendar()
-  assignTrigger: ->
+    @$cal.trigger('hide.minical')
+  initTrigger: ->
     if $.isFunction(@trigger)
       @$trigger = $.proxy(@trigger, @$el)()
     else
@@ -241,8 +245,8 @@ minical =
     if @$trigger.length
       @$trigger
         .data("minical", @)
-        .on("blur.minical", $.proxy(@hideCalendar, @))
-        .on("focus.minical click.minical", $.proxy(@showCalendar, @))
+        .on("blur.minical", => @$cal.trigger('hide.minical'))
+        .on("focus.minical click.minical", => @$cal.trigger('show.minical'))
     else
       @align_to_trigger = false
   detectDataAttributeOptions: ->
@@ -250,38 +254,54 @@ minical =
     if from and /^\d+$/.test(from) then @from = new Date(+from)
     to = @$el.attr('data-minical-to')
     if to and /^\d+$/.test(to) then @to = new Date(+to)
+  detectInitialDate: ->
+    initial_date = @$el.attr("data-minical-initial") || @$el.val()
+    if /^\d+$/.test(initial_date)
+      return new Date(+initial_date)
+    else if initial_date
+      return new Date(initial_date)
+    new Date()
+  external:
+    destroy: ->
+      mc = @data('minical')
+      @trigger('hide.minical')
+      mc.$cal.remove()
+      mc.$el
+        .removeClass('minical_input')
+        .removeData('minical')
   init: ->
     @id = $(".minical").length
     mc = @
     @detectDataAttributeOptions()
     @$cal = @buildCalendarContainer()
+    @selectDay(@detectInitialDate())
     @offset_method = if @$cal.parent().is("body") then "offset" else "position"
-    @assignTrigger()
+    @initTrigger()
     @$el
       .addClass("minical_input")
-      .on("focus.minical click.minical", $.proxy(@showCalendar, @))
-      .on("blur.minical", $.proxy(@hideCalendar, @))
+      .on("focus.minical click.minical", => @$cal.trigger('show.minical'))
+      .on("blur.minical", => @$cal.trigger('hide.minical'))
       .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
-    initial_date = @$el.attr("data-minical-initial") || @$el.val()
-    initial_date = if /^\d+$/.test(initial_date) then +initial_date else initial_date
-    @selectDay(if initial_date then new Date(initial_date) else new Date())
     @$cal
       .on("click.minical", "td a", $.proxy(@clickDay, @))
       .on("mouseenter.minical", "td a", $.proxy(@hoverDay, @))
       .on("click.minical", "a.minical_next", $.proxy(@nextMonth, @))
       .on("click.minical", "a.minical_prev", $.proxy(@prevMonth, @))
+      .on("hide.minical", $.proxy(@hideCalendar, @))
+      .on("show.minical", $.proxy(@showCalendar, @))
     if @move_on_resize
       $(window).resize(() ->
         $cal = $(".minical:visible")
-        $cal.length && $cal.hide().data("minical").showCalendar()
+        $cal.length && $cal.hide().data("minical").positionCalendar()
       )
-    $("body").on("click.minical touchend.minical", (e) => @outsideClick.call(@, e))
 
-do (minical) ->
-  $.fn.minical = (opts) ->
-    @.each ->
+$.fn.minical = (opts) ->
+  $els = @
+  if opts and minical.external[opts]
+    minical.external[opts].apply($els, Array.prototype.slice.call(arguments, 1))
+  else
+    $els.each ->
       $e = $(@)
-      data = $.extend(true, { $el: $e }, minical, opts)
-      data.data = data
-      $e.data("minical", data)
-      data.init()
+      mc = $.extend(true, { $el: $e }, minical, opts)
+      $e.data("minical", mc)
+      mc.init()
