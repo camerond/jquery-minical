@@ -8,7 +8,7 @@ $my_cool_input.minical()
 
 - jQuery (tested through 2.0.3)
 - [jquery.minical.coffee](https://github.com/camerond/jquery-minical/blob/master/source/javascripts/jquery.minical.js.coffee) (or the [generated javascript](https://github.com/camerond/jquery-minical/blob/master/source/javascripts/jquery.minical.plain.js))
-- [jquery.minical.sass](https://github.com/camerond/jquery-minical/blob/master/source/stylesheets/jquery.minical.css.sass) (or the [generated css](http://camerond.github.io/jquery-minical/stylesheets/jquery.minical.css))
+- [jquery.minical.sass](https://github.com/camerond/jquery-minical/blob/master/source/stylesheets/jquery.minical.css.sass) (or the [generated css](http://camerond.github.io/jquery-minical/stylesheets/jquery.minical.plain.css))
 - [jquery_minical_icons.png](https://github.com/camerond/jquery-minical/blob/master/source/images/jquery_minical_icons.png)
 
 Feel free to [check out the source on GitHub](https://github.com/camerond/jquery-minical).
