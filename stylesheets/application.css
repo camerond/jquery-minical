@@ -6,195 +6,201 @@ Tantek Celik's Whitespace Reset
 Description:	Resets default styling of common browsers to a common base
 ----------------------------------------
 */
-/* line 11, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
 ul, ol {
-  list-style: none; }
+  list-style: none;
+}
 
-/* line 12, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
 h1, h2, h3, h4, h5, h6, pre, code {
   font-size: 1em;
-  font-weight: normal; }
+  font-weight: normal;
+}
 
-/* line 13, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
 ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fieldset, input, dl, dt, dd {
   margin: 0;
-  padding: 0; }
+  padding: 0;
+}
 
-/* line 16, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
 a img, :link img, :visited img, fieldset {
-  border: none; }
+  border: none;
+}
 
-/* line 17, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
 address {
-  font-style: normal; }
+  font-style: normal;
+}
 
-/* line 18, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
 header, section, article, nav, footer, hgroup {
-  display: block; }
+  display: block;
+}
 
-/* line 19, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/reset.scss */
 a {
-  text-decoration: none; }
+  text-decoration: none;
+}
 
-/* line 4, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 body {
   font-family: "Helvetica Neue", helvetica, sans-serif;
   color: #373b43;
   text-shadow: 0 1px 1px white;
-  background: #e9e4d7 url("/images/jq_bg.png"); }
-  /* line 9, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  body::before {
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0.3;
-    width: 100%;
-    height: 100px;
-    background-image: -moz-linear-gradient(100% 100% 90deg, #eae6d9, #f13937);
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f13937), to(#eae6d9));
-    content: "";
-    z-index: 1; }
+  background: #e9e4d7 url("/images/jq_bg.png");
+}
+body::before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0.3;
+  width: 100%;
+  height: 100px;
+  background-image: -moz-linear-gradient(100% 100% 90deg, #eae6d9, #f13937);
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f13937), to(#eae6d9));
+  content: "";
+  z-index: 1;
+}
 
-/* line 21, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 #wrapper {
   position: relative;
   padding: 70px;
   z-index: 2;
   max-width: 1000px;
-  margin: 0 auto; }
-  @media screen and (max-width: 850px) {
-    /* line 21, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-    #wrapper {
-      padding: 20px; } }
+  margin: 0 auto;
+}
+@media screen and (max-width: 850px) {
+  #wrapper {
+    padding: 20px;
+  }
+}
 
-/* line 30, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 a {
   text-decoration: none;
-  color: #f13937; }
-  /* line 33, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  a:hover {
-    color: #be0604; }
+  color: #f13937;
+}
+a:hover {
+  color: #be0604;
+}
 
-/* line 36, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 code {
   font-weight: bold;
   background: #efece4;
   padding: 1px 4px;
-  margin: 0 4px; }
+  margin: 0 4px;
+}
 
-/* line 43, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 header h1 {
   font-size: 80px;
-  font-family: "chunk-1", "chunk-2", "Helvetica Neue", helvetica, sans-serif; }
-  /* line 46, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  header h1 span {
-    color: #f13937; }
-  @media screen and (max-width: 850px) {
-    /* line 43, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-    header h1 {
-      font-size: 50px; } }
-  @media screen and (max-width: 480px) {
-    /* line 43, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-    header h1 {
-      font-size: 30px; } }
-/* line 52, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  font-family: "chunk-1", "chunk-2", "Helvetica Neue", helvetica, sans-serif;
+}
+header h1 span {
+  color: #f13937;
+}
+@media screen and (max-width: 850px) {
+  header h1 {
+    font-size: 50px;
+  }
+}
+@media screen and (max-width: 480px) {
+  header h1 {
+    font-size: 30px;
+  }
+}
 header h2 {
   font-size: 40px;
   font-family: "chunk-1", "chunk-2", "Helvetica Neue", helvetica, sans-serif;
-  margin: 0 0 20px 0; }
-  @media screen and (max-width: 850px) {
-    /* line 52, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-    header h2 {
-      font-size: 20px; } }
-/* line 58, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  margin: 0 0 20px 0;
+}
+@media screen and (max-width: 850px) {
+  header h2 {
+    font-size: 20px;
+  }
+}
 header p {
   font-weight: bold;
-  margin: 0 0 40px 0; }
+  margin: 0 0 40px 0;
+}
 
-/* line 62, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 form {
   margin: 0 60px 40px 0;
-  float: left; }
-  @media screen and (max-width: 480px) {
-    /* line 62, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-    form {
-      float: none;
-      margin-right: 0;
-      overflow: hidden; } }
-  /* line 69, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  form label {
-    font-weight: bold;
-    display: block;
-    margin: 0 0 5px 0; }
-  /* line 73, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  form select {
-    float: left;
-    margin: 4px 5px 0 0; }
-  /* line 76, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  form a.calendar_icon {
-    cursor: pointer;
-    display: block;
-    float: left;
-    margin: 5px 0 0 0;
-    width: 16px;
-    height: 16px;
-    background: url("/images/icon_calendar.png"); }
-  /* line 84, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  form input {
-    display: block;
-    float: left;
-    margin: 0 5px 0 0;
-    padding: 0 5px;
-    font-size: 14px;
-    height: 26px;
-    line-height: 26px;
-    width: 140px;
-    border: 1px solid #a9a497; }
+  float: left;
+}
+@media screen and (max-width: 480px) {
+  form {
+    float: none;
+    margin-right: 0;
+    overflow: hidden;
+  }
+}
+form label {
+  font-weight: bold;
+  display: block;
+  margin: 0 0 5px 0;
+}
+form select {
+  float: left;
+  margin: 4px 5px 0 0;
+}
+form a.calendar_icon {
+  cursor: pointer;
+  display: block;
+  float: left;
+  margin: 5px 0 0 0;
+  width: 16px;
+  height: 16px;
+  background: url("/images/icon_calendar.png");
+}
+form input {
+  display: block;
+  float: left;
+  margin: 0 5px 0 0;
+  padding: 0 5px;
+  font-size: 14px;
+  height: 26px;
+  line-height: 26px;
+  width: 140px;
+  border: 1px solid #a9a497;
+}
 
-/* line 95, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
 #readme {
   clear: both;
-  font-weight: normal; }
-  /* line 98, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  #readme h1 {
-    display: none; }
-  /* line 100, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  #readme h2 {
-    font-size: 16px;
-    font-weight: bold;
-    margin: 0 0 20px 0; }
-  /* line 104, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
+  font-weight: normal;
+}
+#readme h1 {
+  display: none;
+}
+#readme h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 0 20px 0;
+}
+#readme h3 {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 0 20px 20px;
+}
+#readme p {
+  font-size: 13px;
+  line-height: 20px;
+  margin: 0 0 20px 0;
+  padding: 0 40px;
+}
+#readme ul {
+  margin: 0 0 20px 0;
+  padding: 0 40px;
+  font-size: 13px;
+  line-height: 20px;
+}
+#readme ul ul {
+  padding: 0 20px;
+  margin: 0;
+}
+#readme p + ul {
+  padding-left: 60px;
+  padding-right: 60px;
+}
+@media screen and (max-width: 480px) {
   #readme h3 {
-    font-size: 14px;
-    font-weight: bold;
-    margin: 0 0 20px 20px; }
-  /* line 108, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  #readme p {
-    font-size: 13px;
-    line-height: 20px;
-    margin: 0 0 20px 0;
-    padding: 0 40px; }
-  /* line 113, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  #readme ul {
-    margin: 0 0 20px 0;
-    padding: 0 40px;
-    font-size: 13px;
-    line-height: 20px; }
-    /* line 118, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-    #readme ul ul {
-      padding: 0 20px;
-      margin: 0; }
-  /* line 121, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-  #readme p + ul {
-    padding-left: 60px;
-    padding-right: 60px; }
-  @media screen and (max-width: 480px) {
-    /* line 125, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-    #readme h3 {
-      margin-left: 0; }
-    /* line 127, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-    #readme p, #readme ul, #readme p + ul {
-      padding: 0; }
-    /* line 129, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
-    #readme ul ul {
-      padding: 0 10px; } }
+    margin-left: 0;
+  }
+  #readme p, #readme ul, #readme p + ul {
+    padding: 0;
+  }
+  #readme ul ul {
+    padding: 0 10px;
+  }
+}

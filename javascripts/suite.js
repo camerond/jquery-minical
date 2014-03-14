@@ -18,82 +18,6 @@
       $e.keyCode = $e.which = k;
       return $el.trigger($e);
     },
-    initDropdowns: function(options) {
-      var $d, $div, $m, $y, d, defaults, dropdown_opts, i, m, opts, y, _i, _j, _k, _l, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
-      defaults = {
-        opts: {},
-        month: 12,
-        day: 21,
-        year: 2012,
-        months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-        days: (function() {
-          _results = [];
-          for (_i = 1; _i <= 31; _i++){ _results.push(_i); }
-          return _results;
-        }).apply(this),
-        years: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020].reverse(),
-        blank: true
-      };
-      opts = $.extend(true, defaults, options);
-      $div = $(".calendar");
-      $div.find(":text").remove();
-      $m = $("<select />", {
-        "class": "months"
-      }).appendTo($div);
-      $d = $("<select />", {
-        "class": "days"
-      }).appendTo($div);
-      $y = $("<select />", {
-        "class": "years"
-      }).appendTo($div);
-      _ref = opts.months;
-      for (i = _j = 0, _len = _ref.length; _j < _len; i = ++_j) {
-        m = _ref[i];
-        $m.append($("<option />", {
-          text: m,
-          value: i + 1
-        }));
-      }
-      _ref1 = opts.days;
-      for (_k = 0, _len1 = _ref1.length; _k < _len1; _k++) {
-        d = _ref1[_k];
-        $d.append($("<option />", {
-          text: d,
-          value: d
-        }));
-      }
-      _ref2 = opts.years;
-      for (_l = 0, _len2 = _ref2.length; _l < _len2; _l++) {
-        y = _ref2[_l];
-        $y.append($("<option />", {
-          text: y,
-          value: y
-        }));
-      }
-      if (opts.blank) {
-        $m.prepend($("<option />", {
-          value: ""
-        }));
-        $d.prepend($("<option />", {
-          value: ""
-        }));
-        $y.prepend($("<option />", {
-          value: ""
-        }));
-      }
-      $m.val(opts.month);
-      $d.val(opts.day);
-      $y.val(opts.year);
-      dropdown_opts = {
-        trigger: ".trigger",
-        dropdowns: {
-          month: ".months",
-          day: ".days",
-          year: ".years"
-        }
-      };
-      return this.$el = $(".calendar").minical($.extend(opts.opts, dropdown_opts));
-    },
     cal: function(selector) {
       var $cal;
       $cal = this.$el.data("minical").$cal;
@@ -137,6 +61,10 @@
     equal(this.text(), text, "" + text + " is displayed within " + this.selector);
     return this;
   };
+
+  QUnit.testDone(function() {
+    return $('.minical').remove();
+  });
 
   test("it is chainable", function() {
     return ok(tester.init().hide().show().is(":visible"), "minical is invoked and visibility is toggled");
@@ -312,95 +240,6 @@
     return deepEqual(to, $input.data('minical').to, "`to` value should assign from data attribute");
   });
 
-  module("Firing using dropdowns");
-
-  test("displays when trigger clicked and dropdowns specified", function() {
-    tester.initDropdowns().find(".trigger").click();
-    return tester.cal("h1").shouldSay("Dec 2012");
-  });
-
-  test("defaults to today if dropdowns are blank", function() {
-    var $el, options, today, today_array;
-    options = {
-      month: '',
-      day: '',
-      year: '',
-      blank: true
-    };
-    today = new Date();
-    today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()];
-    $el = tester.initDropdowns(options);
-    $el.data("minical").$trigger.click();
-    return tester.cal("td.minical_day_" + (today_array.join('_'))).shouldBe(":visible");
-  });
-
-  test("clicking a day sets dropdowns to that value", function() {
-    var $el;
-    $el = tester.initDropdowns();
-    $el.data("minical").$trigger.click();
-    tester.cal("td.minical_12_21_2012").click();
-    $el.find(".months").shouldHaveValue(12);
-    $el.find(".days").shouldHaveValue(21);
-    return $el.find(".years").shouldHaveValue(2012);
-  });
-
-  test("changing dropdowns updates visible calendar", function() {
-    var $el;
-    $el = tester.initDropdowns();
-    $el.find(".trigger").click();
-    $el.find(".years option:contains('2011')").prop("selected", true).parent().change();
-    tester.cal("h1").shouldSay("Dec 2011");
-    return tester.cal("td.minical_day_12_21_2011").shouldBe(".minical_selected");
-  });
-
-  test("Minimum date is autodetected from dropdown content", function() {
-    var $el, opts;
-    opts = {
-      month: 1,
-      day: 1,
-      year: 2000
-    };
-    $el = tester.initDropdowns(opts).data("minical").$trigger.click();
-    tester.cal("td.minical_day_12_31_1999").shouldBe(".minical_disabled");
-    tester.cal("td.minical_day_1_1_2000").shouldNotBe(".minical_disabled");
-    return tester.cal(".minical_prev").shouldNotBe(":visible");
-  });
-
-  test("Maximum date is autodetected from dropdown content", function() {
-    var $el, opts;
-    opts = {
-      month: 12,
-      day: 25,
-      year: 2020
-    };
-    $el = tester.initDropdowns(opts).data("minical").$trigger.click();
-    return tester.cal(".minical_next").shouldNotBe(":visible");
-  });
-
-  test("Dropdown date detection works with ascending or descending year values", function() {
-    var $el, opts, _i, _results;
-    opts = {
-      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-      days: (function() {
-        _results = [];
-        for (_i = 1; _i <= 31; _i++){ _results.push(_i); }
-        return _results;
-      }).apply(this),
-      years: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
-      month: 12,
-      day: 15,
-      year: 2000
-    };
-    $el = tester.initDropdowns(opts);
-    $el.data("minical").$trigger.click();
-    tester.cal(".minical_next").click();
-    tester.cal("td.minical_day_1_8_2001 a").click();
-    $el.find(".months").shouldHaveValue(1);
-    $el.find(".days").shouldHaveValue(8);
-    $el.find(".years").shouldHaveValue(2001);
-    return tester.cal().shouldNotBe(":visible");
-  });
-
   module("Testing alignment");
 
   test("Calendar aligns to trigger if one is specified", function() {
@@ -427,14 +266,6 @@
     $trigger = $el.data("minical").$trigger.click();
     equal($trigger.offset().left + 20, tester.cal().offset().left, "Calendar is 20px to the right of trigger");
     return equal($trigger.offset().top + $trigger.outerHeight() + 20, tester.cal().offset().top, "Calendar is 20px below trigger");
-  });
-
-  test("Calendar aligns to trigger if dropdowns are used", function() {
-    var $el, $trigger;
-    $el = tester.initDropdowns();
-    $trigger = $el.data("minical").$trigger.click();
-    equal($trigger.offset().left, tester.cal().offset().left, "Calendar and trigger left offsets are identical");
-    return equal($trigger.offset().top + $trigger.outerHeight() + 5, tester.cal().offset().top, "Calendar is 5px below trigger by default");
   });
 
   test("Calendar aligns to text input if no trigger is specified", function() {
@@ -550,14 +381,11 @@
   });
 
   test("Arrow keys should not go to inaccessible months", function() {
-    var options;
-    options = {
-      opts: {
-        trigger: ".trigger",
-        to: new Date("January 5, 2013")
-      }
+    var opts;
+    opts = {
+      to: new Date("January 5, 2013")
     };
-    tester.initDropdowns(options).find(".trigger").click();
+    tester.init(opts, "12/21/2012").focus();
     tester.cal(".minical_next").shouldNotBe(":visible");
     tester.keydown(40, "down arrow");
     tester.keydown(40, "down arrow");
@@ -584,9 +412,9 @@
   });
 
   test("Arrow keys fire anywhere on page as long as calendar is visible", function() {
-    tester.initDropdowns().find(".trigger").click();
+    tester.init().focus();
     tester.keydown(37, "left arrow", $("body"));
-    return tester.cal("td.minical_day_12_20_2012").shouldBe(".minical_highlighted");
+    return tester.cal("td.minical_day_11_30_2012").shouldBe(".minical_highlighted");
   });
 
   module("Other options");
@@ -656,8 +484,13 @@
     return $el.shouldHaveValue("7-8-2012");
   });
 
-  QUnit.done(function() {
-    return $(".minical").remove();
+  test("Destroy", function() {
+    var $input;
+    $input = tester.init().focus();
+    tester.cal().minical('destroy');
+    equal($('.minical').length, 0, 'minical element destroyed');
+    equal($input.attr('class'), '', 'class removed from input');
+    return ok(!$input.data('minical'), 'data removed from input');
   });
 
 }).call(this);
