@@ -27,15 +27,47 @@ date_tools =
   getMonthName: (date) ->
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     months[date.getMonth()]
-  getDays: ->
-    days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-    $tr = $("<tr />")
-    $("<th />").text(day).appendTo($tr) for day in days
-    $tr
+  getDayClass: (date) ->
+    return "minical_day_" + [date.getMonth() + 1, date.getDate(), date.getFullYear()].join("_")
   getStartOfCalendarBlock: (date) ->
     firstOfMonth = new Date(date)
     firstOfMonth.setDate(1)
     new Date(firstOfMonth.setDate(1 - firstOfMonth.getDay()))
+
+templates =
+  day: (date) ->
+    $("<td />")
+      .data("minical_date", new Date(date))
+      .addClass(date_tools.getDayClass(date))
+      .append($("<a />", {"href": "#"}).text(date.getDate()))
+  dayHeader: ->
+    days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    $tr = $("<tr />")
+    $("<th />").text(day).appendTo($tr) for day in days
+    $tr
+  month: (date) ->
+    $li = $("<li />", class: "minical_#{date_tools.getMonthName(date).toLowerCase()}")
+    $li.html("
+      <article>
+        <header>
+          <h1>#{date_tools.getMonthName(date)} #{date.getFullYear()}</h1>
+          <a href='#' class='minical_prev'></a>
+          <a href='#' class='minical_next'></a>
+        </header>
+        <section>
+          <table>
+            <thead>
+              <tr>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </section>
+      </article>
+    ")
+    $li.find('thead').append(@dayHeader())
+    $li
 
 minical =
   offset:
@@ -57,34 +89,13 @@ minical =
   to: null
   date_changed: $.noop
   month_drawn: $.noop
-  getDayClass: (date) ->
-    return "minical_day_" + [date.getMonth() + 1, date.getDate(), date.getFullYear()].join("_")
+  buildCalendarContainer: ->
+    $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" })
+      .data("minical", @)
+      .appendTo(@appendCalendarTo.apply(@$el))
   render: (date) ->
     date ?= @selected_day
-    $li = $("<li />", class: "minical_#{date_tools.getMonthName(date).toLowerCase()}")
-    $li.html("
-      <article>
-        <header>
-          <h1>#{date_tools.getMonthName(date)} #{date.getFullYear()}</h1>
-          <a href='#' class='minical_prev'></a>
-          <a href='#' class='minical_next'></a>
-        </header>
-        <section>
-          <table>
-            <thead>
-              <tr>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </section>
-      </article>
-    ")
-    days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-    $tr = $li.find("tr")
-    $("<th />", { text: day }).appendTo($tr) for day in days
-    $tbody = $li.find("tbody")
+    $li = templates.month(date)
     current_date = date_tools.getStartOfCalendarBlock(date)
     $li.find(".minical_prev").hide() if @from and @from > current_date
     for w in [1..6]
@@ -92,18 +103,15 @@ minical =
       for d in [1..7]
         $tr.append(@renderDay(current_date, date))
         current_date.setDate(current_date.getDate() + 1)
-      $tr.appendTo($tbody) if $tr.find(".minical_day").length
-    $li.find(".#{@getDayClass(new Date())}").addClass("minical_today")
-    $li.find(".#{@getDayClass(@selected_day)}").addClass("minical_selected").addClass("minical_highlighted") if @selected_day
-    $li.find("td").not(".minical_disabled, .minical_past_month").eq(0).addClass("minical_highlighted") if !$li.find(".minical_highlighted").length
+      $tr.appendTo($li.find('tbody')) if $tr.find('.minical_day').length
+    $li.find(".#{date_tools.getDayClass(new Date())}").addClass("minical_today")
     $li.find(".minical_next").hide() if @to and @to <= new Date($li.find("td").last().data("minical_date"))
     @month_drawn.apply(@$el)
     @$cal.empty().append($li)
+    @highlightFirstValidDay()
+    @$cal
   renderDay: (d, base_date) ->
-    $td = $("<td />")
-      .data("minical_date", new Date(d))
-      .addClass(@getDayClass(d))
-      .append($("<a />", {"href": "#"}).text(d.getDate()))
+    $td = templates.day(d)
     current_month = d.getMonth()
     month = base_date.getMonth()
     $td.addClass("minical_disabled") if (@from and d < @from) or (@to and d > @to)
@@ -135,6 +143,11 @@ minical =
     $td.closest("tbody").find(".#{klass}").removeClass(klass)
     if e.type == "mouseenter" then $td.addClass(klass)
     true
+  highlightFirstValidDay: ->
+    if @selected_day
+      @$cal.find(".#{date_tools.getDayClass(@selected_day)}").addClass("minical_selected").find('a').trigger("mouseenter")
+    else if !@$cal.find(".minical_highlighted").length
+      @$cal.find("td").not(".minical_disabled, .minical_past_month").eq(0).find('a').trigger("mouseenter")
   moveToDay: (x, y) ->
     return true if !@$cal.is(":visible")
     $selected = if @$cal.find(".minical_highlighted").length then @$cal.find(".minical_highlighted") else @$cal.find("tbody td").eq(0)
@@ -146,7 +159,7 @@ minical =
       if ($selected.parent().children().eq(-1).is($selected) and x == 1) or y == 1 then @nextMonth()
     move_to = new Date(move_from)
     move_to.setDate(move_from.getDate() + x + y * 7)
-    @$cal.find(".#{@getDayClass(move_to)} a").trigger("mouseover")
+    @$cal.find(".#{date_tools.getDayClass(move_to)} a").trigger("mouseover")
     false
   nextMonth: (e) ->
     mc = if e then $(e.target).closest(".minical").data("minical") else @
@@ -259,8 +272,8 @@ minical =
     @id = $(".minical").length
     mc = @
     @detectDataAttributeOptions()
-    @$cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" }).data("minical", @).appendTo(@appendCalendarTo.apply(@$el))
-    @offset_method = if mc.$cal.parent().is("body") then "offset" else "position"
+    @$cal = @buildCalendarContainer()
+    @offset_method = if @$cal.parent().is("body") then "offset" else "position"
     @assignTrigger()
     if @$el.is("input")
       @$el
