@@ -101,6 +101,7 @@
         $li.find(".minical_next").detach();
       }
       this.$cal.empty().append($li);
+      this.markSelectedDay();
       this.fireCallback('month_drawn');
       return this.$cal;
     },
@@ -143,6 +144,7 @@
     },
     selectDay: function(date) {
       this.selected_day = date;
+      this.markSelectedDay();
       this.$el.val(this.date_format(this.selected_day));
       return this.fireCallback('date_changed');
     },
@@ -211,7 +213,6 @@
       if (this.$cal.is(":visible") || this.$el.is(":disabled")) {
         return;
       }
-      this.markSelectedDay();
       this.highlightDay(this.selected_day);
       this.positionCalendar().show();
       this.attachCalendarEvents();
