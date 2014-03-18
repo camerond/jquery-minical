@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1
+
+- tiny but necessary bugfix: rerender selected day properly on month switch
+
 ## 0.7.0
 
 - big cleanup & rewrite, improving readability and efficiency a bunch
