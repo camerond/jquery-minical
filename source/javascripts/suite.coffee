@@ -220,6 +220,8 @@ test "Select date in calendar on redraw", ->
   tester.cal("td.minical_day_12_7_2012").shouldBe(".minical_selected")
   tester.cal("a.minical_next").click()
   equal tester.cal(".minical_selected").length, 0, "selected day was for previous month"
+  tester.cal("a.minical_prev").click()
+  tester.cal("td.minical_day_12_7_2012").shouldBe(".minical_selected")
 
 test "Highlight existing choice if available", ->
   tester.init({}, "12/5/2012").focus()

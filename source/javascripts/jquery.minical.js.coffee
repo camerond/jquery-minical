@@ -105,6 +105,7 @@ minical =
     $li.find(".#{date_tools.getDayClass(new Date())}").addClass("minical_today")
     $li.find(".minical_next").detach() if @to and @to <= new Date($li.find("td").last().data("minical_date"))
     @$cal.empty().append($li)
+    @markSelectedDay()
     @fireCallback('month_drawn')
     @$cal
   renderDay: (d, base_date) ->
@@ -132,6 +133,7 @@ minical =
     $td.addClass(klass)
   selectDay: (date) ->
     @selected_day = date
+    @markSelectedDay()
     @$el.val(@date_format(@selected_day))
     @fireCallback('date_changed')
   markSelectedDay: ->
@@ -178,7 +180,6 @@ minical =
   showCalendar: (e) ->
     $(".minical").not(@$cal).trigger('hide.minical')
     return if @$cal.is(":visible") or @$el.is(":disabled")
-    @markSelectedDay()
     @highlightDay(@selected_day)
     @positionCalendar().show()
     @attachCalendarEvents()
