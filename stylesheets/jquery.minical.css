@@ -47,7 +47,7 @@ ul.minical li article header a {
   top: 50%;
   left: 5px;
   margin-top: -8px;
-  background: url("/images/jquery_minical_icons.png") top left;
+  background: url("../images/jquery_minical_icons.png") top left;
   height: 16px;
   width: 16px;
   font-size: 1px;
