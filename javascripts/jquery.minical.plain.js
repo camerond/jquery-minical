@@ -1,6 +1,6 @@
 // jQuery Minical Plugin
 // http://github.com/camerond/jquery-minical
-// version 0.7.1
+// version 0.7.2
 //
 // Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 //
@@ -80,6 +80,7 @@
     },
     trigger: null,
     align_to_trigger: true,
+    initialize_with_date: true,
     move_on_resize: true,
     read_only: true,
     appendCalendarTo: function() {
@@ -170,7 +171,7 @@
     selectDay: function(date) {
       this.selected_day = date;
       this.markSelectedDay();
-      this.$el.val(this.date_format(this.selected_day));
+      this.$el.val(date ? this.date_format(this.selected_day) : '');
       return this.fireCallback('date_changed');
     },
     markSelectedDay: function() {
@@ -238,7 +239,7 @@
       if (this.$cal.is(":visible") || this.$el.is(":disabled")) {
         return;
       }
-      this.highlightDay(this.selected_day);
+      this.highlightDay(this.selected_day || this.detectInitialDate());
       this.positionCalendar().show();
       this.attachCalendarEvents();
       return e.preventDefault();
@@ -380,6 +381,12 @@
       return new Date();
     },
     external: {
+      clear: function() {
+        var mc;
+        mc = this.data('minical');
+        this.trigger('hide.minical');
+        return mc.selectDay(false);
+      },
       destroy: function() {
         var mc;
         mc = this.data('minical');
@@ -394,7 +401,7 @@
       mc = this;
       this.detectDataAttributeOptions();
       this.$cal = this.buildCalendarContainer();
-      this.selectDay(this.detectInitialDate());
+      this.initialize_with_date && this.selectDay(this.detectInitialDate());
       this.offset_method = this.$cal.parent().is("body") ? "offset" : "position";
       this.initTrigger();
       this.$el.addClass("minical_input").on("focus.minical click.minical", (function(_this) {
@@ -404,8 +411,7 @@
       })(this)).on("blur.minical", $.proxy(this.hideCalendar, this)).on("keydown.minical", function(e) {
         return mc.preventKeystroke.call(mc, e);
       });
-      this.$cal.on("click.minical", "td a", $.proxy(this.clickDay, this)).on("mouseenter.minical", "td a", $.proxy(this.hoverDay, this)).on("click.minical", "a.minical_next", $.proxy(this.nextMonth, this)).on("click.minical", "a.minical_prev", $.proxy(this.prevMonth, this)).on("hide.minical", $.proxy(this.hideCalendar, this)).on("show.minical", $.proxy(this.showCalendar, this));
-      return this.render();
+      return this.$cal.on("click.minical", "td a", $.proxy(this.clickDay, this)).on("mouseenter.minical", "td a", $.proxy(this.hoverDay, this)).on("click.minical", "a.minical_next", $.proxy(this.nextMonth, this)).on("click.minical", "a.minical_prev", $.proxy(this.prevMonth, this)).on("hide.minical", $.proxy(this.hideCalendar, this)).on("show.minical", $.proxy(this.showCalendar, this));
     }
   };
 
