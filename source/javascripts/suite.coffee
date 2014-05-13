@@ -357,6 +357,32 @@ test "Write initial date value by default via custom date format output if provi
   tester.cal("td.minical_day_8_7_2012").shouldBe(".minical_highlighted")
   $el.shouldHaveValue("7-8-2012")
 
+test "Initialize without a value in the field", ->
+  opts =
+    initialize_with_date: false
+  $input = tester.init(opts, '')
+  $input.shouldHaveValue('')
+  $input.focus()
+  today = new Date()
+  today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]
+  $input = tester.init({}, today_array.join("/")).focus()
+  tester.cal("td.minical_day_#{today_array.join('_')}")
+    .shouldBe(".minical_today")
+    .shouldBe(".minical_highlighted")
+
+test "Clear input", ->
+  $input = tester.init().focus()
+  tester.cal().minical('clear')
+  $input.shouldHaveValue('')
+  ok !$input.data('minical').selected_date, 'selected date removed'
+  $input.focus()
+  today = new Date()
+  today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]
+  $input = tester.init({}, today_array.join("/")).focus()
+  tester.cal("td.minical_day_#{today_array.join('_')}")
+    .shouldBe(".minical_today")
+    .shouldBe(".minical_highlighted")
+
 test "Destroy", ->
   $input = tester.init().focus()
   tester.cal().minical('destroy')

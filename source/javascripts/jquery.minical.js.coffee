@@ -1,6 +1,6 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.7.1
+# version 0.7.2
 #
 # Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
 #
@@ -76,6 +76,7 @@ minical =
     y: 5
   trigger: null
   align_to_trigger: true
+  initialize_with_date: true
   move_on_resize: true
   read_only: true
   appendCalendarTo: -> $('body')
@@ -134,7 +135,7 @@ minical =
   selectDay: (date) ->
     @selected_day = date
     @markSelectedDay()
-    @$el.val(@date_format(@selected_day))
+    @$el.val(if date then @date_format(@selected_day) else '')
     @fireCallback('date_changed')
   markSelectedDay: ->
     klass = 'minical_selected'
@@ -180,7 +181,7 @@ minical =
   showCalendar: (e) ->
     $(".minical").not(@$cal).trigger('hide.minical')
     return if @$cal.is(":visible") or @$el.is(":disabled")
-    @highlightDay(@selected_day)
+    @highlightDay(@selected_day || @detectInitialDate())
     @positionCalendar().show()
     @attachCalendarEvents()
     e.preventDefault()
@@ -263,6 +264,10 @@ minical =
       return new Date(initial_date)
     new Date()
   external:
+    clear: ->
+      mc = @data('minical')
+      @trigger('hide.minical')
+      mc.selectDay(false)
     destroy: ->
       mc = @data('minical')
       @trigger('hide.minical')
@@ -275,7 +280,7 @@ minical =
     mc = @
     @detectDataAttributeOptions()
     @$cal = @buildCalendarContainer()
-    @selectDay(@detectInitialDate())
+    @initialize_with_date && @selectDay(@detectInitialDate())
     @offset_method = if @$cal.parent().is("body") then "offset" else "position"
     @initTrigger()
     @$el
@@ -290,7 +295,6 @@ minical =
       .on("click.minical", "a.minical_prev", $.proxy(@prevMonth, @))
       .on("hide.minical", $.proxy(@hideCalendar, @))
       .on("show.minical", $.proxy(@showCalendar, @))
-    @render()
 
 $.fn.minical = (opts) ->
   $els = @

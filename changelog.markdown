@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.2
+
+- add explicit $el.minical(`clear`) for clearing input
+- add option to disable automatically initializing the field with a date
+
 ## 0.7.1
 
 - tiny but necessary bugfix: rerender selected day properly on month switch
