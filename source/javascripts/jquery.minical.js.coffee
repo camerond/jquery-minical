@@ -280,7 +280,7 @@ minical =
     mc = @
     @detectDataAttributeOptions()
     @$cal = @buildCalendarContainer()
-    @initialize_with_date && @selectDay(@detectInitialDate())
+    @selectDay(@detectInitialDate()) unless !@$el.val() && !@initialize_with_date
     @offset_method = if @$cal.parent().is("body") then "offset" else "position"
     @initTrigger()
     @$el

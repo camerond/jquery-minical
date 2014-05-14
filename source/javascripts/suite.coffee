@@ -85,6 +85,12 @@ test "minical highlights the current day", ->
   $input = tester.init({}, today_array.join("/")).focus()
   tester.cal("td.minical_day_#{today_array.join('_')}").shouldBe(".minical_today")
 
+test "minical writes initial value of today if field is empty", ->
+  $input = tester.init({}, "").focus()
+  today = new Date()
+  today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]
+  $input.shouldHaveValue(today_array.join("/"))
+
 test "minical triggers from a separate trigger element", ->
   opts =
     trigger: ".trigger"
@@ -357,7 +363,7 @@ test "Write initial date value by default via custom date format output if provi
   tester.cal("td.minical_day_8_7_2012").shouldBe(".minical_highlighted")
   $el.shouldHaveValue("7-8-2012")
 
-test "Initialize without a value in the field", ->
+test "Initialize without writing to empty field automatically", ->
   opts =
     initialize_with_date: false
   $input = tester.init(opts, '')
