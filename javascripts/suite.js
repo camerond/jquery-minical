@@ -143,6 +143,14 @@
     return tester.cal("td.minical_day_" + (today_array.join('_'))).shouldBe(".minical_today");
   });
 
+  test("minical writes initial value of today if field is empty", function() {
+    var $input, today, today_array;
+    $input = tester.init({}, "").focus();
+    today = new Date();
+    today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()];
+    return $input.shouldHaveValue(today_array.join("/"));
+  });
+
   test("minical triggers from a separate trigger element", function() {
     var $el, opts;
     opts = {
@@ -486,7 +494,7 @@
     return $el.shouldHaveValue("7-8-2012");
   });
 
-  test("Initialize without a value in the field", function() {
+  test("Initialize without writing to empty field automatically", function() {
     var $input, opts, today, today_array;
     opts = {
       initialize_with_date: false

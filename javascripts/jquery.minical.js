@@ -376,7 +376,9 @@
       mc = this;
       this.detectDataAttributeOptions();
       this.$cal = this.buildCalendarContainer();
-      this.initialize_with_date && this.selectDay(this.detectInitialDate());
+      if (!(!this.$el.val() && !this.initialize_with_date)) {
+        this.selectDay(this.detectInitialDate());
+      }
       this.offset_method = this.$cal.parent().is("body") ? "offset" : "position";
       this.initTrigger();
       this.$el.addClass("minical_input").on("focus.minical click.minical", (function(_this) {
