@@ -122,6 +122,7 @@ minical =
       $td.addClass("minical_day")
   highlightDay: (date) ->
     $td = @$cal.find(".#{date_tools.getDayClass(date)}")
+    console.log $td[0]
     return if $td.hasClass("minical_disabled")
     return if @to and date > @to
     return if @from and date < @from

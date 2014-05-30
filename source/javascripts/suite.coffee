@@ -315,7 +315,7 @@ module "Other options"
 
 test "Initialize with data-minical-initial attribute if provided", ->
   $(".calendar :text")
-    .attr("data-minical-initial", "Tue Aug 07 2012 00:00:00 GMT-0400 (EDT)")
+    .attr("data-minical-initial", "Tue Aug 07 2012 00:00:00")
     .val("August seventh two thousand and twelvey!")
   tester.init({ write_initial_value: false }).focus()
   tester.cal("td.minical_day_8_7_2012").shouldBe(".minical_highlighted")
@@ -357,7 +357,7 @@ test "Write initial date value by default via custom date format output if provi
     date_format: (date) ->
       return [date.getDate(), date.getMonth()+1, date.getFullYear()].join("-")
   $(".calendar :text")
-    .attr("data-minical-initial", "Tue Aug 07 2012 00:00:00 GMT-0400 (EDT)")
+    .attr("data-minical-initial", "Tue Aug 07 2012 00:00:00")
     .val("")
   $el = tester.init(opts).focus()
   tester.cal("td.minical_day_8_7_2012").shouldBe(".minical_highlighted")
