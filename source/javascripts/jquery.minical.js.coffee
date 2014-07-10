@@ -74,6 +74,7 @@ minical =
   offset:
     x: 0
     y: 5
+  inline: false
   trigger: null
   align_to_trigger: true
   initialize_with_date: true
@@ -89,9 +90,12 @@ minical =
   fireCallback: (name) ->
     @[name] && @[name].apply(@$el)
   buildCalendarContainer: ->
-    $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" })
+    $cal = $("<ul />", { id: "minical_calendar_#{@id}", class: "minical" })
       .data("minical", @)
-      .appendTo(@appendCalendarTo.apply(@$el))
+    if @inline
+      $cal.addClass('minical-inline').insertAfter(@$el)
+    else
+      $cal.appendTo(@appendCalendarTo.apply(@$el))
   render: (date) ->
     date ?= @selected_day
     $li = templates.month(date)
@@ -122,7 +126,6 @@ minical =
       $td.addClass("minical_day")
   highlightDay: (date) ->
     $td = @$cal.find(".#{date_tools.getDayClass(date)}")
-    console.log $td[0]
     return if $td.hasClass("minical_disabled")
     return if @to and date > @to
     return if @from and date < @from
@@ -151,6 +154,7 @@ minical =
     @highlightDay(move_to)
     false
   positionCalendar: ->
+    if @inline then return @$cal
     offset = if @align_to_trigger then @$trigger[@offset_method]() else @$el[@offset_method]()
     height = if @align_to_trigger then @$trigger.outerHeight() else @$el.outerHeight()
     position =
@@ -169,6 +173,8 @@ minical =
     false
   hoverDay: (e) ->
     @highlightDay($(e.target).closest("td").data('minical_date'))
+  hoverOutDay: (e) ->
+    @$cal.find('.minical_highlighted').removeClass('minical_highlighted')
   nextMonth: (e) ->
     next = new Date(@$cal.find(".minical_day").eq(0).data("minical_date"))
     next.setMonth(next.getMonth() + 1)
@@ -185,8 +191,9 @@ minical =
     @highlightDay(@selected_day || @detectInitialDate())
     @positionCalendar().show()
     @attachCalendarEvents()
-    e.preventDefault()
+    e && e.preventDefault()
   hideCalendar: (e) ->
+    return if @inline
     if e and (e.type == "focusout" or e.type == "blur")
       mc = $(e.target).data("minical")
       $lc = mc.$last_clicked
@@ -198,6 +205,7 @@ minical =
       @detachCalendarEvents()
     false
   attachCalendarEvents: ->
+    return if @inline
     @detachCalendarEvents()
     $(document)
       .on("keydown.minical_#{@id}", $.proxy(@keydown, @))
@@ -284,18 +292,23 @@ minical =
     @selectDay(@detectInitialDate()) unless !@$el.val() && !@initialize_with_date
     @offset_method = if @$cal.parent().is("body") then "offset" else "position"
     @initTrigger()
-    @$el
-      .addClass("minical_input")
-      .on("focus.minical click.minical", => @$cal.trigger('show.minical'))
-      .on("blur.minical", $.proxy(@hideCalendar, @))
-      .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
+    @$el.addClass("minical_input")
     @$cal
       .on("click.minical", "td a", $.proxy(@clickDay, @))
       .on("mouseenter.minical", "td a", $.proxy(@hoverDay, @))
+      .on("mouseleave.minical", $.proxy(@hoverOutDay, @))
       .on("click.minical", "a.minical_next", $.proxy(@nextMonth, @))
       .on("click.minical", "a.minical_prev", $.proxy(@prevMonth, @))
-      .on("hide.minical", $.proxy(@hideCalendar, @))
-      .on("show.minical", $.proxy(@showCalendar, @))
+    if @inline
+      @showCalendar()
+    else
+      @$el
+        .on("focus.minical click.minical", => @$cal.trigger('show.minical'))
+        .on("blur.minical", $.proxy(@hideCalendar, @))
+        .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
+      @$cal
+        .on("hide.minical", $.proxy(@hideCalendar, @))
+        .on("show.minical", $.proxy(@showCalendar, @))
 
 $.fn.minical = (opts) ->
   $els = @

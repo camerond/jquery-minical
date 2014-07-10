@@ -25,6 +25,17 @@ ul.minical
   box-shadow: $box_shadow
   z-index: 9327
   font-size: 1.1em
+  &.minical-inline
+    position: static
+    -webkit-box-shadow: none
+    -moz-box-shadow: none
+    box-shadow: none
+    &:before,
+    &:after
+      content: ' '
+      display: table
+    &:after
+      clear: both
   li
     padding: 1px 10px 0 10px
     margin: 0

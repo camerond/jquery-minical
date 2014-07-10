@@ -1,7 +1,7 @@
 %html
   %head
     %title jQuery.minical
-    = javascript_include_tag 'jquery-2.0.3.min', 'jquery.minical', 'demo'
+    = javascript_include_tag 'jquery-2.0.3.min', 'jquery.minical'
     = stylesheet_link_tag 'application', 'jquery.minical'
     %link(rel='icon' type='image/png' href='favicon.png')
     %script(type="text/javascript" src="http://use.typekit.com/aqp8xdq.js")
@@ -18,17 +18,26 @@
         %p
           by
           %a(href="http://camerondaigle.com") Cameron Daigle
-      %form
+      %form.basic
         %dl
           %dt
             %label Pick a date:
           %dd
             %input(type="text")
             %a(href="#" class="calendar_icon")
+      %form.inline
+        %dl
+          %dt
+            %label Or, here's an inline calendar:
+          %dd
+            %input(type="text")
       %article#readme= partial 'documentation'
     :javascript
-      $("form :text").minical({
+      $("form.basic :text").minical({
         trigger: "a.calendar_icon"
+      });
+      $("form.inline :text").minical({
+        inline: true
       });
     - if build?
       :javascript

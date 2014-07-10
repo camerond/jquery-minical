@@ -311,6 +311,35 @@ test "Arrow keys fire anywhere on page as long as calendar is visible", ->
   tester.keydown(37, "left arrow", $("body"))
   tester.cal("td.minical_day_11_30_2012").shouldBe(".minical_highlighted")
 
+module "Displaying Inline"
+
+test "It appends the calendar inline if `inline` is true", ->
+  tester.init(inline: true)
+  ok tester.$el.next().is(tester.cal()), "calendar is appended directly after input"
+
+test "Inline calendar doesn't hide on blur", ->
+  tester.init(inline: true)
+  tester.$el.focus().blur()
+  tester.cal().shouldBe(':visible')
+
+test "Inline calendar doesn't respond to keypresses", ->
+  tester.init(inline: true)
+  tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_selected")
+  tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_highlighted")
+  tester.keydown(39, "right arrow")
+  tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_highlighted")
+  tester.cal("td.minical_day_12_2_2012").shouldNotBe(".minical_highlighted")
+  tester.cal().shouldBe(':visible')
+
+test "Inline calendar is only selectable via click", ->
+  tester.init(inline: true)
+  tester.cal("td.minical_day_12_2_2012 a").trigger("mouseover")
+  tester.keydown(13, "enter")
+  tester.$el.shouldHaveValue("12/1/2012")
+  tester.cal("td.minical_day_12_2_2012 a").trigger("click")
+  tester.$el.shouldHaveValue("12/2/2012")
+  tester.cal().shouldBe(':visible')
+
 module "Other options"
 
 test "Initialize with data-minical-initial attribute if provided", ->
