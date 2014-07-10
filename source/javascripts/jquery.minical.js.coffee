@@ -1,8 +1,8 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.7.2
+# version 0.8
 #
-# Copyright (c) 2012 Cameron Daigle, http://camerondaigle.com
+# Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8
+
+- add `inline` option to append the calendar directly after the input instead of as a popover
+
 ## 0.7.2
 
 - add explicit $el.minical(`clear`) for clearing input

@@ -1,4 +1,4 @@
-/* generated CSS for jQuery Minical v0.7.1 */
+/* generated CSS for jQuery Minical v0.8 */
 
 ul.minical {
   position: absolute;
@@ -15,6 +15,19 @@ ul.minical {
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   z-index: 9327;
   font-size: 1.1em;
+}
+ul.minical.minical-inline {
+  position: static;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+ul.minical.minical-inline:before, ul.minical.minical-inline:after {
+  content: " ";
+  display: table;
+}
+ul.minical.minical-inline:after {
+  clear: both;
 }
 ul.minical li {
   padding: 1px 10px 0 10px;
@@ -49,7 +62,7 @@ ul.minical li article header a {
   top: 50%;
   left: 5px;
   margin-top: -8px;
-  background: url("/images/jquery_minical_icons.png") top left;
+  background: url("../images/jquery_minical_icons.png") top left;
   height: 16px;
   width: 16px;
   font-size: 1px;
