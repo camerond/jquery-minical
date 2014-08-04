@@ -209,14 +209,14 @@ minical =
     @detachCalendarEvents()
     $(document)
       .on("keydown.minical_#{@id}", $.proxy(@keydown, @))
-      .on("click.minical touchend.minical", $.proxy(@outsideClick, @))
+      .on("click.minical_#{@id} touchend.minical_#{@id}", $.proxy(@outsideClick, @))
     if @move_on_resize
-      $(window).on('resize.minical', $.proxy(@positionCalendar, @))
+      $(window).on("resize.minical_#{@id}", $.proxy(@positionCalendar, @))
   detachCalendarEvents: ->
     $(document)
       .off("keydown.minical_#{@id}")
-      .off("click.minical touchend.minical")
-    $(window).off('resize.minical')
+      .off("click.minical_#{@id} touchend.minical_#{@id}")
+    $(window).off("resize.minical_#{@id}")
   keydown: (e) ->
     key = e.which
     mc = @
