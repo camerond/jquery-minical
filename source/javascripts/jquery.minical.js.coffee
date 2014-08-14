@@ -139,7 +139,7 @@ minical =
   selectDay: (date) ->
     @selected_day = date
     @markSelectedDay()
-    @$el.val(if date then @date_format(@selected_day) else '')
+    @$el.val(if date then @date_format(@selected_day) else '').trigger('change')
     @fireCallback('date_changed')
   markSelectedDay: ->
     klass = 'minical_selected'
