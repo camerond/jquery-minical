@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9
+
+- refactor Sass variables completely
+- remove legacy .js and .css files
+- remove image-based next & prev month icons, replace with characters
+
 ## 0.8
 
 - add `inline` option to append the calendar directly after the input instead of as a popover
