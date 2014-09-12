@@ -1,29 +1,25 @@
-// styles for jQuery Minical v0.8
+// styles for jQuery Minical v0.9
 
-$font_family: "Helvetica Neue", Helvetica, Arial, sans-serif
-$background: #fff
-$light_border: #dde2e6
-$dark_border: #bbc5cd
-$light_text: #b1b5b7
-$dark_text: #3d454b
-$accent: #517a9c
-$box_shadow: 0 0 12px rgba(0, 0, 0, .2)
-$image: '../images/jquery_minical_icons.png'
+$mc_font_family: "Helvetica Neue", Helvetica, Arial, sans-serif
+$mc_background: #fff !default
+$mc_border: #bbc5cd !default
+$mc_text: #3d454b !default
+$mc_accent: #517a9c !default
+$mc_image: '../images/jquery_minical_icons.png' !default
 
 ul.minical
   position: absolute
   display: none
-  color: $dark_text
-  background: $background
-  border: 1px solid $dark_border
+  color: $mc_text
+  background: $mc_background
+  border: 1px solid $mc_border
   margin: 0
   padding: 0
   text-shadow: none
   width: 16em
-  -webkit-box-shadow: $box_shadow
-  -moz-box-shadow: $box_shadow
-  box-shadow: $box_shadow
+  box-shadow: 0 0 12px rgba(0, 0, 0, .2)
   z-index: 9327
+  font-family: $mc_font_family
   font-size: 1.1em
   &.minical-inline
     position: static
@@ -43,9 +39,9 @@ ul.minical
       float: left
       width: 100%
       header
-        background: $light_border
-        color: $dark_text
-        border: 1px solid $dark_border
+        background: transparentize($mc_border, .5)
+        color: $mc_text
+        border: 1px solid $mc_border
         padding: 2px 0
         position: relative
         height: 1.2em
@@ -57,7 +53,7 @@ ul.minical
           text-align: center
           padding: .2em 0
           margin: 0
-          font-family: $font_family
+          font-family: $mc_font_family
         a
           display: block
           position: absolute
@@ -65,7 +61,7 @@ ul.minical
           top: 50%
           left: 5px
           margin-top: -8px
-          background: url("#{$image}") top left
+          background: url("#{$mc_image}") top left
           height: 16px
           width: 16px
           font-size: 1px
@@ -86,35 +82,33 @@ ul.minical
                 padding: 5px 0 0 0
                 font-size: .7em
                 font-weight: bold
-                font-family: $font_family
-                color: $dark_text
+                color: $mc_text
           tbody
             tr
               td
                 padding: 1px
                 text-align: right
                 font-size: .9em
-                font-family: $font_family
                 a
                   display: block
-                  border: 1px solid $light_border
-                  color: $dark_text
+                  border: 1px solid transparentize($mc_border, .5)
+                  color: $mc_text
                   padding: .1em .3em
                   text-decoration: none
                 &.minical_highlighted a
-                  border-color: lighten($accent, 10%)
-                  color: $dark_text
+                  border-color: transparentize($mc_accent, .5)
+                  color: $mc_text
                 &.minical_selected a
-                  border-color: $accent
-                  color: $dark_text
+                  border-color: $mc_accent
+                  color: $mc_text
                 &.minical_past_month a,
                 &.minical_future_month a
-                  color: $light_text
+                  color: transparentize($mc_text, .5)
                 &.minical_today a
-                  border-color: $accent
-                  background: $accent
-                  color: $background
+                  border-color: $mc_accent
+                  background: $mc_accent
+                  color: $mc_background
                 &.minical_disabled a
-                  color: $light_text
-                  background: $light_border
-                  border-color: $light_border
+                  color: transparentize($mc_text, .5)
+                  background: transparentize($mc_border, .8)
+                  border-color: transparentize($mc_border, .8)
