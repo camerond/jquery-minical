@@ -4,7 +4,7 @@ $mc_font_family: "Helvetica Neue", Helvetica, Arial, sans-serif
 $mc_background: #fff !default
 $mc_border: #bbc5cd !default
 $mc_text: #3d454b !default
-$mc_accent: #517a9c !default
+$mc_highlight: #517a9c !default
 
 ul.minical
   position: absolute
@@ -93,17 +93,17 @@ ul.minical
                   padding: .1em .3em
                   text-decoration: none
                 &.minical_highlighted a
-                  border-color: transparentize($mc_accent, .5)
+                  border-color: transparentize($mc_highlight, .5)
                   color: $mc_text
                 &.minical_selected a
-                  border-color: $mc_accent
+                  border-color: $mc_highlight
                   color: $mc_text
                 &.minical_past_month a,
                 &.minical_future_month a
                   color: transparentize($mc_text, .5)
                 &.minical_today a
-                  border-color: $mc_accent
-                  background: $mc_accent
+                  border-color: $mc_highlight
+                  background: $mc_highlight
                   color: $mc_background
                 &.minical_disabled a
                   color: transparentize($mc_text, .5)
