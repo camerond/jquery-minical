@@ -5,7 +5,6 @@ $mc_background: #fff !default
 $mc_border: #bbc5cd !default
 $mc_text: #3d454b !default
 $mc_accent: #517a9c !default
-$mc_image: '../images/jquery_minical_icons.png' !default
 
 ul.minical
   position: absolute
@@ -44,11 +43,9 @@ ul.minical
         border: 1px solid $mc_border
         padding: 2px 0
         position: relative
-        height: 1.2em
         margin: 0 -9px
         h1
           font-size: .8em
-          line-height: 1.2em
           font-weight: bold
           text-align: center
           padding: .2em 0
@@ -57,18 +54,18 @@ ul.minical
         a
           display: block
           position: absolute
-          text-indent: -9327px
-          top: 50%
           left: 5px
-          margin-top: -8px
-          background: url("#{$mc_image}") top left
-          height: 16px
-          width: 16px
-          font-size: 1px
+          top: 50%
+          margin-top: -.5em
+          font-size: .8em
+          color: $mc_text
+          &:after
+            content: '\25C4'
           &.minical_next
             left: auto
             right: 5px
-            background-position: bottom left
+            &:after
+              content: '\25BA'
       section
         margin-bottom: 10px
         table
