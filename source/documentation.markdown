@@ -6,7 +6,7 @@ $my_cool_input.minical()
 
 ## Requirements
 
-- jQuery (tested through 2.0.3)
+- jQuery (tested through 2.1.1)
 - [jquery.minical.coffee](https://github.com/camerond/jquery-minical/blob/master/source/javascripts/jquery.minical.js.coffee) (or the [generated javascript](https://github.com/camerond/jquery-minical/blob/master/source/javascripts/jquery.minical.plain.js))
 - [jquery.minical.sass](https://github.com/camerond/jquery-minical/blob/master/source/stylesheets/jquery.minical.css.sass) (or the [generated css](http://camerond.github.io/jquery-minical/stylesheets/jquery.minical.plain.css))
 - [jquery_minical_icons.png](https://github.com/camerond/jquery-minical/blob/master/source/images/jquery_minical_icons.png)
