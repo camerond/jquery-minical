@@ -2,85 +2,39 @@
 
 <h2 id="usage">Usage</h2>
 
-<p>$my_cool_input.minical()</p>
+<p>Include <a href="https://github.com/camerond/jquery-minical/blob/master/source/javascripts/jquery.minical.js.coffee">jquery.minical.coffee</a> and <a href="https://github.com/camerond/jquery-minical/blob/master/source/stylesheets/jquery.minical.css.sass">jquery.minical.sass</a>, then:</p>
 
-<h2 id="requirements">Requirements</h2>
-
-<ul>
-  <li>jQuery (tested through 2.0.3)</li>
-  <li><a href="https://github.com/camerond/jquery-minical/blob/master/source/javascripts/jquery.minical.js.coffee">jquery.minical.coffee</a> (or the <a href="https://github.com/camerond/jquery-minical/blob/master/source/javascripts/jquery.minical.plain.js">generated javascript</a>)</li>
-  <li><a href="https://github.com/camerond/jquery-minical/blob/master/source/stylesheets/jquery.minical.css.sass">jquery.minical.sass</a> (or the <a href="http://camerond.github.io/jquery-minical/stylesheets/jquery.minical.plain.css">generated css</a>)</li>
-  <li><a href="https://github.com/camerond/jquery-minical/blob/master/source/images/jquery_minical_icons.png">jquery_minical_icons.png</a></li>
-</ul>
+<p><code>$my_cool_input.minical()</code></p>
 
 <p>Feel free to <a href="https://github.com/camerond/jquery-minical">check out the source on GitHub</a>.</p>
 
 <h2 id="why-its-awesome">Why It's Awesome</h2>
 
-<p>Minical is teeny (~300 lines of Coffeescript), and has no dependencies other than jQuery, its icon PNG and stylesheet (which has SASS variables for easy customization).</p>
+<p>Minical is teeny (~300 lines of Coffeescript), and has no dependencies other than jQuery. It has full keyboard support. It's an easy way to get your users to input a readable, parsable date value.</p>
 
-<p>It has full keyboard support and also defaults to make the associated input read-only, so its value can only be changed by the date format specified in the plugin, alleviating unexpected JavaScript date-parsing drama. (It also works great on mobile, with just enough touch event handling to behave properly.)</p>
+<h2 id="skinning">Skinning</h2>
 
-<p>To aid in customization and general sanity, its markup is also nice and lean. Here's the DOM construction of Minical:</p>
+<p>Minical exposes a few Sass variables for easy skinning:</p>
 
 <ul>
-  <li><code>ul.minical</code> contains all elements, with id <code>#minical_calendar_0</code> and so on (for multiple instances on a page).
-    <ul>
-      <li><code>li</code> - given class <code>.minical_jan</code> and so on for each month.
-        <ul>
-          <li><code>article</code>
-            <ul>
-              <li><code>header</code>
-                <ul>
-                  <li><code>a.minical_next</code></li>
-                  <li><code>a.minical_prev</code></li>
-                  <li><code>h1</code></li>
-                </ul>
-              </li>
-              <li><code>section</code>
-                <ul>
-                  <li><code>table</code>
-                    <ul>
-                      <li><code>thead</code>
-                        <ul>
-                          <li><code>tr</code>
-                            <ul>
-                              <li><code>th</code></li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><code>tbody</code>
-                        <ul>
-                          <li><code>tr</code>
-                            <ul>
-                              <li><code>td.minical_day</code> for each day of current month</li>
-                              <li><code>td.minical_day_[m_d_yyyy]</code> for each unique day (e.g. <code>minical_day_1_1_2011</code>)</li>
-                              <li><code>td.minical_today</code> for the current day</li>
-                              <li><code>td.minical_past_month</code> for days of previous month</li>
-                              <li><code>td.minical_future_month</code> for days of next month</li>
-                              <li><code>td.minical_disabled</code> for unselectable days</li>
-                              <li><code>td.minical_selected</code> for the currently selected day</li>
-                              <li><code>td.minical_highlighted</code> for the currently highlighted day
-                                <ul>
-                                  <li><code>a</code></li>
-                                </ul>
-                              </li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
+  <li><code>$mc_font-family</code></li>
+  <li><code>$mc_background</code></li>
+  <li><code>$mc_border</code></li>
+  <li><code>$mc_text</code></li>
+  <li><code>$mc_highlight</code></li>
 </ul>
+
+<h2 id="initializing">Initializing</h2>
+
+<p>JavaScript date parsing is a pain, and it's entirely possible that the date format you want displayed in your input won't be one that JS can parse. If your page ever loads with a value already in the Minical-enabled input, Minical needs a JavaScript-parseable date in order to set its initial value properly.</p>
+
+<p>In this case, you can just output a <code>data-minical-initial</code> attribute on your input element, give it a Javascript-parseable string, and Minical will initialize using that attribute instead of attempting to parse the value of your input. (Minical will also write that value to the input via the <code>date_format</code> method, so you don't even need to set an initial value for the input itself.)</p>
+
+<p>Either string or integer formats will work, but the most foolproof <code>data-minical-initial</code> attribute seems to be JavaScript's conversion of a date object to an integer (e.g. <code>+my_date_object</code>). This renders a value of <code>12/13/2013</code> using the default date_format method:</p>
+
+<p><code>
+&lt;input data-minical-initial="1386967591204"&gt;
+</code></p>
 
 <h2 id="options">Options</h2>
 
@@ -101,18 +55,3 @@
   <li><code>appendCalendarTo</code>: function; should return jQuery element. Minical appends to <code>body</code> by default.</li>
 </ul>
 
-<h2 id="initializing">Initializing</h2>
-
-<p>JavaScript date parsing is a pain, and it's entirely possible that the date format you want displayed in your input won't be one that JS can parse. If your page ever loads with a value already in the Minical-enabled input, Minical needs a JavaScript-parseable date in order to set its initial value properly.</p>
-
-<p>In this case, you can just output a <code>data-minical-initial</code> attribute on your input element, give it a Javascript-parseable string, and Minical will initialize using that attribute instead of attempting to parse the value of your input. (Minical will also write that value to the input via the <code>date_format</code> method, so you don't even need to set an initial value for the input itself.)</p>
-
-<p>Either string or integer formats will work, but the most foolproof <code>data-minical-initial</code> attribute seems to be JavaScript's conversion of a date object to an integer (e.g. <code>+my_date_object</code>). This renders a value of <code>12/13/2013</code> using the default date_format method:</p>
-
-<p><code>
-&lt;input data-minical-initial="1386967591204"&gt;
-</code></p>
-
-<h2 id="what-about-dropdowns">What about dropdowns?</h2>
-
-<p>If you've been using Minical a while, you might notice that it no longer supports month/day/year in <code>&lt;select&gt;</code> tags. That feature caused a ton of complexity and while it seemed like a good idea at the time, I've literally never used it. Version 0.7 includes a <em>ton</em> of code cleanup, and I stripped the dropdown support in the process.</p>

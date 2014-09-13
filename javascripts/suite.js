@@ -427,10 +427,51 @@
     return tester.cal("td.minical_day_11_30_2012").shouldBe(".minical_highlighted");
   });
 
+  module("Displaying Inline");
+
+  test("It appends the calendar inline if `inline` is true", function() {
+    tester.init({
+      inline: true
+    });
+    return ok(tester.$el.next().is(tester.cal()), "calendar is appended directly after input");
+  });
+
+  test("Inline calendar doesn't hide on blur", function() {
+    tester.init({
+      inline: true
+    });
+    tester.$el.focus().blur();
+    return tester.cal().shouldBe(':visible');
+  });
+
+  test("Inline calendar doesn't respond to keypresses", function() {
+    tester.init({
+      inline: true
+    });
+    tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_selected");
+    tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_highlighted");
+    tester.keydown(39, "right arrow");
+    tester.cal("td.minical_day_12_1_2012").shouldBe(".minical_highlighted");
+    tester.cal("td.minical_day_12_2_2012").shouldNotBe(".minical_highlighted");
+    return tester.cal().shouldBe(':visible');
+  });
+
+  test("Inline calendar is only selectable via click", function() {
+    tester.init({
+      inline: true
+    });
+    tester.cal("td.minical_day_12_2_2012 a").trigger("mouseover");
+    tester.keydown(13, "enter");
+    tester.$el.shouldHaveValue("12/1/2012");
+    tester.cal("td.minical_day_12_2_2012 a").trigger("click");
+    tester.$el.shouldHaveValue("12/2/2012");
+    return tester.cal().shouldBe(':visible');
+  });
+
   module("Other options");
 
   test("Initialize with data-minical-initial attribute if provided", function() {
-    $(".calendar :text").attr("data-minical-initial", "Tue Aug 07 2012 00:00:00 GMT-0400 (EDT)").val("August seventh two thousand and twelvey!");
+    $(".calendar :text").attr("data-minical-initial", "Tue Aug 07 2012 00:00:00").val("August seventh two thousand and twelvey!");
     tester.init({
       write_initial_value: false
     }).focus();
@@ -488,7 +529,7 @@
         return [date.getDate(), date.getMonth() + 1, date.getFullYear()].join("-");
       }
     };
-    $(".calendar :text").attr("data-minical-initial", "Tue Aug 07 2012 00:00:00 GMT-0400 (EDT)").val("");
+    $(".calendar :text").attr("data-minical-initial", "Tue Aug 07 2012 00:00:00").val("");
     $el = tester.init(opts).focus();
     tester.cal("td.minical_day_8_7_2012").shouldBe(".minical_highlighted");
     return $el.shouldHaveValue("7-8-2012");

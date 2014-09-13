@@ -1,3 +1,4 @@
+/* line 9, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
 ul.minical {
   position: absolute;
   display: none;
@@ -8,102 +9,111 @@ ul.minical {
   padding: 0;
   text-shadow: none;
   width: 16em;
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   z-index: 9327;
-  font-size: 1.1em;
-}
-ul.minical li {
-  padding: 1px 10px 0 10px;
-  margin: 0;
-}
-ul.minical li article {
-  float: left;
-  width: 100%;
-}
-ul.minical li article header {
-  background: #dde2e6;
-  color: #3d454b;
-  border: 1px solid #bbc5cd;
-  padding: 2px 0;
-  position: relative;
-  height: 1.2em;
-  margin: 0 -9px;
-}
-ul.minical li article header h1 {
-  font-size: 0.8em;
-  line-height: 1.2em;
-  font-weight: bold;
-  text-align: center;
-  padding: 0.2em 0;
-  margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-ul.minical li article header a {
-  display: block;
-  position: absolute;
-  text-indent: -9327px;
-  top: 50%;
-  left: 5px;
-  margin-top: -8px;
-  background: url("../images/jquery_minical_icons.png") top left;
-  height: 16px;
-  width: 16px;
-  font-size: 1px;
-}
-ul.minical li article header a.minical_next {
-  left: auto;
-  right: 5px;
-  background-position: bottom left;
-}
-ul.minical li article section {
-  margin-bottom: 10px;
-}
-ul.minical li article section table {
-  width: 100%;
-  color: inherit;
-  font-size: inherit;
-  border-collapse: collapse;
-}
-ul.minical li article section table thead tr th {
-  padding: 5px 0 0 0;
-  font-size: 0.7em;
-  font-weight: bold;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #3d454b;
-}
-ul.minical li article section table tbody tr td {
-  padding: 1px;
-  text-align: right;
-  font-size: 0.9em;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-ul.minical li article section table tbody tr td a {
-  display: block;
-  border: 1px solid #dde2e6;
-  color: #3d454b;
-  padding: 0.1em 0.3em;
-  text-decoration: none;
-}
-ul.minical li article section table tbody tr td.minical_highlighted a {
-  border-color: #6d93b3;
-  color: #3d454b;
-}
-ul.minical li article section table tbody tr td.minical_selected a {
-  border-color: #517a9c;
-  color: #3d454b;
-}
-ul.minical li article section table tbody tr td.minical_past_month a, ul.minical li article section table tbody tr td.minical_future_month a {
-  color: #b1b5b7;
-}
-ul.minical li article section table tbody tr td.minical_today a {
-  border-color: #517a9c;
-  background: #517a9c;
-  color: white;
-}
-ul.minical li article section table tbody tr td.minical_disabled a {
-  color: #b1b5b7;
-  background: #dde2e6;
-  border-color: #dde2e6;
-}
+  font-size: 1.1em; }
+  /* line 23, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+  ul.minical.minical-inline {
+    position: static;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none; }
+    /* line 28, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+    ul.minical.minical-inline:before, ul.minical.minical-inline:after {
+      content: " ";
+      display: table; }
+    /* line 32, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+    ul.minical.minical-inline:after {
+      clear: both; }
+  /* line 34, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+  ul.minical li {
+    padding: 1px 10px 0 10px;
+    margin: 0; }
+    /* line 37, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+    ul.minical li article {
+      float: left;
+      width: 100%; }
+      /* line 40, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+      ul.minical li article header {
+        background: rgba(187, 197, 205, 0.5);
+        color: #3d454b;
+        border: 1px solid #bbc5cd;
+        padding: 2px 0;
+        position: relative;
+        margin: 0 -9px; }
+        /* line 47, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+        ul.minical li article header h1 {
+          font-size: 0.8em;
+          font-weight: bold;
+          text-align: center;
+          padding: 0.2em 0;
+          margin: 0;
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+        /* line 54, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+        ul.minical li article header a {
+          display: block;
+          position: absolute;
+          left: 5px;
+          top: 50%;
+          margin-top: -0.5em;
+          font-size: 0.8em;
+          color: #3d454b; }
+          /* line 62, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+          ul.minical li article header a:after {
+            content: "\25C4"; }
+          /* line 64, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+          ul.minical li article header a.minical_next {
+            left: auto;
+            right: 5px; }
+            /* line 67, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            ul.minical li article header a.minical_next:after {
+              content: "\25BA"; }
+      /* line 69, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+      ul.minical li article section {
+        margin-bottom: 10px; }
+        /* line 71, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+        ul.minical li article section table {
+          width: 100%;
+          color: inherit;
+          font-size: inherit;
+          border-collapse: collapse; }
+          /* line 78, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+          ul.minical li article section table thead tr th {
+            padding: 5px 0 0 0;
+            font-size: 0.7em;
+            font-weight: bold;
+            color: #3d454b; }
+          /* line 85, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+          ul.minical li article section table tbody tr td {
+            padding: 1px;
+            text-align: right;
+            font-size: 0.9em; }
+            /* line 89, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            ul.minical li article section table tbody tr td a {
+              display: block;
+              border: 1px solid rgba(187, 197, 205, 0.5);
+              color: #3d454b;
+              padding: 0.1em 0.3em;
+              text-decoration: none; }
+            /* line 95, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            ul.minical li article section table tbody tr td.minical_highlighted a {
+              border-color: rgba(81, 122, 156, 0.5);
+              color: #3d454b; }
+            /* line 98, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            ul.minical li article section table tbody tr td.minical_selected a {
+              border-color: #517a9c;
+              color: #3d454b; }
+            /* line 101, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            ul.minical li article section table tbody tr td.minical_past_month a, ul.minical li article section table tbody tr td.minical_future_month a {
+              color: rgba(61, 69, 75, 0.5); }
+            /* line 104, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            ul.minical li article section table tbody tr td.minical_today a {
+              border-color: #517a9c;
+              background: #517a9c;
+              color: white; }
+            /* line 108, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            ul.minical li article section table tbody tr td.minical_disabled a {
+              color: rgba(61, 69, 75, 0.5);
+              background: rgba(187, 197, 205, 0.2);
+              border-color: rgba(187, 197, 205, 0.2); }
