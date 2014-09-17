@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.1
+
+- Fix issue with Minical hiding properly when tabbing through inputs
+
 ## 0.9
 
 - refactor Sass variables completely

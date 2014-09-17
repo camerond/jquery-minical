@@ -45,9 +45,14 @@ test "minical triggers on focus", ->
   $input = tester.init().focus()
   tester.cal().shouldBe(":visible")
 
-test "minical hides on blur", ->
-  $input = tester.init().blur()
-  tester.cal().shouldNotBe(":visible")
+asyncTest "minical hides on blur", ->
+  $input = tester.init().focus()
+  tester.keydown(9, "tab")
+  $input.blur()
+  setTimeout(->
+    tester.cal().shouldNotBe(":visible")
+    QUnit.start()
+  , 100)
 
 test "minical hides on outside click", ->
   $input = tester.init().focus()

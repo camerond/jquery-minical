@@ -1,6 +1,6 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.9
+# version 0.9.1
 #
 # Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
 #
@@ -194,15 +194,8 @@ minical =
     e && e.preventDefault()
   hideCalendar: (e) ->
     return if @inline
-    if e and (e.type == "focusout" or e.type == "blur")
-      mc = $(e.target).data("minical")
-      $lc = mc.$last_clicked
-      if $lc and !$lc.is(mc.$trigger) and !$lc.is(mc.$el) and !$lc.closest(".minical").length
-        mc.$cal.hide()
-        mc.detachCalendarEvents()
-    else
-      @$cal.hide()
-      @detachCalendarEvents()
+    @$cal.hide()
+    @detachCalendarEvents()
     false
   attachCalendarEvents: ->
     return if @inline
@@ -229,25 +222,23 @@ minical =
       38: -> mc.moveToDay(0, -1)   # up
       39: -> mc.moveToDay(1, 0)    # right
       40: -> mc.moveToDay(0, 1)    # down
+    @checkToHideCalendar()
     if keys[key]
       keys[key]()
     else if !e.metaKey and !e.ctrlKey
       !mc.read_only
   preventKeystroke: (e) ->
-    mc = @
-    if mc.$cal.is(":visible") then return true
-    key = e.which
-    keys =
-      9:  -> true                  # tab
-      13: ->                       # enter
-        mc.$cal.trigger('show.minical')
-        false
-    if keys[key] then return keys[key]() else return !mc.read_only
+    @read_only
   outsideClick: (e) ->
     $t = $(e.target)
     @$last_clicked = $t
     return true if $t.is(@$el) or $t.is(@$trigger) or $t.closest(".minical").length
     @$cal.trigger('hide.minical')
+  checkToHideCalendar: ->
+    mc = @
+    setTimeout( ->
+      if !mc.$el.add(mc.$trigger).is(":focus") then mc.$cal.trigger("hide.minical")
+    , 50)
   initTrigger: ->
     if $.isFunction(@trigger)
       @$trigger = $.proxy(@trigger, @$el)()
@@ -257,9 +248,9 @@ minical =
     if @$trigger.length
       @$trigger
         .data("minical", @)
-        .on("blur.minical", => @$cal.trigger('hide.minical'))
         .on("focus.minical click.minical", => @$cal.trigger('show.minical'))
     else
+      @$trigger = $.noop
       @align_to_trigger = false
   detectDataAttributeOptions: ->
     for range in ['from', 'to']
@@ -304,7 +295,6 @@ minical =
     else
       @$el
         .on("focus.minical click.minical", => @$cal.trigger('show.minical'))
-        .on("blur.minical", $.proxy(@hideCalendar, @))
         .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
       @$cal
         .on("hide.minical", $.proxy(@hideCalendar, @))
