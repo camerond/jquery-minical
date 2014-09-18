@@ -36,7 +36,7 @@ $.fn.shouldSay = (text) ->
   equal @.text(), text, "#{text} is displayed within #{@.selector}"
   @
 
-QUnit.testDone -> $('.minical').remove()
+QUnit.testDone -> $('.minical').each -> $(@).minical('destroy')
 
 test "it is chainable", ->
   ok tester.init().hide().show().is(":visible"), "minical is invoked and visibility is toggled"
@@ -422,6 +422,21 @@ test "Clear input", ->
   tester.cal("td.minical_day_#{today_array.join('_')}")
     .shouldBe(".minical_today")
     .shouldBe(".minical_highlighted")
+
+test "Initialize without writing to empty field provides link to clear input", ->
+  today = new Date()
+  today_val = [today.getMonth() + 1, today.getDate(), today.getFullYear()].join("/")
+  opts =
+    initialize_with_date: false
+  $input = tester.init(opts, '').focus()
+  tester.cal("td.minical_today a").click()
+  $input.shouldHaveValue(today_val)
+  $input.focus()
+  $clear = tester.cal(".minical_clear a")
+  equal $clear.length, 1, "Clear link appended to calendar"
+  $clear.click()
+  $input.shouldHaveValue("")
+  tester.cal().shouldNotBe(":visible")
 
 test "Destroy", ->
   $input = tester.init().focus()

@@ -36,6 +36,9 @@ date_tools =
     new Date(firstOfMonth.setDate(1 - firstOfMonth.getDay()))
 
 templates =
+  clear_link: ->
+    $("<p />", { class: "minical_clear" })
+      .append $("<a />", { href: "#", text: "clear date" })
   day: (date) ->
     $("<td />")
       .data("minical_date", new Date(date))
@@ -99,6 +102,8 @@ minical =
   render: (date) ->
     date ?= @selected_day
     $li = templates.month(date)
+    if !@initialize_with_date
+      templates.clear_link().insertAfter($li.find("table"))
     current_date = date_tools.getStartOfCalendarBlock(date)
     $li.find(".minical_prev").detach() if @from and @from > current_date
     for w in [1..6]
@@ -232,6 +237,9 @@ minical =
   outsideClick: (e) ->
     $t = $(e.target)
     @$last_clicked = $t
+    if $t.parent().is(".minical_clear")
+      @$el.minical('clear')
+      return false
     return true if $t.is(@$el) or $t.is(@$trigger) or $t.closest(".minical").length
     @$cal.trigger('hide.minical')
   checkToHideCalendar: ->
@@ -295,6 +303,7 @@ minical =
     else
       @$el
         .on("focus.minical click.minical", => @$cal.trigger('show.minical'))
+        .on("hide.minical", $.proxy(@hideCalendar, @))
         .on("keydown.minical", (e) -> mc.preventKeystroke.call(mc, e))
       @$cal
         .on("hide.minical", $.proxy(@hideCalendar, @))
