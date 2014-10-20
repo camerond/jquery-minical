@@ -47,4 +47,6 @@ Either string or integer formats will work, but the most foolproof `data-minical
 - `date_changed`: callback that fires after the input or dropdowns have changed value.
 - `month_drawn`: callback that fires when a new month is rendered.
 - `appendCalendarTo`: function; should return jQuery element. Minical appends to `body` by default.
+- `initialize_with_date`: defaults to true; Minical will write the initial date to the input (either via data-minical-initial or just by displaying today)
+- `show_clear_link`: defaults to false; displays a 'clear date' link in the calendar popout
 
