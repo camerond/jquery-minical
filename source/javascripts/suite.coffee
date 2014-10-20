@@ -397,20 +397,7 @@ test "Write initial date value by default via custom date format output if provi
   tester.cal("td.minical_day_8_7_2012").shouldBe(".minical_highlighted")
   $el.shouldHaveValue("7-8-2012")
 
-test "Initialize without writing to empty field automatically", ->
-  opts =
-    initialize_with_date: false
-  $input = tester.init(opts, '')
-  $input.shouldHaveValue('')
-  $input.focus()
-  today = new Date()
-  today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]
-  $input = tester.init({}, today_array.join("/")).focus()
-  tester.cal("td.minical_day_#{today_array.join('_')}")
-    .shouldBe(".minical_today")
-    .shouldBe(".minical_highlighted")
-
-test "Clear input", ->
+test "Clear input command", ->
   $input = tester.init().focus()
   tester.cal().minical('clear')
   $input.shouldHaveValue('')
@@ -423,11 +410,11 @@ test "Clear input", ->
     .shouldBe(".minical_today")
     .shouldBe(".minical_highlighted")
 
-test "Initialize without writing to empty field provides link to clear input", ->
+test "Option to display clear link", ->
   today = new Date()
   today_val = [today.getMonth() + 1, today.getDate(), today.getFullYear()].join("/")
   opts =
-    initialize_with_date: false
+    show_clear_link: true
   $input = tester.init(opts, '').focus()
   tester.cal("td.minical_today a").click()
   $input.shouldHaveValue(today_val)
@@ -437,6 +424,21 @@ test "Initialize without writing to empty field provides link to clear input", -
   $clear.click()
   $input.shouldHaveValue("")
   tester.cal().shouldNotBe(":visible")
+
+test "Initialize without writing to empty field automatically", ->
+  opts =
+    initialize_with_date: false
+  $input = tester.init(opts, '')
+  $input.shouldHaveValue('')
+  $input.focus()
+  $clear = tester.cal(".minical_clear a")
+  equal $clear.length, 1, "Clear link appended to calendar"
+  today = new Date()
+  today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()]
+  $input = tester.init({}, today_array.join("/")).focus()
+  tester.cal("td.minical_day_#{today_array.join('_')}")
+    .shouldBe(".minical_today")
+    .shouldBe(".minical_highlighted")
 
 test "Destroy", ->
   $input = tester.init().focus()

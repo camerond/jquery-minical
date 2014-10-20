@@ -83,6 +83,7 @@ minical =
   initialize_with_date: true
   move_on_resize: true
   read_only: true
+  show_clear_link: false
   appendCalendarTo: -> $('body')
   date_format: (date) ->
     [date.getMonth()+1, date.getDate(), date.getFullYear()].join("/")
@@ -102,7 +103,7 @@ minical =
   render: (date) ->
     date ?= @selected_day
     $li = templates.month(date)
-    if !@initialize_with_date
+    if @show_clear_link || !@initialize_with_date
       templates.clear_link().insertAfter($li.find("table"))
     current_date = date_tools.getStartOfCalendarBlock(date)
     $li.find(".minical_prev").detach() if @from and @from > current_date
