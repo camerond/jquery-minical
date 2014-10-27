@@ -284,6 +284,8 @@ minical =
       mc.$el
         .removeClass('minical_input')
         .removeData('minical')
+    select: (date) ->
+      @data('minical').selectDay(date)
   init: ->
     @id = $(".minical").length
     mc = @

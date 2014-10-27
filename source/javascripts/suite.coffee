@@ -446,3 +446,9 @@ test "Destroy", ->
   equal $('.minical').length, 0, 'minical element destroyed'
   equal $input.attr('class'), '', 'class removed from input'
   ok !$input.data('minical'), 'data removed from input'
+
+test "Select date via `.minical` call", ->
+  $input = tester.init()
+  date = new Date("December 25, 2014")
+  tester.cal().minical('select', date)
+  $input.shouldHaveValue("12/25/2014")
