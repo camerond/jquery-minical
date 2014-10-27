@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.3
+
+- add simpler `select` external method
+
+## 0.9.2
+
+- add `show_clear_link` option
+
 ## 0.9.1
 
 - Fix issue with Minical hiding properly when tabbing through inputs
