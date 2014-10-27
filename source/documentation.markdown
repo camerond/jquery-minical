@@ -34,6 +34,14 @@ Either string or integer formats will work, but the most foolproof `data-minical
 <input data-minical-initial="1386967591204">
 ```
 
+## Interface
+
+Minical tracks its own state internally, so just changing its input's value directly will cause the two to get out of sync. You can manipulate a Minical instance through some external methods:
+
+- `$input.minical('clear')` clears the input and resets Minical to its initial state
+- `$input.minical('select', date_obj)` sets Minical to the date specified by the passed Javascript date object
+- `$input.minical('destroy')` removes the Minical element completely
+
 ## Options
 
 - `offset`: positions calendar relative to the bottom-left corner of the input
