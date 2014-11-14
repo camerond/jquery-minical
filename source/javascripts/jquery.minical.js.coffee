@@ -84,6 +84,7 @@ minical =
   move_on_resize: true
   read_only: true
   show_clear_link: false
+  add_timezone_offset: false
   appendCalendarTo: -> $('body')
   date_format: (date) ->
     [date.getMonth()+1, date.getDate(), date.getFullYear()].join("/")
@@ -267,11 +268,14 @@ minical =
       if attr and /^\d+$/.test(attr) then @[range] = new Date(+attr)
   detectInitialDate: ->
     initial_date = @$el.attr("data-minical-initial") || @$el.val()
-    if /^\d+$/.test(initial_date)
-      return new Date(+initial_date)
+    millis = if /^\d+$/.test(initial_date)
+      initial_date
     else if initial_date
-      return new Date(initial_date)
-    new Date()
+      Date.parse(initial_date)
+    else
+      new Date().getTime()
+    millis = parseInt(millis) + if @add_timezone_offset then (new Date().getTimezoneOffset() * 60 * 1000) else 0
+    new Date(millis)
   external:
     clear: ->
       mc = @data('minical')
