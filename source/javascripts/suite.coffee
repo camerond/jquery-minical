@@ -425,6 +425,15 @@ test "Option to display clear link", ->
   $input.shouldHaveValue("")
   tester.cal().shouldNotBe(":visible")
 
+test "Option to add browsers offset to parsed time", ->
+  opts =
+    add_timezone_offset: true
+  $(".calendar :text")
+    .attr("data-minical-initial", "2014-08-07T00:00:00Z")
+    .val("")
+  $el = tester.init(opts).focus()
+  $el.shouldHaveValue("8/7/2014")
+
 test "Initialize without writing to empty field automatically", ->
   opts =
     initialize_with_date: false
