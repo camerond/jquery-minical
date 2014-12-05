@@ -260,7 +260,7 @@ minical =
         .data("minical", @)
         .on("focus.minical click.minical", => @$cal.trigger('show.minical'))
     else
-      @$trigger = $.noop
+      @$trigger = @$el
       @align_to_trigger = false
   detectDataAttributeOptions: ->
     for range in ['from', 'to']
