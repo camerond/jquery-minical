@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.4
+
+- namespace `select` external method's change event so it doesn't collide with regular change event
+
 ## 0.9.3
 
 - add simpler `select` external method

@@ -1,6 +1,6 @@
 # jQuery Minical Plugin
 # http://github.com/camerond/jquery-minical
-# version 0.9.2
+# version 0.9.4
 #
 # Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
 #
@@ -143,10 +143,11 @@ minical =
     klass = "minical_highlighted"
     @$cal.find(".#{klass}").removeClass(klass)
     $td.addClass(klass)
-  selectDay: (date) ->
+  selectDay: (date, external) ->
+    event_name = if external then 'change.minical_external' else 'change.minical'
     @selected_day = date
     @markSelectedDay()
-    @$el.val(if date then @date_format(@selected_day) else '').trigger('change')
+    @$el.val(if date then @date_format(@selected_day) else '').trigger(event_name)
     @fireCallback('date_changed')
   markSelectedDay: ->
     klass = 'minical_selected'
@@ -289,7 +290,7 @@ minical =
         .removeClass('minical_input')
         .removeData('minical')
     select: (date) ->
-      @data('minical').selectDay(date)
+      @data('minical').selectDay(date, true)
   init: ->
     @id = $(".minical").length
     mc = @

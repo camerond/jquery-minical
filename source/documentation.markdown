@@ -39,7 +39,7 @@ Either string or integer formats will work, but the most foolproof `data-minical
 Minical tracks its own state internally, so just changing its input's value directly will cause the two to get out of sync. You can manipulate a Minical instance through some external methods:
 
 - `$input.minical('clear')` clears the input and resets Minical to its initial state
-- `$input.minical('select', date_obj)` sets Minical to the date specified by the passed Javascript date object
+- `$input.minical('select', date_obj)` sets Minical to the date specified by the passed Javascript date object. (This is fired as a `change.minical_external` event rather than a `change.minical` event)
 - `$input.minical('destroy')` removes the Minical element completely
 
 ## Options
