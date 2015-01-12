@@ -36,6 +36,16 @@
 &lt;input data-minical-initial="1386967591204"&gt;
 </code></p>
 
+<h2 id="interface">Interface</h2>
+
+<p>Minical tracks its own state internally, so just changing its input's value directly will cause the two to get out of sync. You can manipulate a Minical instance through some external methods:</p>
+
+<ul>
+  <li><code>$input.minical('clear')</code> clears the input and resets Minical to its initial state</li>
+  <li><code>$input.minical('select', date_obj)</code> sets Minical to the date specified by the passed Javascript date object. (This is fired as a <code>change.minical_external</code> event rather than a <code>change.minical</code> event)</li>
+  <li><code>$input.minical('destroy')</code> removes the Minical element completely</li>
+</ul>
+
 <h2 id="options">Options</h2>
 
 <ul>
@@ -53,5 +63,7 @@
   <li><code>date_changed</code>: callback that fires after the input or dropdowns have changed value.</li>
   <li><code>month_drawn</code>: callback that fires when a new month is rendered.</li>
   <li><code>appendCalendarTo</code>: function; should return jQuery element. Minical appends to <code>body</code> by default.</li>
+  <li><code>initialize_with_date</code>: defaults to true; Minical will write the initial date to the input (either via data-minical-initial or just by displaying today)</li>
+  <li><code>show_clear_link</code>: defaults to false; displays a 'clear date' link in the calendar popout</li>
 </ul>
 

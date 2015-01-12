@@ -73,46 +73,60 @@ ul.minical {
       ul.minical li article section {
         margin-bottom: 10px; }
         /* line 71, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+        ul.minical li article section p.minical_clear {
+          font-size: 0.7em;
+          display: block;
+          text-align: center;
+          font-weight: bold;
+          padding-top: 10px; }
+          /* line 77, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+          ul.minical li article section p.minical_clear a {
+            text-decoration: none;
+            color: #517a9c; }
+            /* line 80, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            ul.minical li article section p.minical_clear a:hover {
+              color: #6d93b3; }
+        /* line 82, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
         ul.minical li article section table {
           width: 100%;
           color: inherit;
           font-size: inherit;
           border-collapse: collapse; }
-          /* line 78, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+          /* line 89, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
           ul.minical li article section table thead tr th {
             padding: 5px 0 0 0;
             font-size: 0.7em;
             font-weight: bold;
             color: #3d454b; }
-          /* line 85, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+          /* line 96, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
           ul.minical li article section table tbody tr td {
             padding: 1px;
             text-align: right;
             font-size: 0.9em; }
-            /* line 89, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            /* line 100, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
             ul.minical li article section table tbody tr td a {
               display: block;
               border: 1px solid rgba(187, 197, 205, 0.5);
               color: #3d454b;
               padding: 0.1em 0.3em;
               text-decoration: none; }
-            /* line 95, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            /* line 106, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
             ul.minical li article section table tbody tr td.minical_highlighted a {
               border-color: rgba(81, 122, 156, 0.5);
               color: #3d454b; }
-            /* line 98, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            /* line 109, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
             ul.minical li article section table tbody tr td.minical_selected a {
               border-color: #517a9c;
               color: #3d454b; }
-            /* line 101, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            /* line 112, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
             ul.minical li article section table tbody tr td.minical_past_month a, ul.minical li article section table tbody tr td.minical_future_month a {
               color: rgba(61, 69, 75, 0.5); }
-            /* line 104, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            /* line 115, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
             ul.minical li article section table tbody tr td.minical_today a {
               border-color: #517a9c;
               background: #517a9c;
               color: white; }
-            /* line 108, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
+            /* line 119, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/jquery.minical.css.sass */
             ul.minical li article section table tbody tr td.minical_disabled a {
               color: rgba(61, 69, 75, 0.5);
               background: rgba(187, 197, 205, 0.2);

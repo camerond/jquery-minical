@@ -63,7 +63,9 @@
   };
 
   QUnit.testDone(function() {
-    return $('.minical').remove();
+    return $('.minical').each(function() {
+      return $(this).minical('destroy');
+    });
   });
 
   test("it is chainable", function() {
@@ -76,10 +78,15 @@
     return tester.cal().shouldBe(":visible");
   });
 
-  test("minical hides on blur", function() {
+  asyncTest("minical hides on blur", function() {
     var $input;
-    $input = tester.init().blur();
-    return tester.cal().shouldNotBe(":visible");
+    $input = tester.init().focus();
+    tester.keydown(9, "tab");
+    $input.blur();
+    return setTimeout(function() {
+      tester.cal().shouldNotBe(":visible");
+      return QUnit.start();
+    }, 100);
   });
 
   test("minical hides on outside click", function() {
@@ -535,13 +542,12 @@
     return $el.shouldHaveValue("7-8-2012");
   });
 
-  test("Initialize without writing to empty field automatically", function() {
-    var $input, opts, today, today_array;
-    opts = {
-      initialize_with_date: false
-    };
-    $input = tester.init(opts, '');
+  test("Clear input command", function() {
+    var $input, today, today_array;
+    $input = tester.init().focus();
+    tester.cal().minical('clear');
     $input.shouldHaveValue('');
+    ok(!$input.data('minical').selected_date, 'selected date removed');
     $input.focus();
     today = new Date();
     today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()];
@@ -549,13 +555,44 @@
     return tester.cal("td.minical_day_" + (today_array.join('_'))).shouldBe(".minical_today").shouldBe(".minical_highlighted");
   });
 
-  test("Clear input", function() {
-    var $input, today, today_array;
-    $input = tester.init().focus();
-    tester.cal().minical('clear');
-    $input.shouldHaveValue('');
-    ok(!$input.data('minical').selected_date, 'selected date removed');
+  test("Option to display clear link", function() {
+    var $clear, $input, opts, today, today_val;
+    today = new Date();
+    today_val = [today.getMonth() + 1, today.getDate(), today.getFullYear()].join("/");
+    opts = {
+      show_clear_link: true
+    };
+    $input = tester.init(opts, '').focus();
+    tester.cal("td.minical_today a").click();
+    $input.shouldHaveValue(today_val);
     $input.focus();
+    $clear = tester.cal(".minical_clear a");
+    equal($clear.length, 1, "Clear link appended to calendar");
+    $clear.click();
+    $input.shouldHaveValue("");
+    return tester.cal().shouldNotBe(":visible");
+  });
+
+  test("Option to add browsers offset to parsed time", function() {
+    var $el, opts;
+    opts = {
+      add_timezone_offset: true
+    };
+    $(".calendar :text").attr("data-minical-initial", "2014-08-07T00:00:00Z").val("");
+    $el = tester.init(opts).focus();
+    return $el.shouldHaveValue("8/7/2014");
+  });
+
+  test("Initialize without writing to empty field automatically", function() {
+    var $clear, $input, opts, today, today_array;
+    opts = {
+      initialize_with_date: false
+    };
+    $input = tester.init(opts, '');
+    $input.shouldHaveValue('');
+    $input.focus();
+    $clear = tester.cal(".minical_clear a");
+    equal($clear.length, 1, "Clear link appended to calendar");
     today = new Date();
     today_array = [today.getMonth() + 1, today.getDate(), today.getFullYear()];
     $input = tester.init({}, today_array.join("/")).focus();
@@ -569,6 +606,14 @@
     equal($('.minical').length, 0, 'minical element destroyed');
     equal($input.attr('class'), '', 'class removed from input');
     return ok(!$input.data('minical'), 'data removed from input');
+  });
+
+  test("Select date via `.minical` call", function() {
+    var $input, date;
+    $input = tester.init();
+    date = new Date("December 25, 2014");
+    tester.cal().minical('select', date);
+    return $input.shouldHaveValue("12/25/2014");
   });
 
 }).call(this);

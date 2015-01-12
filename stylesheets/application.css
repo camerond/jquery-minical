@@ -41,7 +41,7 @@ body {
   font-family: "Helvetica Neue", helvetica, sans-serif;
   color: #373b43;
   text-shadow: 0 1px 1px white;
-  background: #e9e4d7 url("/images/jq_bg.png"); }
+  background: #e9e4d7 url("../images/jq_bg.png"); }
   /* line 9, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   body::before {
     position: absolute;
@@ -137,7 +137,7 @@ form {
     margin: 5px 0 0 0;
     width: 16px;
     height: 16px;
-    background: url("/images/icon_calendar.png"); }
+    background: url("../images/icon_calendar.png"); }
   /* line 83, /Users/camerondaigle/Projects/jquery-minical/source/stylesheets/application.sass */
   form input {
     display: inline-block;

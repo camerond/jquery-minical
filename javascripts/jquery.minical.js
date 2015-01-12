@@ -22,6 +22,14 @@
   };
 
   templates = {
+    clear_link: function() {
+      return $("<p />", {
+        "class": "minical_clear"
+      }).append($("<a />", {
+        href: "#",
+        text: "clear date"
+      }));
+    },
     day: function(date) {
       return $("<td />").data("minical_date", new Date(date)).addClass(date_tools.getDayClass(date)).append($("<a />", {
         "href": "#"
@@ -59,6 +67,8 @@
     initialize_with_date: true,
     move_on_resize: true,
     read_only: true,
+    show_clear_link: false,
+    add_timezone_offset: false,
     appendCalendarTo: function() {
       return $('body');
     },
@@ -90,6 +100,9 @@
         date = this.selected_day;
       }
       $li = templates.month(date);
+      if (this.show_clear_link || !this.initialize_with_date) {
+        templates.clear_link().insertAfter($li.find("table"));
+      }
       current_date = date_tools.getStartOfCalendarBlock(date);
       if (this.from && this.from > current_date) {
         $li.find(".minical_prev").detach();
@@ -150,10 +163,12 @@
       this.$cal.find("." + klass).removeClass(klass);
       return $td.addClass(klass);
     },
-    selectDay: function(date) {
+    selectDay: function(date, external) {
+      var event_name;
+      event_name = external ? 'change.minical_external' : 'change.minical';
       this.selected_day = date;
       this.markSelectedDay();
-      this.$el.val(date ? this.date_format(this.selected_day) : '').trigger('change');
+      this.$el.val(date ? this.date_format(this.selected_day) : '').trigger(event_name);
       return this.fireCallback('date_changed');
     },
     markSelectedDay: function() {
@@ -233,21 +248,11 @@
       return e && e.preventDefault();
     },
     hideCalendar: function(e) {
-      var $lc, mc;
       if (this.inline) {
         return;
       }
-      if (e && (e.type === "focusout" || e.type === "blur")) {
-        mc = $(e.target).data("minical");
-        $lc = mc.$last_clicked;
-        if ($lc && !$lc.is(mc.$trigger) && !$lc.is(mc.$el) && !$lc.closest(".minical").length) {
-          mc.$cal.hide();
-          mc.detachCalendarEvents();
-        }
-      } else {
-        this.$cal.hide();
-        this.detachCalendarEvents();
-      }
+      this.$cal.hide();
+      this.detachCalendarEvents();
       return false;
     },
     attachCalendarEvents: function() {
@@ -289,6 +294,7 @@
           return mc.moveToDay(0, 1);
         }
       };
+      this.checkToHideCalendar();
       if (keys[key]) {
         return keys[key]();
       } else if (!e.metaKey && !e.ctrlKey) {
@@ -296,35 +302,29 @@
       }
     },
     preventKeystroke: function(e) {
-      var key, keys, mc;
-      mc = this;
-      if (mc.$cal.is(":visible")) {
-        return true;
-      }
-      key = e.which;
-      keys = {
-        9: function() {
-          return true;
-        },
-        13: function() {
-          mc.$cal.trigger('show.minical');
-          return false;
-        }
-      };
-      if (keys[key]) {
-        return keys[key]();
-      } else {
-        return !mc.read_only;
-      }
+      return this.read_only;
     },
     outsideClick: function(e) {
       var $t;
       $t = $(e.target);
       this.$last_clicked = $t;
+      if ($t.parent().is(".minical_clear")) {
+        this.$el.minical('clear');
+        return false;
+      }
       if ($t.is(this.$el) || $t.is(this.$trigger) || $t.closest(".minical").length) {
         return true;
       }
       return this.$cal.trigger('hide.minical');
+    },
+    checkToHideCalendar: function() {
+      var mc;
+      mc = this;
+      return setTimeout(function() {
+        if (!mc.$el.add(mc.$trigger).is(":focus")) {
+          return mc.$cal.trigger("hide.minical");
+        }
+      }, 50);
     },
     initTrigger: function() {
       if ($.isFunction(this.trigger)) {
@@ -336,16 +336,13 @@
         }
       }
       if (this.$trigger.length) {
-        return this.$trigger.data("minical", this).on("blur.minical", (function(_this) {
-          return function() {
-            return _this.$cal.trigger('hide.minical');
-          };
-        })(this)).on("focus.minical click.minical", (function(_this) {
+        return this.$trigger.data("minical", this).on("focus.minical click.minical", (function(_this) {
           return function() {
             return _this.$cal.trigger('show.minical');
           };
         })(this));
       } else {
+        this.$trigger = $.noop;
         return this.align_to_trigger = false;
       }
     },
@@ -365,14 +362,11 @@
       return _results;
     },
     detectInitialDate: function() {
-      var initial_date;
+      var initial_date, millis;
       initial_date = this.$el.attr("data-minical-initial") || this.$el.val();
-      if (/^\d+$/.test(initial_date)) {
-        return new Date(+initial_date);
-      } else if (initial_date) {
-        return new Date(initial_date);
-      }
-      return new Date();
+      millis = /^\d+$/.test(initial_date) ? initial_date : initial_date ? Date.parse(initial_date) : new Date().getTime();
+      millis = parseInt(millis) + (this.add_timezone_offset ? new Date().getTimezoneOffset() * 60 * 1000 : 0);
+      return new Date(millis);
     },
     external: {
       clear: function() {
@@ -387,6 +381,9 @@
         this.trigger('hide.minical');
         mc.$cal.remove();
         return mc.$el.removeClass('minical_input').removeData('minical');
+      },
+      select: function(date) {
+        return this.data('minical').selectDay(date, true);
       }
     },
     init: function() {
@@ -409,7 +406,7 @@
           return function() {
             return _this.$cal.trigger('show.minical');
           };
-        })(this)).on("blur.minical", $.proxy(this.hideCalendar, this)).on("keydown.minical", function(e) {
+        })(this)).on("hide.minical", $.proxy(this.hideCalendar, this)).on("keydown.minical", function(e) {
           return mc.preventKeystroke.call(mc, e);
         });
         return this.$cal.on("hide.minical", $.proxy(this.hideCalendar, this)).on("show.minical", $.proxy(this.showCalendar, this));
