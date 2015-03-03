@@ -236,7 +236,7 @@ minical =
     else if !e.metaKey and !e.ctrlKey
       !mc.read_only
   preventKeystroke: (e) ->
-    @read_only
+    !@read_only
   outsideClick: (e) ->
     $t = $(e.target)
     @$last_clicked = $t
