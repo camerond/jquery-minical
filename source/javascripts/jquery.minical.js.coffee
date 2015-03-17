@@ -273,7 +273,7 @@ minical =
       Date.parse(initial_date)
     else
       new Date().getTime()
-    millis = parseInt(millis) + if @add_timezone_offset then (new Date().getTimezoneOffset() * 60 * 1000) else 0
+    millis = parseInt(millis) + if @add_timezone_offset then (new Date(millis).getTimezoneOffset() * 60 * 1000) else 0
     new Date(millis)
   external:
     clear: ->
