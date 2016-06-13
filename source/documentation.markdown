@@ -1,5 +1,7 @@
 # jQuery.minical
 
+> __PSA:__ This plugin's initial codebase is pretty creaky at this point, and working on it isn't high priority for me right now. I'm open to someone else taking it over, or just letting it fade into the technological distance in favor of newer code & interface techniques. Thanks for using Minical over the years, and although I reserve the right to suddenly change my mind and make it awesome again, consider this main fork dormant.
+
 ## Usage
 
 Include [jquery.minical.coffee](https://github.com/camerond/jquery-minical/blob/master/source/javascripts/jquery.minical.js.coffee) and [jquery.minical.sass](https://github.com/camerond/jquery-minical/blob/master/source/stylesheets/jquery.minical.css.sass), then:

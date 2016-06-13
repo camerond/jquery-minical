@@ -194,6 +194,7 @@ minical =
     @render(prev)
     false
   showCalendar: (e) ->
+    console.log('attaching')
     $(".minical").not(@$cal).trigger('hide.minical')
     return if @$cal.is(":visible") or @$el.is(":disabled")
     @highlightDay(@selected_day || @detectInitialDate())
