@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
+ruby "2.3.0"
+#ruby-gemset=minical
 
-gem "middleman", "~>3.1.2"
-gem "middleman-deploy"
+gem "middleman", "~>4.0"
 gem "middleman-livereload"
+gem "middleman-gh-pages"
