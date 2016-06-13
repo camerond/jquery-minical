@@ -36,11 +36,11 @@
       }).text(date.getDate()));
     },
     dayHeader: function() {
-      var $tr, day, days, _i, _len;
+      var $tr, day, days, i, len;
       days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
       $tr = $("<tr />");
-      for (_i = 0, _len = days.length; _i < _len; _i++) {
-        day = days[_i];
+      for (i = 0, len = days.length; i < len; i++) {
+        day = days[i];
         $("<th />").text(day).appendTo($tr);
       }
       return $tr;
@@ -95,7 +95,7 @@
       }
     },
     render: function(date) {
-      var $li, $tr, current_date, d, w, _i, _j;
+      var $li, $tr, current_date, d, i, j, w;
       if (date == null) {
         date = this.selected_day;
       }
@@ -107,9 +107,9 @@
       if (this.from && this.from > current_date) {
         $li.find(".minical_prev").detach();
       }
-      for (w = _i = 1; _i <= 6; w = ++_i) {
+      for (w = i = 1; i <= 6; w = ++i) {
         $tr = $("<tr />");
-        for (d = _j = 1; _j <= 7; d = ++_j) {
+        for (d = j = 1; j <= 7; d = ++j) {
           $tr.append(this.renderDay(current_date, date));
           current_date.setDate(current_date.getDate() + 1);
         }
@@ -197,8 +197,8 @@
       offset = this.align_to_trigger ? this.$trigger[this.offset_method]() : this.$el[this.offset_method]();
       height = this.align_to_trigger ? this.$trigger.outerHeight() : this.$el.outerHeight();
       position = {
-        left: "" + (offset.left + this.offset.x) + "px",
-        top: "" + (height + offset.top + this.offset.y) + "px"
+        left: (offset.left + this.offset.x) + "px",
+        top: (height + offset.top + this.offset.y) + "px"
       };
       this.$cal.css(position);
       overlap = this.$cal.width() + this.$cal[this.offset_method]().left - $(window).width();
@@ -238,6 +238,7 @@
       return false;
     },
     showCalendar: function(e) {
+      console.log('attaching');
       $(".minical").not(this.$cal).trigger('hide.minical');
       if (this.$cal.is(":visible") || this.$el.is(":disabled")) {
         return;
@@ -301,9 +302,6 @@
         return !mc.read_only;
       }
     },
-    preventKeystroke: function(e) {
-      return this.read_only;
-    },
     outsideClick: function(e) {
       var $t;
       $t = $(e.target);
@@ -342,30 +340,30 @@
           };
         })(this));
       } else {
-        this.$trigger = $.noop;
+        this.$trigger = this.$el;
         return this.align_to_trigger = false;
       }
     },
     detectDataAttributeOptions: function() {
-      var attr, range, _i, _len, _ref, _results;
-      _ref = ['from', 'to'];
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        range = _ref[_i];
+      var attr, i, len, range, ref, results;
+      ref = ['from', 'to'];
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        range = ref[i];
         attr = this.$el.attr("data-minical-" + range);
         if (attr && /^\d+$/.test(attr)) {
-          _results.push(this[range] = new Date(+attr));
+          results.push(this[range] = new Date(+attr));
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     },
     detectInitialDate: function() {
       var initial_date, millis;
       initial_date = this.$el.attr("data-minical-initial") || this.$el.val();
-      millis = /^\d+$/.test(initial_date) ? initial_date : initial_date ? Date.parse(initial_date) : new Date().getTime();
-      millis = parseInt(millis) + (this.add_timezone_offset ? new Date().getTimezoneOffset() * 60 * 1000 : 0);
+      millis = /^-?\d+$/.test(initial_date) ? initial_date : initial_date ? Date.parse(initial_date) : new Date().getTime();
+      millis = parseInt(millis) + (this.add_timezone_offset ? new Date(millis).getTimezoneOffset() * 60 * 1000 : 0);
       return new Date(millis);
     },
     external: {
@@ -406,9 +404,7 @@
           return function() {
             return _this.$cal.trigger('show.minical');
           };
-        })(this)).on("hide.minical", $.proxy(this.hideCalendar, this)).on("keydown.minical", function(e) {
-          return mc.preventKeystroke.call(mc, e);
-        });
+        })(this)).on("hide.minical", $.proxy(this.hideCalendar, this));
         return this.$cal.on("hide.minical", $.proxy(this.hideCalendar, this)).on("show.minical", $.proxy(this.showCalendar, this));
       }
     }

@@ -43,22 +43,22 @@
   };
 
   $.fn.shouldHaveValue = function(val) {
-    equal(this.val(), val, "" + this.selector + " should have a value of " + val);
+    equal(this.val(), val, this.selector + " should have a value of " + val);
     return this;
   };
 
   $.fn.shouldBe = function(attr) {
-    ok(this.is(attr), "" + this.selector + " should be " + attr);
+    ok(this.is(attr), this.selector + " should be " + attr);
     return this;
   };
 
   $.fn.shouldNotBe = function(attr) {
-    ok(!this.is(attr), "" + this.selector + " should not be " + attr);
+    ok(!this.is(attr), this.selector + " should not be " + attr);
     return this;
   };
 
   $.fn.shouldSay = function(text) {
-    equal(this.text(), text, "" + text + " is displayed within " + this.selector);
+    equal(this.text(), text, text + " is displayed within " + this.selector);
     return this;
   };
 
@@ -111,18 +111,18 @@
     $input = tester.init().focus();
     deepEqual(tester.cal("th").getTextArray(), ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], "Days of week are displayed properly");
     days = (function() {
-      var _i, _j, _len, _ref, _results, _results1;
-      _ref = [].concat([25, 26, 27, 28, 29, 30], (function() {
-        _results1 = [];
-        for (_j = 1; _j <= 31; _j++){ _results1.push(_j); }
-        return _results1;
+      var i, j, len, ref, results, results1;
+      ref = [].concat([25, 26, 27, 28, 29, 30], (function() {
+        results1 = [];
+        for (j = 1; j <= 31; j++){ results1.push(j); }
+        return results1;
       }).apply(this), [1, 2, 3, 4, 5]);
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        day = _ref[_i];
-        _results.push(day + "");
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        day = ref[i];
+        results.push(day + "");
       }
-      return _results;
+      return results;
     })();
     return deepEqual(tester.cal("td").getTextArray(), days, "days of month are displayed properly");
   });
@@ -491,6 +491,12 @@
     return tester.cal("td.minical_day_10_16_2013").shouldBe(".minical_highlighted");
   });
 
+  test("Support integer negative data-minical-initial attribute", function() {
+    $(".calendar :text").attr("data-minical-initial", "-1381937430000");
+    tester.init().focus();
+    return tester.cal("td.minical_day_3_18_1926").shouldBe(".minical_highlighted");
+  });
+
   test("Callback when date is changed", function() {
     var callback, opts;
     callback = false;
@@ -573,14 +579,24 @@
     return tester.cal().shouldNotBe(":visible");
   });
 
-  test("Option to add browsers offset to parsed time", function() {
+  test("Option to add browsers offset to parsed time from DST", function() {
     var $el, opts;
     opts = {
       add_timezone_offset: true
     };
-    $(".calendar :text").attr("data-minical-initial", "2014-08-07T00:00:00Z").val("");
+    $(".calendar :text").attr("data-minical-initial", "2014-02-21T00:00:00Z").val("");
     $el = tester.init(opts).focus();
-    return $el.shouldHaveValue("8/7/2014");
+    return $el.shouldHaveValue("2/21/2014");
+  });
+
+  test("Option to add browsers offset to parsed time not from DST", function() {
+    var $el, opts;
+    opts = {
+      add_timezone_offset: true
+    };
+    $(".calendar :text").attr("data-minical-initial", "2014-06-21T00:00:00Z").val("");
+    $el = tester.init(opts).focus();
+    return $el.shouldHaveValue("6/21/2014");
   });
 
   test("Initialize without writing to empty field automatically", function() {

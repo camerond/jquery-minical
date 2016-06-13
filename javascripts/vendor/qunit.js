@@ -8,7 +8,6 @@
  * or GPL (GPL-LICENSE.txt) licenses.
  */
 
-
 (function( window ) {
 
 var QUnit,
