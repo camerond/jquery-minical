@@ -16,7 +16,7 @@ GEM
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
-    eventmachine (1.0.3)
+    eventmachine (1.0.7)
     execjs (1.4.0)
       multi_json (~> 1.0)
     ffi (1.9.3)
