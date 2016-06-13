@@ -360,6 +360,12 @@ test "Support integer data-minical-initial attribute", ->
   tester.init().focus()
   tester.cal("td.minical_day_10_16_2013").shouldBe(".minical_highlighted")
 
+test "Support integer negative data-minical-initial attribute", ->
+  $(".calendar :text")
+    .attr("data-minical-initial", "-1381937430000")
+  tester.init().focus()
+  tester.cal("td.minical_day_3_18_1926").shouldBe(".minical_highlighted")
+
 test "Callback when date is changed", ->
   callback = false
   opts =

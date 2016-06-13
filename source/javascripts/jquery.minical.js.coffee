@@ -267,7 +267,7 @@ minical =
       if attr and /^\d+$/.test(attr) then @[range] = new Date(+attr)
   detectInitialDate: ->
     initial_date = @$el.attr("data-minical-initial") || @$el.val()
-    millis = if /^\d+$/.test(initial_date)
+    millis = if /^-?\d+$/.test(initial_date)
       initial_date
     else if initial_date
       Date.parse(initial_date)
