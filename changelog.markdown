@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.5
+
+- Allow for negative values
+- Fix assignment of default trigger (#10)
+- Fix DST timezone offset (#12)
+
 ## 0.9.4
 
 - namespace `select` external method's change event so it doesn't collide with regular change event
